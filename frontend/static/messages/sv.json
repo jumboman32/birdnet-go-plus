@@ -1131,6 +1131,39 @@
       "newThisYear": "Första i år",
       "newThisSeason": "Första denna säsong",
       "daysSinceFirst": "Dagar sedan först sedd"
+    },
+    "localRarity": {
+      "title": "Lokalt sällsynthetsvärde",
+      "loading": "Läser in lokala sällsynthetsdata…",
+      "failed": "Lokal sällsynthet kunde inte läsas in. Din detektion är oförändrad.",
+      "retry": "Försök hämta sällsynthet igen",
+      "interpretation": "Ett högre värde betyder färre lokala rapporter under denna årstid. Det är skilt från identifieringssäkerheten.",
+      "insufficient": "Otillräckliga data",
+      "evidence": "Underlag och begränsningar",
+      "counts": "{reports} lokaldagar med rapporter / {samples} lämpliga lokaldagar från {years} tidigare år.",
+      "interval": "Ungefärligt 95-procentigt stickprovsintervall: {low}–{high}. Snedvridning från livsmiljöer och observatörer ökar osäkerheten.",
+      "method": "Kompletta eBird-listor inom ±14 kalenderdagar, endast från tidigare år. Begränsad insats och en lista per lokal och dag minskar snedvridning; rapporteringsfrekvens är inte sannolikhet för förekomst.",
+      "source": "Källa: {source}. Import förberedd: {date}.",
+      "recentReported": "Arten finns i det senaste eBird-svaret för närområdet (senaste 14 dagarna).",
+      "recentMissing": "Arten returnerades inte i det senaste eBird-svaret för närområdet. Det bevisar inte frånvaro.",
+      "recentLimit": "Begränsat till 200 resultat inom eBirds standardradie. Ingen nämnare för observationsinsats; dessa rapporter ändrar inte värdet.",
+      "historical": "Aktuella eBird-data saknas för detta historiska datum; dagens observationer används inte som ersättning.",
+      "recentUnavailable": "Aktuella eBird-data är inte tillgängliga. Kontrollera att eBird-integrationen är aktiverad och konfigurerad.",
+      "model": "BirdNETs geografiska modell är separat stödjande information och ändrar inte detta värde.",
+      "geography": "{region} · importerat undersökningsområde: radie {radius} km · {date}",
+      "modelTitle": "BirdNETs geografiska modell",
+      "modelContext": "Modellens aktuella säsongskontext; skild från lokalt sällsynthetsvärde och identifieringssäkerhet.",
+      "birdcastLink": "Se föregående natts flyttning på BirdCast (öppnar ny flik)",
+      "birdcastContext": "Radar beskriver den samlade flyttningen, inte arters sällsynthet, och ändrar inte värdet.",
+      "reasons": {
+        "missingData": "Historiska data från kompletta observationslistor har inte angetts.",
+        "stationMismatch": "Den importerade datamängden stämmer inte med stationens konfigurerade plats.",
+        "unmappedTaxon": "Arten har ingen verifierad taxonomisk matchning i importerade data.",
+        "insufficientSamples": "Minst 100 lämpliga lokaldagar från 3 tidigare år krävs i säsongsfönstret.",
+        "locationRequired": "Konfigurera stationens plats för att bedöma lokal sällsynthet.",
+        "invalidImport": "Importen för lokal sällsynthet kunde inte läsas eller valideras.",
+        "unavailable": "Tillförlitliga lokala sällsynthetsdata saknas."
+      }
     }
   },
   "spectrogram": {

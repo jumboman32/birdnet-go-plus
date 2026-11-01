@@ -1131,6 +1131,39 @@
       "newThisYear": "Ensimmäinen tänä vuonna",
       "newThisSeason": "Ensimmäinen tällä kaudella",
       "daysSinceFirst": "Päiviä ensihavainnosta"
+    },
+    "localRarity": {
+      "title": "Paikallinen harvinaisuuspistemäärä",
+      "loading": "Ladataan paikallisia harvinaisuustietoja…",
+      "failed": "Paikallista harvinaisuutta ei voitu ladata. Havaintosi ei ole muuttunut.",
+      "retry": "Yritä harvinaisuushakua uudelleen",
+      "interpretation": "Suurempi arvo tarkoittaa vähemmän paikallisia ilmoituksia tähän vuodenaikaan. Se on erillinen tunnistuksen varmuudesta.",
+      "insufficient": "Riittämättömät tiedot",
+      "evidence": "Aineisto ja rajoitukset",
+      "counts": "{reports} ilmoituksen sisältävää paikkapäivää / {samples} kelvollista paikkapäivää {years} aiemmalta vuodelta.",
+      "interval": "Likimääräinen 95 %:n otantaväli: {low}–{high}. Elinympäristö- ja havaitsijavinoumat lisäävät epävarmuutta.",
+      "method": "Täydelliset eBird-listat ±14 kalenteripäivän ikkunassa, vain aiemmilta vuosilta. Rajattu havaintopanostus ja yksi lista paikkaa ja päivää kohden vähentävät vinoumaa; ilmoitustiheys ei ole esiintymisen todennäköisyys.",
+      "source": "Lähde: {source}. Tuonti valmisteltu: {date}.",
+      "recentReported": "Laji esiintyy lähialueen tuoreessa eBird-vastauksessa (viimeiset 14 päivää).",
+      "recentMissing": "Lajia ei palautettu lähialueen tuoreessa eBird-vastauksessa. Tämä ei osoita poissaoloa.",
+      "recentLimit": "Enintään 200 tulosta eBirdin oletusarvoiselta lähialueelta. Havaintopanostuksen vertailulukua ei ole; ilmoitukset eivät muuta pistemäärää.",
+      "historical": "Tuoreita eBird-tietoja ei ole tälle historialliselle päivälle; nykyisiä havaintoja ei käytetä niiden sijaan.",
+      "recentUnavailable": "Tuoreita eBird-tietoja ei ole saatavilla. Tarkista, että eBird-integraatio on käytössä ja määritetty.",
+      "model": "BirdNETin maantieteellinen malli on erillinen tukitieto eikä muuta tätä pistemäärää.",
+      "geography": "{region} · tuotu tutkimusalue: säde {radius} km · {date}",
+      "modelTitle": "BirdNETin maantieteellinen malli",
+      "modelContext": "Mallin nykyinen vuodenaikaiskonteksti; erillinen paikallisesta harvinaisuuspistemäärästä ja tunnistuksen varmuudesta.",
+      "birdcastLink": "Katso edellisen yön muutto BirdCastista (avautuu uuteen välilehteen)",
+      "birdcastContext": "Tutka kuvaa kokonaismuuttoa, ei lajien harvinaisuutta, eikä muuta pistemäärää.",
+      "reasons": {
+        "missingData": "Täydellisten havaintolistojen historiallista aineistoa ei ole annettu.",
+        "stationMismatch": "Tuotu aineisto ei vastaa aseman määritettyä sijaintia.",
+        "unmappedTaxon": "Lajille ei ole vahvistettua taksonomista vastinetta tuoduissa tiedoissa.",
+        "insufficientSamples": "Vuodenaikaikkunassa tarvitaan vähintään 100 kelvollista paikkapäivää 3 aiemmalta vuodelta.",
+        "locationRequired": "Määritä aseman sijainti paikallisen harvinaisuuden arvioimiseksi.",
+        "invalidImport": "Paikallisen harvinaisuuden tuontia ei voitu lukea tai vahvistaa.",
+        "unavailable": "Luotettavaa paikallista harvinaisuusaineistoa ei ole saatavilla."
+      }
     }
   },
   "spectrogram": {

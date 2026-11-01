@@ -1131,6 +1131,39 @@
       "newThisYear": "Eerste keer dit jaar",
       "newThisSeason": "Eerste keer dit seizoen",
       "daysSinceFirst": "Dagen sinds eerste waarneming"
+    },
+    "localRarity": {
+      "title": "Lokale zeldzaamheidsscore",
+      "loading": "Lokale zeldzaamheidsgegevens laden…",
+      "failed": "De lokale zeldzaamheid kon niet worden geladen. Uw detectie blijft ongewijzigd.",
+      "retry": "Zeldzaamheid opnieuw opvragen",
+      "interpretation": "Een hogere waarde betekent minder lokale meldingen in dit seizoen. Dit staat los van de identificatiezekerheid.",
+      "insufficient": "Onvoldoende gegevens",
+      "evidence": "Gegevens en beperkingen",
+      "counts": "{reports} locatiedagen met meldingen / {samples} geschikte locatiedagen uit {years} voorgaande jaren.",
+      "interval": "Benaderd 95%-steekproefinterval: {low}–{high}. Vertekening door habitat en waarnemers vergroot de onzekerheid.",
+      "method": "Volledige eBird-lijsten binnen ±14 kalenderdagen, alleen uit voorgaande jaren. Beperkte waarnemingsinspanning en één lijst per locatie per dag verminderen vertekening; meldingsfrequentie is geen aanwezigheidskans.",
+      "source": "Bron: {source}. Import voorbereid: {date}.",
+      "recentReported": "Deze soort staat in het recente eBird-antwoord voor de omgeving (afgelopen 14 dagen).",
+      "recentMissing": "Deze soort ontbreekt in het recente eBird-antwoord voor de omgeving. Dat bewijst geen afwezigheid.",
+      "recentLimit": "Maximaal 200 resultaten binnen de standaardafstand van eBird. Geen noemer voor waarnemingsinspanning; deze meldingen veranderen de score niet.",
+      "historical": "Recente eBird-gegevens zijn niet beschikbaar voor deze historische datum; waarnemingen van vandaag worden niet als vervanging gebruikt.",
+      "recentUnavailable": "Recente eBird-gegevens zijn niet beschikbaar. Controleer of de eBird-integratie is ingeschakeld en ingesteld.",
+      "model": "Het geografische model van BirdNET is afzonderlijke aanvullende informatie en verandert deze score niet.",
+      "geography": "{region} · geïmporteerd onderzoeksgebied: straal van {radius} km · {date}",
+      "modelTitle": "Geografisch BirdNET-model",
+      "modelContext": "Huidige seizoenscontext van het model; los van de lokale zeldzaamheidsscore en identificatiezekerheid.",
+      "birdcastLink": "Bekijk de trek van de vorige nacht op BirdCast (opent nieuw tabblad)",
+      "birdcastContext": "Radar beschrijft de totale vogeltrek, niet de zeldzaamheid van een soort, en verandert de score niet.",
+      "reasons": {
+        "missingData": "Historische gegevens van volledige lijsten zijn niet aangeleverd.",
+        "stationMismatch": "De geïmporteerde gegevens passen niet bij de ingestelde stationslocatie.",
+        "unmappedTaxon": "Voor deze soort is geen gecontroleerde taxonomische overeenkomst in de geïmporteerde gegevens.",
+        "insufficientSamples": "Binnen het seizoensvenster zijn minimaal 100 geschikte locatiedagen uit 3 voorgaande jaren nodig.",
+        "locationRequired": "Stel de stationslocatie in om de lokale zeldzaamheid te beoordelen.",
+        "invalidImport": "De import voor lokale zeldzaamheid kon niet worden gelezen of gecontroleerd.",
+        "unavailable": "Betrouwbare gegevens over lokale zeldzaamheid ontbreken."
+      }
     }
   },
   "spectrogram": {

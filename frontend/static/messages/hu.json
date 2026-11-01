@@ -1131,6 +1131,39 @@
       "newThisYear": "Első az idén",
       "newThisSeason": "Első ebben az évszakban",
       "daysSinceFirst": "Napok az első észlelés óta"
+    },
+    "localRarity": {
+      "title": "Helyi ritkasági pontszám",
+      "loading": "Helyi ritkasági adatok betöltése…",
+      "failed": "A helyi ritkaság nem tölthető be. Az észlelés nem változott.",
+      "retry": "Ritkaság lekérdezése újra",
+      "interpretation": "A magasabb érték kevesebb helyi bejelentést jelent ebben az évszakban. Ez független a fajazonosítás bizonyosságától.",
+      "insufficient": "Elégtelen adat",
+      "evidence": "Adatok és korlátok",
+      "counts": "{reports} bejelentést tartalmazó helyszínnap / {samples} megfelelő helyszínnap {years} korábbi évből.",
+      "interval": "Közelítő 95%-os mintavételi intervallum: {low}–{high}. Az élőhely- és megfigyelői torzítás növeli a bizonytalanságot.",
+      "method": "Teljes eBird-listák ±14 naptári napos időablakból, kizárólag korábbi évekből. A korlátozott megfigyelési ráfordítás és helyszínenként napi egy lista csökkenti a torzítást; a bejelentési gyakoriság nem jelenléti valószínűség.",
+      "source": "Forrás: {source}. Import elkészítve: {date}.",
+      "recentReported": "A faj szerepel a környékre vonatkozó friss eBird-válaszban (utolsó 14 nap).",
+      "recentMissing": "A faj nem szerepelt a környékre vonatkozó friss eBird-válaszban. Ez nem bizonyítja a hiányát.",
+      "recentLimit": "Legfeljebb 200 találat az eBird alapértelmezett közeli sugarán belül. Nincs megfigyelési ráfordításhoz tartozó nevező; ezek a bejelentések nem módosítják a pontszámot.",
+      "historical": "Ehhez a múltbeli dátumhoz nem áll rendelkezésre friss eBird-adat; a mai megfigyelések nem helyettesítik azt.",
+      "recentUnavailable": "Friss eBird-adatok nem érhetők el. Ellenőrizze, hogy az eBird-integráció engedélyezett és beállított-e.",
+      "model": "A BirdNET földrajzi modellje külön támogató információ, és nem módosítja ezt a pontszámot.",
+      "geography": "{region} · importált felmérési terület: {radius} km sugarú kör · {date}",
+      "modelTitle": "A BirdNET földrajzi modellje",
+      "modelContext": "A modell jelenlegi évszakos környezete; független a helyi ritkasági pontszámtól és a fajazonosítás bizonyosságától.",
+      "birdcastLink": "Előző éjszakai vonulás megtekintése a BirdCaston (új lap)",
+      "birdcastContext": "A radar az összesített vonulást mutatja, nem a fajok ritkaságát, és nem módosítja a pontszámot.",
+      "reasons": {
+        "missingData": "A teljes megfigyelési listák történeti adatai nincsenek megadva.",
+        "stationMismatch": "Az importált adatkészlet nem egyezik az állomás beállított helyével.",
+        "unmappedTaxon": "A fajnak nincs ellenőrzött rendszertani egyezése az importált adatokban.",
+        "insufficientSamples": "Az évszakos időablakban legalább 100 megfelelő helyszínnap szükséges 3 korábbi évből.",
+        "locationRequired": "Állítsa be az állomás helyét a helyi ritkaság értékeléséhez.",
+        "invalidImport": "A helyi ritkasági import nem olvasható vagy nem ellenőrizhető.",
+        "unavailable": "Megbízható helyi ritkasági adatok nem érhetők el."
+      }
     }
   },
   "spectrogram": {

@@ -890,6 +890,35 @@ export type TranslationKey =
   | 'species.tracking.newThisYear'
   | 'species.tracking.newThisSeason'
   | 'species.tracking.daysSinceFirst'
+  | 'species.localRarity.title'
+  | 'species.localRarity.loading'
+  | 'species.localRarity.failed'
+  | 'species.localRarity.retry'
+  | 'species.localRarity.interpretation'
+  | 'species.localRarity.insufficient'
+  | 'species.localRarity.evidence'
+  | 'species.localRarity.counts' // params: reports, samples, years
+  | 'species.localRarity.interval' // params: low, high
+  | 'species.localRarity.method'
+  | 'species.localRarity.source' // params: source, date
+  | 'species.localRarity.recentReported'
+  | 'species.localRarity.recentMissing'
+  | 'species.localRarity.recentLimit'
+  | 'species.localRarity.historical'
+  | 'species.localRarity.recentUnavailable'
+  | 'species.localRarity.model'
+  | 'species.localRarity.geography' // params: region, radius, date
+  | 'species.localRarity.modelTitle'
+  | 'species.localRarity.modelContext'
+  | 'species.localRarity.birdcastLink'
+  | 'species.localRarity.birdcastContext'
+  | 'species.localRarity.reasons.missingData'
+  | 'species.localRarity.reasons.stationMismatch'
+  | 'species.localRarity.reasons.unmappedTaxon'
+  | 'species.localRarity.reasons.insufficientSamples'
+  | 'species.localRarity.reasons.locationRequired'
+  | 'species.localRarity.reasons.invalidImport'
+  | 'species.localRarity.reasons.unavailable'
   | 'spectrogram.controls.frequencyRange'
   | 'spectrogram.controls.colorMap'
   | 'spectrogram.controls.gain'
@@ -4602,6 +4631,18 @@ export type TranslationParams = {
   'detections.aria.thumbnailLoaded': { species: string | number };
   'detections.errors.loadFailed': { status: string | number };
   'species.rarity.basedOnLocation': { latitude: string | number; longitude: string | number };
+  'species.localRarity.counts': {
+    reports: string | number;
+    samples: string | number;
+    years: string | number;
+  };
+  'species.localRarity.interval': { low: string | number; high: string | number };
+  'species.localRarity.source': { source: string | number; date: string | number };
+  'species.localRarity.geography': {
+    region: string | number;
+    radius: string | number;
+    date: string | number;
+  };
   'spectrogram.gain.level': { value: string | number };
   'system.systemInfo.temperatureValue': { temp: string | number };
   'system.errors.systemInfo': { error: string | number };

@@ -1131,6 +1131,39 @@
       "newThisYear": "First this year",
       "newThisSeason": "First this season",
       "daysSinceFirst": "Days since first seen"
+    },
+    "localRarity": {
+      "title": "Local Rarity Score",
+      "loading": "Loading local rarity evidence…",
+      "failed": "Local rarity could not be loaded. Your detection is unchanged.",
+      "retry": "Retry rarity lookup",
+      "interpretation": "Higher means less frequently reported locally in this season. This is separate from identification confidence.",
+      "insufficient": "Insufficient data",
+      "evidence": "Evidence and limitations",
+      "counts": "{reports} reporting locality-days / {samples} eligible locality-days across {years} prior years.",
+      "interval": "Approximate 95% sampling interval: {low}–{high}. Habitat and observer bias add uncertainty.",
+      "method": "Complete eBird checklists within ±14 calendar days in prior years only. Restricted effort and one checklist per locality-day reduce bias; reporting frequency is not occupancy probability.",
+      "source": "Source: {source}. Import prepared: {date}.",
+      "recentReported": "This species appears in the recent nearby eBird response (past 14 days).",
+      "recentMissing": "This species was not returned in the recent nearby eBird response. This does not establish absence.",
+      "recentLimit": "Limited to 200 results within eBird’s default nearby radius. No effort denominator; these reports do not change the score.",
+      "historical": "Recent eBird evidence is unavailable for this historical date; today’s sightings are not substituted.",
+      "recentUnavailable": "Recent eBird evidence is unavailable. Check that the eBird integration is enabled and configured.",
+      "model": "BirdNET’s geographic model is separate supporting evidence and does not change this score.",
+      "geography": "{region} · imported survey area: {radius} km radius · {date}",
+      "modelTitle": "BirdNET geographic model",
+      "modelContext": "Current seasonal model context; separate from Local Rarity Score and identification confidence.",
+      "birdcastLink": "View preceding-night migration on BirdCast (opens new tab)",
+      "birdcastContext": "Radar describes overall migration, not species rarity, and does not change the score.",
+      "reasons": {
+        "missingData": "Historical complete-checklist data has not been supplied.",
+        "stationMismatch": "The imported dataset does not match the configured station location.",
+        "unmappedTaxon": "This species has no verified taxonomy match in the imported data.",
+        "insufficientSamples": "At least 100 eligible locality-days across 3 prior years are required in the seasonal window.",
+        "locationRequired": "Configure the station location to evaluate local rarity.",
+        "invalidImport": "The local rarity import could not be read or validated.",
+        "unavailable": "Reliable local rarity evidence is unavailable."
+      }
     }
   },
   "spectrogram": {

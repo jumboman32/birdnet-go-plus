@@ -440,13 +440,14 @@ Both verbs report identically under the `skippedFields` response key: it lists o
 
 ### Species (`species/species.go`)
 
-| Method | Route                         | Handler                  | Auth | Description                                                       |
-| ------ | ----------------------------- | ------------------------ | ---- | ----------------------------------------------------------------- |
-| GET    | `/species`                    | `GetSpeciesInfo`         | ❌   | Get extended species information including rarity status          |
-| GET    | `/species/all`                | `GetAllSpecies`          | ❌   | Get all BirdNET species labels (not filtered by location)         |
-| GET    | `/species/taxonomy`           | `GetSpeciesTaxonomy`     | ❌   | Get detailed taxonomy data with subspecies and hierarchy          |
-| GET    | `/species/:code/thumbnail`    | `GetSpeciesThumbnail`    | ❌   | Get bird thumbnail image by species code (redirects to image URL) |
-| GET    | `/species/dictionary/:locale` | `ServeSpeciesDictionary` | ❌   | Precompressed per-locale species name dictionary (gzip JSON)      |
+| Method | Route                         | Handler                  | Auth | Description                                                                                                                                                                                                                      |
+| ------ | ----------------------------- | ------------------------ | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/species`                    | `GetSpeciesInfo`         | ❌   | Get extended species information including rarity status                                                                                                                                                                         |
+| GET    | `/species/all`                | `GetAllSpecies`          | ❌   | Get all BirdNET species labels (not filtered by location)                                                                                                                                                                        |
+| GET    | `/species/local-rarity`       | `GetLocalRarity`         | ❌   | Seasonal eBird reporting rarity for `scientific_name` and ISO `date`; nullable score, sample/provenance metadata, recent supporting evidence, optional BirdCast context link. See [local rarity](../../../docs/local-rarity.md). |
+| GET    | `/species/taxonomy`           | `GetSpeciesTaxonomy`     | ❌   | Get detailed taxonomy data with subspecies and hierarchy                                                                                                                                                                         |
+| GET    | `/species/:code/thumbnail`    | `GetSpeciesThumbnail`    | ❌   | Get bird thumbnail image by species code (redirects to image URL)                                                                                                                                                                |
+| GET    | `/species/dictionary/:locale` | `ServeSpeciesDictionary` | ❌   | Precompressed per-locale species name dictionary (gzip JSON)                                                                                                                                                                     |
 
 ### Server-Sent Events (`sse/sse.go`)
 

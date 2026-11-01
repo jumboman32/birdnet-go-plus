@@ -1131,6 +1131,39 @@
       "newThisYear": "Første i år",
       "newThisSeason": "Første denne sæson",
       "daysSinceFirst": "Dage siden første observation"
+    },
+    "localRarity": {
+      "title": "Lokal sjældenhedsscore",
+      "loading": "Indlæser lokale sjældenhedsdata…",
+      "failed": "Lokal sjældenhed kunne ikke indlæses. Din registrering er uændret.",
+      "retry": "Prøv sjældenhedsopslag igen",
+      "interpretation": "En højere værdi betyder færre lokale observationer på denne årstid. Det er adskilt fra identifikationssikkerhed.",
+      "insufficient": "Utilstrækkelige data",
+      "evidence": "Datagrundlag og begrænsninger",
+      "counts": "{reports} lokalitetsdage med observationer / {samples} egnede lokalitetsdage fra {years} tidligere år.",
+      "interval": "Omtrentligt 95 %-stikprøveinterval: {low}–{high}. Skævheder i levesteder og observatører øger usikkerheden.",
+      "method": "Komplette eBird-lister inden for ±14 kalenderdage, kun fra tidligere år. Begrænset indsats og én liste pr. lokalitet pr. dag mindsker skævheder; observationshyppighed er ikke sandsynlighed for tilstedeværelse.",
+      "source": "Kilde: {source}. Import klargjort: {date}.",
+      "recentReported": "Arten findes i det seneste eBird-svar for nærområdet (seneste 14 dage).",
+      "recentMissing": "Arten blev ikke returneret i det seneste eBird-svar for nærområdet. Det beviser ikke fravær.",
+      "recentLimit": "Begrænset til 200 resultater inden for eBirds standardradius. Ingen nævner for observationsindsats; disse observationer ændrer ikke scoren.",
+      "historical": "Nye eBird-data er ikke tilgængelige for denne historiske dato; dagens observationer bruges ikke som erstatning.",
+      "recentUnavailable": "Nye eBird-data er utilgængelige. Kontrollér, at eBird-integrationen er aktiveret og konfigureret.",
+      "model": "BirdNETs geografiske model er separat støtteinformation og ændrer ikke denne score.",
+      "geography": "{region} · importeret undersøgelsesområde: radius {radius} km · {date}",
+      "modelTitle": "BirdNETs geografiske model",
+      "modelContext": "Modellens aktuelle sæsonkontekst; adskilt fra lokal sjældenhedsscore og identifikationssikkerhed.",
+      "birdcastLink": "Se forrige nats træk på BirdCast (åbner ny fane)",
+      "birdcastContext": "Radar beskriver det samlede træk, ikke arters sjældenhed, og ændrer ikke scoren.",
+      "reasons": {
+        "missingData": "Historiske data fra komplette observationslister er ikke angivet.",
+        "stationMismatch": "Det importerede datasæt passer ikke til stationens konfigurerede placering.",
+        "unmappedTaxon": "Arten har intet bekræftet taksonomisk match i de importerede data.",
+        "insufficientSamples": "Der kræves mindst 100 egnede lokalitetsdage fra 3 tidligere år i sæsonvinduet.",
+        "locationRequired": "Konfigurér stationens placering for at vurdere lokal sjældenhed.",
+        "invalidImport": "Importen til lokal sjældenhed kunne ikke læses eller valideres.",
+        "unavailable": "Pålidelige lokale sjældenhedsdata er ikke tilgængelige."
+      }
     }
   },
   "spectrogram": {

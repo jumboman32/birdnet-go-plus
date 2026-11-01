@@ -37,6 +37,7 @@ import (
 	"github.com/tphakala/birdnet-go/internal/ebird"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/birdnet-go/internal/rarity"
 	"github.com/tphakala/birdnet-go/internal/speciesindex"
 	"github.com/tphakala/birdnet-go/internal/wallclock"
 )
@@ -46,6 +47,7 @@ import (
 // carries atomic/lock-bearing fields and must never be copied by value.
 type Handler struct {
 	*apicore.Core
+	rarityStore rarity.Store
 
 	// speciesSnapshot returns the current orchestrator-owned species-index
 	// snapshot (the scientific-to-common map plus the label-union canonical memo
@@ -126,6 +128,7 @@ func (c *Handler) RegisterRoutes(g *echo.Group) {
 	// Public endpoints for species information
 	g.GET("/species", c.GetSpeciesInfo)
 	g.GET("/species/all", c.GetAllSpecies)
+	g.GET("/species/local-rarity", c.GetLocalRarity)
 	g.GET("/species/taxonomy", c.GetSpeciesTaxonomy)
 	g.GET("/species/dictionary/:locale", c.ServeSpeciesDictionary)
 
