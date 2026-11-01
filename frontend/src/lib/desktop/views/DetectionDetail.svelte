@@ -40,7 +40,41 @@
     Moon,
     Sunrise,
     Sunset,
+    ExternalLink,
+    Headphones,
   } from '@lucide/svelte';
+
+  // Custom feature: external species resources.
+  // eBird profile URLs use taxon codes, which cannot be reliably derived from a
+  // BirdNET scientific name or from BirdNET's own speciesCode field.
+  // Known eBird codes link directly to profiles; other species use a targeted
+  // web search rather than risking an incorrect eBird species page.
+  const EBIRD_CODES: Record<string, string> = {
+    'Zonotrichia albicollis': 'whtspa', // White-throated Sparrow
+    'Cyanocitta cristata': 'blujay', // Blue Jay
+    'Melanerpes carolinus': 'rebwoo', // Red-bellied Woodpecker
+    'Cardinalis cardinalis': 'norcar', // Northern Cardinal
+    'Dryobates pubescens': 'dowwoo', // Downy Woodpecker
+  };
+
+  function getEBirdLink(scientificName: string): { href: string; direct: boolean } {
+    const name = scientificName.trim();
+    const code = EBIRD_CODES[name];
+    if (code) {
+      return { href: `https://ebird.org/species/${code}`, direct: true };
+    }
+    const query = `site:ebird.org/species/ "${name}"`;
+    return {
+      href: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+      direct: false,
+    };
+  }
+
+  function getCornellCallsLink(commonName: string): string {
+    // Cornell's All About Birds guide uses English common-name URL slugs.
+    const slug = commonName.trim().replace(/\s+/g, '_');
+    return `https://www.allaboutbirds.org/guide/${encodeURIComponent(slug)}/sounds`;
+  }
 
   // Interface definitions for API responses
   interface SpeciesRarity {
@@ -507,6 +541,7 @@
 
 {#snippet heroSection(det: Detection)}
   {@const displayName = localizeSpeciesName(det.scientificName, det.commonName)}
+  {@const ebirdLink = getEBirdLink(det.scientificName)}
   <section class="detection-hero-grid" aria-labelledby="species-heading">
     <!-- Identity Card -->
     <div class="hero-card hero-identity-card">
@@ -571,6 +606,35 @@
           })}
         >
           <ConfidenceCircle confidence={det.confidence} size="xl" />
+        </div>
+      </div>
+
+      <!-- Custom feature: contextual bird reference links -->
+      <div class="species-resources" aria-label="External species resources">
+        <h4 class="species-resources-heading">Species resources</h4>
+        <div class="species-resources-actions">
+          <a
+            href={ebirdLink.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="species-resource-button species-resource-button-primary"
+            aria-label={ebirdLink.direct
+              ? `View ${det.commonName} on eBird (opens new tab)`
+              : `Find ${det.scientificName} on eBird (opens search in new tab)`}
+          >
+            <ExternalLink size={15} aria-hidden="true" />
+            <span>{ebirdLink.direct ? 'View on eBird' : 'Find on eBird'}</span>
+          </a>
+          <a
+            href={getCornellCallsLink(det.commonName)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="species-resource-button species-resource-button-secondary"
+            aria-label={`Compare ${det.commonName} calls on Cornell All About Birds (opens new tab)`}
+          >
+            <Headphones size={15} aria-hidden="true" />
+            <span>Compare calls</span>
+          </a>
         </div>
       </div>
     </div>
@@ -1117,6 +1181,72 @@
     .hero-card {
       padding: 2rem;
     }
+  }
+
+  /* Custom feature: species resources sit beneath the identity row. */
+  .hero-identity-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .species-resources {
+    margin-top: auto;
+    padding-top: 1.25rem;
+  }
+
+  .species-resources-heading {
+    margin-bottom: 0.625rem;
+    color: var(--color-base-content);
+    opacity: 0.65;
+    font-size: 0.6875rem;
+    font-weight: 650;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+  }
+
+  .species-resources-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  .species-resource-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 2.375rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-selector);
+    border: 1px solid var(--border-100);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .species-resource-button-primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-content);
+    border-color: var(--color-primary);
+  }
+
+  .species-resource-button-primary:hover {
+    filter: brightness(1.08);
+  }
+
+  .species-resource-button-secondary {
+    background-color: var(--color-base-200);
+    color: var(--color-base-content);
+  }
+
+  .species-resource-button-secondary:hover {
+    background-color: var(--color-base-300);
+  }
+
+  .species-resource-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
   }
 
   /* Identity card row: thumbnail + species + confidence */
