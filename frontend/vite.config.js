@@ -11,6 +11,8 @@ const MESSAGES_SOURCE_DIR = './static/messages'
 
 // Placeholder token replaced by the inject-supported-locales plugin.
 const LOCALES_PLACEHOLDER = '__SUPPORTED_LOCALES_PLACEHOLDER__'
+const PRODUCTION_ASSET_BASE = '/ui/assets/'
+const DEVELOPMENT_ENTRY = '/ui/dashboard'
 
 /**
  * Return sorted *.json filenames from static/messages/, or [] if missing.
@@ -61,13 +63,37 @@ function discoverSupportedLocales() {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: '/ui/assets/',
+export default defineConfig(({ command, isPreview }) => ({
+  // The SPA routes live under /ui/, outside the production asset directory.
+  // Vite must serve those routes at the root during development, otherwise its
+  // base middleware rejects page navigation before the SPA can handle it.
+  base: command === 'serve' && !isPreview ? '/' : PRODUCTION_ASSET_BASE,
   publicDir: 'static',
   define: {
     __I18N_CACHE_VERSION__: JSON.stringify(computeI18nCacheVersion()),
   },
   plugins: [
+    {
+      name: 'development-ui-paths',
+      apply: 'serve',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (!req.url) return next()
+          const url = new URL(req.url, 'http://vite.internal')
+          if (url.pathname === PRODUCTION_ASSET_BASE || url.pathname === PRODUCTION_ASSET_BASE.slice(0, -1)) {
+            res.writeHead(302, { Location: DEVELOPMENT_ENTRY + url.search })
+            res.end()
+            return
+          }
+          // Runtime URLs for translations/icons retain the Go server's asset
+          // prefix; Vite's publicDir serves those same files at the root.
+          if (url.pathname.startsWith(PRODUCTION_ASSET_BASE)) {
+            req.url = url.pathname.slice(PRODUCTION_ASSET_BASE.length - 1) + url.search
+          }
+          next()
+        })
+      },
+    },
     tailwindcss(),
     svelte({
       compilerOptions: {
@@ -127,6 +153,7 @@ export default defineConfig({
     },
   },
   server: {
+    open: command === 'serve' && !isPreview ? DEVELOPMENT_ENTRY : false,
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
@@ -208,4 +235,4 @@ export default defineConfig({
       ]
     }
   }
-})
+}))
