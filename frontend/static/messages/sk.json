@@ -1131,6 +1131,39 @@
       "newThisYear": "Prvýkrát tento rok",
       "newThisSeason": "Prvýkrát túto sezónu",
       "daysSinceFirst": "Dní od prvej detekcie"
+    },
+    "localRarity": {
+      "title": "Index miestnej vzácnosti",
+      "loading": "Načítavajú sa údaje o miestnej vzácnosti…",
+      "failed": "Miestnu vzácnosť sa nepodarilo načítať. Vaša detekcia sa nezmenila.",
+      "retry": "Znova načítať vzácnosť",
+      "interpretation": "Vyššia hodnota znamená menej miestnych hlásení v tomto ročnom období. Je nezávislá od istoty určenia.",
+      "insufficient": "Nedostatok údajov",
+      "evidence": "Podklady a obmedzenia",
+      "counts": "{reports} lokalitných dní s hlásením / {samples} vhodných lokalitných dní z {years} predchádzajúcich rokov.",
+      "interval": "Približný 95 % výberový interval: {low}–{high}. Skreslenie biotopmi a pozorovateľmi zvyšuje neistotu.",
+      "method": "Úplné zoznamy eBird v rozsahu ±14 kalendárnych dní, iba z predchádzajúcich rokov. Obmedzené pozorovacie úsilie a jeden zoznam na lokalitu a deň znižujú skreslenie; početnosť hlásení nie je pravdepodobnosť prítomnosti.",
+      "source": "Zdroj: {source}. Import pripravený: {date}.",
+      "recentReported": "Tento druh je v nedávnej odpovedi eBird pre okolie (posledných 14 dní).",
+      "recentMissing": "Tento druh nebol vrátený v nedávnej odpovedi eBird pre okolie. To nedokazuje jeho neprítomnosť.",
+      "recentLimit": "Najviac 200 výsledkov v predvolenom okruhu eBird. Chýba menovateľ pozorovacieho úsilia; tieto hlásenia index nemenia.",
+      "historical": "Pre tento historický dátum nie sú nedávne údaje eBird dostupné; dnešné pozorovania ich nenahrádzajú.",
+      "recentUnavailable": "Nedávne údaje eBird nie sú dostupné. Overte, či je integrácia eBird zapnutá a nastavená.",
+      "model": "Geografický model BirdNET je samostatný podporný údaj a tento index nemení.",
+      "geography": "{region} · importovaná oblasť prieskumu: polomer {radius} km · {date}",
+      "modelTitle": "Geografický model BirdNET",
+      "modelContext": "Aktuálny sezónny kontext modelu; oddelený od indexu miestnej vzácnosti a istoty určenia.",
+      "birdcastLink": "Zobraziť ťah predchádzajúcej noci na BirdCast (nová karta)",
+      "birdcastContext": "Radar opisuje celkový ťah, nie vzácnosť druhu, a index nemení.",
+      "reasons": {
+        "missingData": "Historické údaje úplných pozorovacích zoznamov neboli poskytnuté.",
+        "stationMismatch": "Importovaný súbor údajov nezodpovedá nastavenej polohe stanice.",
+        "unmappedTaxon": "Tento druh nemá v importovaných údajoch overenú taxonomickú zhodu.",
+        "insufficientSamples": "V sezónnom okne treba aspoň 100 vhodných lokalitných dní z 3 predchádzajúcich rokov.",
+        "locationRequired": "Na vyhodnotenie miestnej vzácnosti nastavte polohu stanice.",
+        "invalidImport": "Import miestnej vzácnosti sa nepodarilo prečítať alebo overiť.",
+        "unavailable": "Spoľahlivé údaje o miestnej vzácnosti nie sú dostupné."
+      }
     }
   },
   "spectrogram": {

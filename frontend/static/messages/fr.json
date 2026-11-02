@@ -1131,6 +1131,39 @@
       "newThisYear": "Première fois cette année",
       "newThisSeason": "Première fois cette saison",
       "daysSinceFirst": "Jours depuis la première détection"
+    },
+    "localRarity": {
+      "title": "Indice de rareté locale",
+      "loading": "Chargement des données de rareté locale…",
+      "failed": "Impossible de charger la rareté locale. Votre détection reste inchangée.",
+      "retry": "Réessayer le calcul de rareté",
+      "interpretation": "Une valeur élevée indique moins de signalements locaux à cette saison. Elle est indépendante de la confiance d’identification.",
+      "insufficient": "Données insuffisantes",
+      "evidence": "Données et limites",
+      "counts": "{reports} jours-localités avec signalement / {samples} jours-localités admissibles sur {years} années antérieures.",
+      "interval": "Intervalle d’échantillonnage approximatif à 95 % : {low}–{high}. Les biais liés aux habitats et aux observateurs ajoutent de l’incertitude.",
+      "method": "Listes complètes eBird dans une fenêtre de ±14 jours calendaires, uniquement les années antérieures. Un effort limité et une liste par localité et par jour réduisent les biais ; la fréquence de signalement n’est pas une probabilité de présence.",
+      "source": "Source : {source}. Import préparé : {date}.",
+      "recentReported": "Cette espèce figure dans la réponse eBird récente à proximité (14 derniers jours).",
+      "recentMissing": "Cette espèce ne figure pas dans la réponse eBird récente à proximité. Cela ne prouve pas son absence.",
+      "recentLimit": "Limité à 200 résultats dans le rayon de proximité par défaut d’eBird. Aucun dénominateur d’effort ; ces signalements ne modifient pas l’indice.",
+      "historical": "Les données eBird récentes ne sont pas disponibles pour cette date passée ; les observations d’aujourd’hui ne les remplacent pas.",
+      "recentUnavailable": "Les données eBird récentes sont indisponibles. Vérifiez que l’intégration eBird est activée et configurée.",
+      "model": "Le modèle géographique de BirdNET est une information complémentaire distincte et ne modifie pas cet indice.",
+      "geography": "{region} · zone d’étude importée : rayon de {radius} km · {date}",
+      "modelTitle": "Modèle géographique de BirdNET",
+      "modelContext": "Contexte saisonnier actuel du modèle ; indépendant de l’indice de rareté locale et de la confiance d’identification.",
+      "birdcastLink": "Voir la migration de la nuit précédente sur BirdCast (nouvel onglet)",
+      "birdcastContext": "Le radar décrit la migration globale, pas la rareté d’une espèce, et ne modifie pas l’indice.",
+      "reasons": {
+        "missingData": "Les données historiques de listes complètes n’ont pas été fournies.",
+        "stationMismatch": "Le jeu de données importé ne correspond pas à l’emplacement de la station configurée.",
+        "unmappedTaxon": "Cette espèce n’a aucune correspondance taxonomique vérifiée dans les données importées.",
+        "insufficientSamples": "Au moins 100 jours-localités admissibles sur 3 années antérieures sont nécessaires dans la fenêtre saisonnière.",
+        "locationRequired": "Configurez l’emplacement de la station pour évaluer la rareté locale.",
+        "invalidImport": "Impossible de lire ou de valider l’import de rareté locale.",
+        "unavailable": "Aucune donnée fiable de rareté locale n’est disponible."
+      }
     }
   },
   "spectrogram": {

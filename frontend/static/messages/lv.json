@@ -1131,6 +1131,39 @@
       "newThisYear": "Pirmā šogad",
       "newThisSeason": "Pirmā šosezon",
       "daysSinceFirst": "Dienas kopš pirmās novērošanas"
+    },
+    "localRarity": {
+      "title": "Vietējā retuma vērtējums",
+      "loading": "Ielādē vietējā retuma datus…",
+      "failed": "Neizdevās ielādēt vietējo retumu. Jūsu noteikšanas rezultāts nav mainīts.",
+      "retry": "Atkārtot retuma pieprasījumu",
+      "interpretation": "Lielāka vērtība nozīmē mazāk vietējo ziņojumu šajā sezonā. Tā ir neatkarīga no identifikācijas ticamības.",
+      "insufficient": "Nepietiek datu",
+      "evidence": "Dati un ierobežojumi",
+      "counts": "{reports} vietas dienas ar ziņojumiem / {samples} atbilstošas vietas dienas {years} iepriekšējos gados.",
+      "interval": "Aptuvens 95 % izlases intervāls: {low}–{high}. Dzīvotņu un novērotāju radītā nobīde palielina nenoteiktību.",
+      "method": "Pilni eBird saraksti ±14 kalendāro dienu logā, tikai no iepriekšējiem gadiem. Ierobežota novērošanas piepūle un viens saraksts vietai dienā mazina nobīdi; ziņojumu biežums nav klātbūtnes varbūtība.",
+      "source": "Avots: {source}. Imports sagatavots: {date}.",
+      "recentReported": "Šī suga ir iekļauta nesenajā eBird atbildē par apkārtni (pēdējās 14 dienas).",
+      "recentMissing": "Šī suga netika atgriezta nesenajā eBird atbildē par apkārtni. Tas nepierāda tās neesamību.",
+      "recentLimit": "Ne vairāk kā 200 rezultātu eBird noklusējuma apkārtnes rādiusā. Nav piepūles saucēja; šie ziņojumi nemaina vērtējumu.",
+      "historical": "Šim vēsturiskajam datumam nesenie eBird dati nav pieejami; tie netiek aizstāti ar šodienas novērojumiem.",
+      "recentUnavailable": "Nesenie eBird dati nav pieejami. Pārbaudiet, vai eBird integrācija ir iespējota un konfigurēta.",
+      "model": "BirdNET ģeogrāfiskais modelis ir atsevišķa papildu informācija un nemaina šo vērtējumu.",
+      "geography": "{region} · importētā apsekojuma teritorija: {radius} km rādiuss · {date}",
+      "modelTitle": "BirdNET ģeogrāfiskais modelis",
+      "modelContext": "Modeļa pašreizējais sezonas konteksts; neatkarīgs no vietējā retuma vērtējuma un identifikācijas ticamības.",
+      "birdcastLink": "Skatīt iepriekšējās nakts migrāciju BirdCast (jauna cilne)",
+      "birdcastContext": "Radars raksturo kopējo migrāciju, nevis sugas retumu, un nemaina vērtējumu.",
+      "reasons": {
+        "missingData": "Pilnu novērojumu sarakstu vēsturiskie dati nav norādīti.",
+        "stationMismatch": "Importētā datu kopa neatbilst konfigurētajai stacijas atrašanās vietai.",
+        "unmappedTaxon": "Šai sugai importētajos datos nav pārbaudītas taksonomiskas atbilstības.",
+        "insufficientSamples": "Sezonas logā vajadzīgas vismaz 100 atbilstošas vietas dienas 3 iepriekšējos gados.",
+        "locationRequired": "Konfigurējiet stacijas atrašanās vietu, lai novērtētu vietējo retumu.",
+        "invalidImport": "Vietējā retuma importu neizdevās nolasīt vai pārbaudīt.",
+        "unavailable": "Uzticami vietējā retuma dati nav pieejami."
+      }
     }
   },
   "spectrogram": {
