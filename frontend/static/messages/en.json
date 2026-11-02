@@ -1163,6 +1163,16 @@
         "locationRequired": "Configure the station location to evaluate local rarity.",
         "invalidImport": "The local rarity import could not be read or validated.",
         "unavailable": "Reliable local rarity evidence is unavailable."
+      },
+      "preview": {
+        "title": "Local Rarity Score preview",
+        "notice": "Sample data only. This preview does not connect to your BirdNET-Go installation or assess real detections.",
+        "scenario": "Choose a sample state",
+        "available": "Score available (75 / 100)",
+        "rare": "Rare example (98 / 100)",
+        "missing": "Insufficient historical data",
+        "historical": "Historical detection",
+        "unavailable": "Backend unavailable / retry"
       }
     }
   },

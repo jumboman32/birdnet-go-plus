@@ -1163,6 +1163,16 @@
         "locationRequired": "Konfigurera stationens plats för att bedöma lokal sällsynthet.",
         "invalidImport": "Importen för lokal sällsynthet kunde inte läsas eller valideras.",
         "unavailable": "Tillförlitliga lokala sällsynthetsdata saknas."
+      },
+      "preview": {
+        "title": "Förhandsvisning av lokalt sällsynthetsvärde",
+        "notice": "Endast exempeldata. Denna förhandsvisning ansluter inte till din BirdNET-Go-installation och bedömer inga verkliga detektioner.",
+        "scenario": "Välj ett exempeltillstånd",
+        "available": "Värde tillgängligt (75 / 100)",
+        "rare": "Sällsynt exempel (98 / 100)",
+        "missing": "Otillräckliga historiska data",
+        "historical": "Historisk detektion",
+        "unavailable": "Backend inte tillgänglig / försök igen"
       }
     }
   },

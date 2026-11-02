@@ -1163,6 +1163,16 @@
         "locationRequired": "Stel de stationslocatie in om de lokale zeldzaamheid te beoordelen.",
         "invalidImport": "De import voor lokale zeldzaamheid kon niet worden gelezen of gecontroleerd.",
         "unavailable": "Betrouwbare gegevens over lokale zeldzaamheid ontbreken."
+      },
+      "preview": {
+        "title": "Voorbeeld van lokale zeldzaamheidsscore",
+        "notice": "Alleen voorbeeldgegevens. Dit voorbeeld maakt geen verbinding met uw BirdNET-Go-installatie en beoordeelt geen echte detecties.",
+        "scenario": "Kies een voorbeeldstatus",
+        "available": "Score beschikbaar (75 / 100)",
+        "rare": "Zeldzaam voorbeeld (98 / 100)",
+        "missing": "Onvoldoende historische gegevens",
+        "historical": "Historische detectie",
+        "unavailable": "Backend niet beschikbaar / opnieuw proberen"
       }
     }
   },

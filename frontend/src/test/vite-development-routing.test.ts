@@ -24,9 +24,13 @@ describe('Vite development routes', () => {
     await server?.close();
   });
 
-  function get(path: string): Promise<{ status: number; location?: string; body: string }> {
+  function get(
+    path: string,
+    targetOrigin = origin,
+    method = 'GET'
+  ): Promise<{ status: number; location?: string; body: string }> {
     return new Promise((resolveResponse, reject) => {
-      const req = request(origin + path, response => {
+      const req = request(targetOrigin + path, { method }, response => {
         let body = '';
         response.setEncoding('utf8');
         response.on('data', chunk => {
@@ -77,6 +81,10 @@ describe('Vite development routes', () => {
     expect(config.base).toBe('/ui/assets/');
   });
 
+  it('rejects the sample HTML entry when the real backend proxy is enabled', async () => {
+    expect((await get('/rarity-preview.html')).status).toBe(404);
+  });
+
   it('preserves preview paths without opening a development-only route', async () => {
     const config = await resolveConfig(
       { configFile: resolve('vite.config.js'), logLevel: 'silent' },
@@ -87,5 +95,50 @@ describe('Vite development routes', () => {
     );
     expect(config.base).toBe('/ui/assets/');
     expect(config.preview.open).toBe(false);
+  });
+
+  it('runs an isolated sample preview without a production API proxy', async () => {
+    const preview = await createServer({
+      configFile: resolve('vite.config.js'),
+      mode: 'rarity',
+      logLevel: 'silent',
+      server: { host: '127.0.0.1', port: 0, open: false, watch: null },
+    });
+    try {
+      await preview.listen();
+      const address = preview.httpServer?.address();
+      if (!address || typeof address === 'string') throw new Error('Preview did not bind a port');
+      const previewOrigin = `http://127.0.0.1:${address.port}`;
+      expect(preview.config.server.proxy).toBeUndefined();
+      const root = await get('/', previewOrigin);
+      expect(root.location).toBe('/rarity-preview.html');
+      const html = await get('/rarity-preview.html', previewOrigin);
+      expect(html.status).toBe(200);
+      expect(html.body).toContain('/src/rarity-preview.ts');
+      expect(html.body).not.toContain('/src/main.js');
+      const endpoint = '/api/v2/species/local-rarity?scientific_name=';
+      const available = await get(endpoint + 'available', previewOrigin);
+      expect(JSON.parse(available.body).score).toBe(75);
+      expect(JSON.parse(available.body).source).toBe('SYNTHETIC PREVIEW DATA');
+      const rare = await get(endpoint + 'rare', previewOrigin);
+      expect(JSON.parse(rare.body).score).toBe(98);
+      const missing = await get(endpoint + 'missing', previewOrigin);
+      expect(JSON.parse(missing.body).score).toBeNull();
+      const historical = await get(endpoint + 'historical', previewOrigin);
+      expect(JSON.parse(historical.body).recentStatus).toBe('historical_unavailable');
+      expect((await get(endpoint + 'unavailable', previewOrigin)).status).toBe(503);
+      expect((await get('/api/v2/app/config', previewOrigin)).status).toBe(404);
+      expect((await get('/api/v2/settings', previewOrigin, 'PUT')).status).toBe(404);
+    } finally {
+      await preview.close();
+    }
+  });
+
+  it('never enables sample endpoints for a production build', async () => {
+    const config = await resolveConfig(
+      { configFile: resolve('vite.config.js'), mode: 'rarity', logLevel: 'silent' },
+      'build'
+    );
+    expect(config.plugins.some(plugin => plugin.name === 'isolated-rarity-preview')).toBe(false);
   });
 });

@@ -5,6 +5,20 @@ identification confidence. BirdCast is an optional external link for migration
 context and never changes the score. No settings, recordings, or database rows are
 written by this feature.
 
+## One-command preview without a backend
+
+From `frontend/`, run `npm.cmd run dev:rarity` in Windows PowerShell (or
+`npm run dev:rarity` elsewhere). Vite opens the rarity preview automatically.
+Use the terminal's Local address if your normal development port is occupied.
+
+The preview renders the actual rarity card with clearly labelled synthetic
+responses: scores of 75 and 98, insufficient data, historical evidence, and an
+unavailable backend with retry. It needs no Go installation, API key, database,
+or running production server. Its API proxy is disabled and other API requests
+are rejected locally. This tests the interface and states; it does not calculate
+rarity for real detections or load historical data. Use the import/backend steps
+below for real-data validation. The preview is never included in production builds.
+
 ## Data and limitations
 
 The [official eBird data guidance](https://science.ebird.org/en/use-ebird-data)

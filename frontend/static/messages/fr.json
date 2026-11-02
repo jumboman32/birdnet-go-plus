@@ -1163,6 +1163,16 @@
         "locationRequired": "Configurez l’emplacement de la station pour évaluer la rareté locale.",
         "invalidImport": "Impossible de lire ou de valider l’import de rareté locale.",
         "unavailable": "Aucune donnée fiable de rareté locale n’est disponible."
+      },
+      "preview": {
+        "title": "Aperçu de l’indice de rareté locale",
+        "notice": "Données d’exemple uniquement. Cet aperçu ne se connecte pas à votre installation BirdNET-Go et n’évalue pas de détections réelles.",
+        "scenario": "Choisir un état d’exemple",
+        "available": "Indice disponible (75 / 100)",
+        "rare": "Exemple rare (98 / 100)",
+        "missing": "Données historiques insuffisantes",
+        "historical": "Détection historique",
+        "unavailable": "Serveur indisponible / réessayer"
       }
     }
   },

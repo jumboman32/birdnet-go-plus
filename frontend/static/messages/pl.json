@@ -1163,6 +1163,16 @@
         "locationRequired": "Skonfiguruj lokalizację stacji, aby ocenić lokalną rzadkość.",
         "invalidImport": "Nie udało się odczytać lub zweryfikować importu lokalnej rzadkości.",
         "unavailable": "Wiarygodne dane o lokalnej rzadkości są niedostępne."
+      },
+      "preview": {
+        "title": "Podgląd lokalnego wskaźnika rzadkości",
+        "notice": "Tylko dane przykładowe. Ten podgląd nie łączy się z Twoją instalacją BirdNET-Go i nie ocenia rzeczywistych wykryć.",
+        "scenario": "Wybierz przykładowy stan",
+        "available": "Wskaźnik dostępny (75 / 100)",
+        "rare": "Rzadki przykład (98 / 100)",
+        "missing": "Niewystarczające dane historyczne",
+        "historical": "Historyczne wykrycie",
+        "unavailable": "Backend niedostępny / ponów próbę"
       }
     }
   },

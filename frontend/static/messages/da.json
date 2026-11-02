@@ -1163,6 +1163,16 @@
         "locationRequired": "Konfigurér stationens placering for at vurdere lokal sjældenhed.",
         "invalidImport": "Importen til lokal sjældenhed kunne ikke læses eller valideres.",
         "unavailable": "Pålidelige lokale sjældenhedsdata er ikke tilgængelige."
+      },
+      "preview": {
+        "title": "Forhåndsvisning af lokal sjældenhedsscore",
+        "notice": "Kun eksempeldata. Denne forhåndsvisning forbinder ikke til din BirdNET-Go-installation og vurderer ikke virkelige registreringer.",
+        "scenario": "Vælg en eksempeltilstand",
+        "available": "Score tilgængelig (75 / 100)",
+        "rare": "Sjældent eksempel (98 / 100)",
+        "missing": "Utilstrækkelige historiske data",
+        "historical": "Historisk registrering",
+        "unavailable": "Backend utilgængelig / prøv igen"
       }
     }
   },

@@ -1163,6 +1163,16 @@
         "locationRequired": "Määritä aseman sijainti paikallisen harvinaisuuden arvioimiseksi.",
         "invalidImport": "Paikallisen harvinaisuuden tuontia ei voitu lukea tai vahvistaa.",
         "unavailable": "Luotettavaa paikallista harvinaisuusaineistoa ei ole saatavilla."
+      },
+      "preview": {
+        "title": "Paikallisen harvinaisuuspistemäärän esikatselu",
+        "notice": "Vain esimerkkiaineistoa. Tämä esikatselu ei yhdistä BirdNET-Go-asennukseesi eikä arvioi todellisia havaintoja.",
+        "scenario": "Valitse esimerkkitila",
+        "available": "Pistemäärä saatavilla (75 / 100)",
+        "rare": "Harvinainen esimerkki (98 / 100)",
+        "missing": "Riittämättömät historialliset tiedot",
+        "historical": "Historiallinen havainto",
+        "unavailable": "Taustapalvelu ei ole käytettävissä / yritä uudelleen"
       }
     }
   },

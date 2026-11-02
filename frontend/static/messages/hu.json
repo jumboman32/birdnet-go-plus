@@ -1163,6 +1163,16 @@
         "locationRequired": "Állítsa be az állomás helyét a helyi ritkaság értékeléséhez.",
         "invalidImport": "A helyi ritkasági import nem olvasható vagy nem ellenőrizhető.",
         "unavailable": "Megbízható helyi ritkasági adatok nem érhetők el."
+      },
+      "preview": {
+        "title": "A helyi ritkasági pontszám előnézete",
+        "notice": "Csak mintaadatok. Ez az előnézet nem kapcsolódik a BirdNET-Go-telepítéséhez, és nem értékel valós észleléseket.",
+        "scenario": "Válasszon mintaállapotot",
+        "available": "Pontszám elérhető (75 / 100)",
+        "rare": "Ritka példa (98 / 100)",
+        "missing": "Elégtelen történeti adat",
+        "historical": "Korábbi észlelés",
+        "unavailable": "A háttérszolgáltatás nem érhető el / újrapróbálás"
       }
     }
   },

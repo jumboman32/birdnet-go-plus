@@ -1163,6 +1163,16 @@
         "locationRequired": "Konfigurējiet stacijas atrašanās vietu, lai novērtētu vietējo retumu.",
         "invalidImport": "Vietējā retuma importu neizdevās nolasīt vai pārbaudīt.",
         "unavailable": "Uzticami vietējā retuma dati nav pieejami."
+      },
+      "preview": {
+        "title": "Vietējā retuma vērtējuma priekšskatījums",
+        "notice": "Tikai parauga dati. Šis priekšskatījums nepievienojas jūsu BirdNET-Go instalācijai un nevērtē reālus noteikšanas rezultātus.",
+        "scenario": "Izvēlieties parauga stāvokli",
+        "available": "Vērtējums pieejams (75 / 100)",
+        "rare": "Rets piemērs (98 / 100)",
+        "missing": "Nepietiek vēsturisko datu",
+        "historical": "Vēsturisks noteikšanas rezultāts",
+        "unavailable": "Aizmugursistēma nav pieejama / mēģināt vēlreiz"
       }
     }
   },

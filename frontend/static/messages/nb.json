@@ -1163,6 +1163,16 @@
         "locationRequired": "Konfigurer stasjonens plassering for å vurdere lokal sjeldenhet.",
         "invalidImport": "Importen for lokal sjeldenhet kunne ikke leses eller valideres.",
         "unavailable": "Pålitelige lokale sjeldenhetsdata er utilgjengelige."
+      },
+      "preview": {
+        "title": "Forhåndsvisning av lokal sjeldenhetsskår",
+        "notice": "Bare eksempeldata. Denne forhåndsvisningen kobler ikke til BirdNET-Go-installasjonen din og vurderer ikke virkelige deteksjoner.",
+        "scenario": "Velg en eksempeltilstand",
+        "available": "Skår tilgjengelig (75 / 100)",
+        "rare": "Sjeldent eksempel (98 / 100)",
+        "missing": "Utilstrekkelige historiske data",
+        "historical": "Historisk deteksjon",
+        "unavailable": "Backend utilgjengelig / prøv igjen"
       }
     }
   },
