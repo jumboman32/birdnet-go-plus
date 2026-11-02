@@ -21,6 +21,10 @@ below for real-data validation. The preview is never included in production buil
 
 ## Data and limitations
 
+For the separate Windows backend package and its port-8081 launcher, see
+[development backend instructions](../scripts/development/README.md). The package
+uses a new database and does not include historical eBird data.
+
 The [official eBird data guidance](https://science.ebird.org/en/use-ebird-data)
 recommends complete-checklist data, sampling effort, and careful treatment of
 sampling bias. Obtain an authorized **all-species** eBird Basic Dataset (EBD) and
