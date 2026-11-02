@@ -5,6 +5,7 @@ import { svelteTesting } from '@testing-library/svelte/vite'
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { createHash } from 'node:crypto'
+import { rarityPreviewPlugin, RARITY_PREVIEW_ENTRY } from './rarity-preview.js'
 
 // Single source of truth for the translation files directory.
 const MESSAGES_SOURCE_DIR = './static/messages'
@@ -63,7 +64,7 @@ function discoverSupportedLocales() {
 }
 
 // https://vite.dev/config/
-export default defineConfig(({ command, isPreview }) => ({
+export default defineConfig(({ command, isPreview, mode }) => ({
   // The SPA routes live under /ui/, outside the production asset directory.
   // Vite must serve those routes at the root during development, otherwise its
   // base middleware rejects page navigation before the SPA can handle it.
@@ -73,6 +74,7 @@ export default defineConfig(({ command, isPreview }) => ({
     __I18N_CACHE_VERSION__: JSON.stringify(computeI18nCacheVersion()),
   },
   plugins: [
+    ...(mode === 'rarity' && command === 'serve' && !isPreview ? [rarityPreviewPlugin()] : []),
     {
       name: 'development-ui-paths',
       apply: 'serve',
@@ -80,6 +82,11 @@ export default defineConfig(({ command, isPreview }) => ({
         server.middlewares.use((req, res, next) => {
           if (!req.url) return next()
           const url = new URL(req.url, 'http://vite.internal')
+          if (mode !== 'rarity' && url.pathname === RARITY_PREVIEW_ENTRY) {
+            res.statusCode = 404
+            res.end()
+            return
+          }
           if (url.pathname === PRODUCTION_ASSET_BASE || url.pathname === PRODUCTION_ASSET_BASE.slice(0, -1)) {
             res.writeHead(302, { Location: DEVELOPMENT_ENTRY + url.search })
             res.end()
@@ -153,8 +160,8 @@ export default defineConfig(({ command, isPreview }) => ({
     },
   },
   server: {
-    open: command === 'serve' && !isPreview ? DEVELOPMENT_ENTRY : false,
-    proxy: {
+    open: command === 'serve' && !isPreview ? (mode === 'rarity' ? RARITY_PREVIEW_ENTRY : DEVELOPMENT_ENTRY) : false,
+    proxy: mode === 'rarity' ? undefined : {
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,

@@ -1163,6 +1163,16 @@
         "locationRequired": "Richten Sie den Stationsstandort ein, um die lokale Seltenheit zu bewerten.",
         "invalidImport": "Der Import für die lokale Seltenheit konnte nicht gelesen oder geprüft werden.",
         "unavailable": "Verlässliche Daten zur lokalen Seltenheit sind nicht verfügbar."
+      },
+      "preview": {
+        "title": "Vorschau des lokalen Seltenheitswerts",
+        "notice": "Nur Beispieldaten. Diese Vorschau verbindet sich nicht mit Ihrer BirdNET-Go-Installation und bewertet keine echten Erkennungen.",
+        "scenario": "Beispielzustand auswählen",
+        "available": "Wert verfügbar (75 / 100)",
+        "rare": "Seltenes Beispiel (98 / 100)",
+        "missing": "Unzureichende historische Daten",
+        "historical": "Frühere Erkennung",
+        "unavailable": "Backend nicht verfügbar / erneut versuchen"
       }
     }
   },

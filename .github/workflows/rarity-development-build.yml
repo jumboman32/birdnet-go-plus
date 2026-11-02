@@ -1,0 +1,42 @@
+name: Windows rarity development download
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/local-rarity-score]
+
+permissions:
+  contents: read
+
+jobs:
+  windows-download:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build Windows backend using the release toolchain
+        uses: ./.github/actions/build-birdnet-binary
+        with:
+          goos: windows
+          goarch: amd64
+          build-version: local-rarity-development
+          github-token: ${{ github.token }}
+      - name: Assemble isolated development package
+        shell: bash
+        run: |
+          mkdir -p development-package/licenses/onnxruntime
+          cp artifacts/birdnet-go.exe development-package/birdnet-go-dev.exe
+          cp artifacts/*.dll development-package/
+          cp scripts/development/start-development.mjs scripts/development/Start-Development.cmd scripts/development/README.md development-package/
+          cp LICENSE development-package/
+          cp "${RUNNER_TEMP}/onnxruntime/LICENSE" "${RUNNER_TEMP}/onnxruntime/ThirdPartyNotices.txt" development-package/licenses/onnxruntime/
+          node --test scripts/development/start-development.test.mjs
+          cd development-package
+          sha256sum birdnet-go-dev.exe *.dll > SHA256SUMS.txt
+      - name: Upload Windows ZIP download
+        uses: actions/upload-artifact@v7
+        with:
+          name: Windows-Rarity-Backend
+          path: development-package/
+          if-no-files-found: error
+          retention-days: 30

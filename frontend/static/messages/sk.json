@@ -1163,6 +1163,16 @@
         "locationRequired": "Na vyhodnotenie miestnej vzácnosti nastavte polohu stanice.",
         "invalidImport": "Import miestnej vzácnosti sa nepodarilo prečítať alebo overiť.",
         "unavailable": "Spoľahlivé údaje o miestnej vzácnosti nie sú dostupné."
+      },
+      "preview": {
+        "title": "Náhľad indexu miestnej vzácnosti",
+        "notice": "Iba ukážkové údaje. Tento náhľad sa nepripája k vašej inštalácii BirdNET-Go ani nehodnotí skutočné detekcie.",
+        "scenario": "Vyberte ukážkový stav",
+        "available": "Index je dostupný (75 / 100)",
+        "rare": "Príklad vzácneho výskytu (98 / 100)",
+        "missing": "Nedostatok historických údajov",
+        "historical": "Historická detekcia",
+        "unavailable": "Backend nie je dostupný / skúsiť znova"
       }
     }
   },

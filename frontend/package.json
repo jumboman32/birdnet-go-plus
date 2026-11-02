@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:rarity": "vite --mode rarity",
     "build": "vite build",
     "preview": "vite preview",
     "build:go": "npm run build && cd .. && go generate ./frontend",
