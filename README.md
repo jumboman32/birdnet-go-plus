@@ -1,6 +1,6 @@
 # BirdNET-Go+
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
-- Experimental Local Rarity Score using historical eBird checklist imports, separate from identification confidence.
+- Experimental Local Rarity Score using historical eBird checklist imports, separate from identification confidence. (wip)
 - Recent eBird observations and BirdCast migration context.
 - eBird and Cornell Compare Calls links in Detection Details.
 - Separate Windows development launcher for testing.
