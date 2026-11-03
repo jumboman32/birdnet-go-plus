@@ -168,10 +168,14 @@
   }
 
   .thumbnail-image {
+    /* Preserve more headroom when wide cards crop the species photograph. */
+    --species-photo-vertical-focus: 25%;
+
     position: relative;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center var(--species-photo-vertical-focus);
     transition: transform 400ms ease;
   }
 
