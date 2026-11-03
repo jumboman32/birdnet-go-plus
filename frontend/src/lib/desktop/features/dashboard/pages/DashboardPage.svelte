@@ -43,6 +43,7 @@ Performance Optimizations:
   import CurrentlyHearingCard from '$lib/desktop/features/dashboard/components/CurrentlyHearingCard.svelte';
   import DailySummaryCard from '$lib/desktop/features/dashboard/components/DailySummaryCard.svelte';
   import NewSpeciesHighlightsCard from '$lib/desktop/features/dashboard/components/NewSpeciesHighlightsCard.svelte';
+  import { MAX_DETECTION_CARDS, normalizeDetectionCardLimit } from '../utils/detectionCardLayout';
   import DetectionCardGrid from '$lib/desktop/features/dashboard/components/DetectionCardGrid.svelte';
   import { t } from '$lib/i18n';
   import type { DailySpeciesSummary, Detection } from '$lib/types/detection.types';
@@ -62,7 +63,7 @@ Performance Optimizations:
   import { getLogger } from '$lib/utils/logger';
   import { cn } from '$lib/utils/cn.js';
   import { createDebounce } from '$lib/utils/debounce';
-  import { getStoredValue, setStoredValue } from '$lib/utils/storage';
+  import { getStoredValue } from '$lib/utils/storage';
   import { safeArrayAccess, isPlainObject } from '$lib/utils/security';
   import { api } from '$lib/utils/api';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
@@ -283,30 +284,8 @@ Performance Optimizations:
   // SSE throttling timer
   let sseFetchTimer: ReturnType<typeof setTimeout> | null = null;
 
-  // Valid detection limit options for card grid layout
-  const VALID_DETECTION_LIMITS = [6, 12, 24, 48];
-  const DEFAULT_DETECTION_LIMIT = 6;
-
-  // Migration map from old values to new card grid values
-  const LIMIT_MIGRATION_MAP: Record<number, number> = {
-    5: 6,
-    10: 12,
-    25: 24,
-    50: 48,
-  };
-
   function getInitialDetectionLimit(): number {
-    const stored = getStoredValue('recentDetectionLimit', DEFAULT_DETECTION_LIMIT);
-    if (typeof stored !== 'number' || isNaN(stored)) return DEFAULT_DETECTION_LIMIT;
-    if (VALID_DETECTION_LIMITS.includes(stored)) return stored;
-    const migrated = Object.hasOwn(LIMIT_MIGRATION_MAP, stored)
-      ? LIMIT_MIGRATION_MAP[stored as keyof typeof LIMIT_MIGRATION_MAP]
-      : undefined;
-    if (migrated !== undefined) {
-      setStoredValue('recentDetectionLimit', migrated);
-      return migrated;
-    }
-    return DEFAULT_DETECTION_LIMIT;
+    return normalizeDetectionCardLimit(getStoredValue('recentDetectionLimit', MAX_DETECTION_CARDS));
   }
 
   // Detection limit state to sync with DetectionCardGrid

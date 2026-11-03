@@ -2,7 +2,7 @@
   SpeciesInfoBar.svelte
 
   Bottom info bar displaying species information on detection cards.
-  Features species thumbnail, name, verification status, and time info.
+  Features a full-card species photograph, name, verification status, and time info.
 
   Props:
   - detection: Detection - The detection data to display
@@ -12,10 +12,11 @@
   import type { Detection } from '$lib/types/detection.types';
   import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
   import { formatRelativeTime } from '$lib/utils/formatters';
-  import { Check, CircleHelp } from '@lucide/svelte';
+  import { Bird, Check, CircleHelp } from '@lucide/svelte';
   import { cn } from '$lib/utils/cn';
   import { t } from '$lib/i18n';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
+  import { navigation } from '$lib/stores/navigation.svelte';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
 
   interface Props {
@@ -42,7 +43,7 @@
   const isFalsePositive = $derived(detection.verified === 'false_positive');
   const isUnlikely = $derived(detection.unlikely === true);
 
-  // Thumbnail URL: buildAppUrl prepends the configured base path so the
+  // Species photo URL: buildAppUrl prepends the configured base path so the
   // image resolves correctly behind reverse proxies (e.g. /birdnet/...).
   const thumbnailUrl = $derived(
     buildAppUrl(`/api/v2/media/species-image?name=${encodeURIComponent(detection.scientificName)}`)
@@ -54,22 +55,41 @@
 </script>
 
 <div class={cn('species-info-bar', className)}>
-  <!-- Species Thumbnail -->
+  <!-- Existing species-image API and retrying silhouette fallback. -->
   <div class="species-thumbnail">
-    <img
-      src={thumbnailUrl}
-      alt={displayName}
-      class="thumbnail-image"
-      loading="lazy"
-      onerror={handleBirdImageError}
-    />
+    <Bird class="photo-placeholder" aria-hidden="true" strokeWidth={1} />
+    {#key thumbnailUrl}
+      <img
+        src={thumbnailUrl}
+        alt={displayName}
+        class="thumbnail-image"
+        decoding="async"
+        loading="lazy"
+        onerror={handleBirdImageError}
+      />
+    {/key}
   </div>
 
   <!-- Species Info (flex-1) -->
   <div class="species-details">
     <!-- Name row with verification badge -->
     <div class="species-name-row">
-      <span class="species-name">{displayName}</span>
+      <a
+        class="species-name"
+        href={buildAppUrl(`/ui/detections/${detection.id}`)}
+        onclick={event => {
+          if (
+            event.button !== 0 ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey
+          )
+            return;
+          event.preventDefault();
+          navigation.navigate(`/ui/detections/${detection.id}`);
+        }}>{displayName}</a
+      >
       {#if isVerified}
         <span
           class="verified-badge"
@@ -117,38 +137,67 @@
 <style>
   .species-info-bar {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: flex-end;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    z-index: 10;
+    inset: 0;
+    z-index: 1;
+    color: white;
+    background: linear-gradient(145deg, var(--color-base-200), var(--color-base-300));
   }
 
-  /* Species thumbnail */
-  /* 4:3 aspect ratio to match avicommons 320×240 source images */
-  /* Colors are overlay-specific: this bar sits on a dark image, not a themed surface */
+  .species-info-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgb(0 0 0 / 0.2), transparent 35%, rgb(0 0 0 / 0.85));
+    pointer-events: none;
+  }
+
   .species-thumbnail {
-    flex-shrink: 0;
-    width: 3.5rem;
-    height: 2.625rem;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 2px solid rgb(255 255 255 / 0.15);
-    background-color: rgb(15 23 42 / 0.6);
+    position: absolute;
+    inset: 0;
+  }
+
+  .species-thumbnail :global(.photo-placeholder) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 45%;
+    height: 45%;
+    transform: translate(-50%, -50%);
+    color: var(--color-base-content);
+    opacity: 0.2;
   }
 
   .thumbnail-image {
+    position: relative;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 400ms ease;
+  }
+
+  .thumbnail-image[src*='bird-placeholder.svg'] {
+    opacity: 0;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    :global(.detection-card:hover) .thumbnail-image {
+      transform: scale(1.03);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .thumbnail-image {
+      transition: none;
+    }
   }
 
   /* Species details */
   .species-details {
-    flex: 1;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    z-index: 2;
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -158,15 +207,24 @@
   .species-name-row {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.375rem;
   }
 
   .species-name {
-    font-weight: 600;
-    font-size: 0.9375rem;
+    font-weight: 750;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    text-decoration: none;
+    overflow-wrap: anywhere;
     color: white;
     line-height: 1.3;
     text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
+  }
+
+  .species-name:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+    border-radius: 0.25rem;
   }
 
   .verified-badge {
@@ -199,7 +257,7 @@
     height: 1rem;
     border-radius: 9999px;
     background-color: rgb(255 255 255 / 0.12);
-    color: rgb(255 255 255 / 0.75);
+    color: white;
     font-size: 0.625rem;
     font-weight: 500;
   }
@@ -220,18 +278,25 @@
   .scientific-name {
     font-size: 0.8125rem;
     font-style: italic;
-    color: rgb(255 255 255 / 0.65);
+    color: rgb(255 255 255 / 0.9);
     line-height: 1.3;
     text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
   }
 
   /* Time info */
   .time-info {
-    flex-shrink: 0;
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    max-width: calc(100% - 8.5rem);
+    z-index: 2;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background: rgb(0 0 0 / 0.65);
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.125rem;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .detection-time {
@@ -244,7 +309,7 @@
 
   .relative-time {
     font-size: 0.75rem;
-    color: rgb(255 255 255 / 0.65);
+    color: rgb(255 255 255 / 0.9);
     text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
   }
 </style>

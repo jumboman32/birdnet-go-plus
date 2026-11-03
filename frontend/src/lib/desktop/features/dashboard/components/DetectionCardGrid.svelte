@@ -2,7 +2,7 @@
   DetectionCardGrid.svelte
 
   A card-based grid layout for displaying recent bird detections.
-  Features prominent spectrogram visualization with overlaid metadata.
+  Features prominent species photographs with compact audio previews.
 
   Usage:
   - Dashboard view for recent detections
@@ -29,7 +29,12 @@
   import { dropdown } from '$lib/utils/transitions';
   import { onMount } from 'svelte';
   import { t } from '$lib/i18n';
-  import { loggers } from '$lib/utils/logger';
+  import { setStoredValue } from '$lib/utils/storage';
+  import {
+    DETECTION_CARD_LIMITS,
+    MAX_DETECTION_CARDS,
+    normalizeDetectionCardLimit,
+  } from '../utils/detectionCardLayout';
   import { cn } from '$lib/utils/cn';
   import { useDetectionActions } from '$lib/desktop/features/detections/composables/useDetectionActions.svelte';
   import {
@@ -37,11 +42,6 @@
     setExcluded,
     hydrateExcludedSpecies,
   } from '$lib/stores/excludedSpecies.svelte';
-
-  const logger = loggers.ui;
-
-  // Each DetectionCard renders its compact (media-free) form on its own when its
-  // detection has no clip, so no card-level audio flag is threaded through here.
 
   interface Props {
     data: Detection[];
@@ -63,7 +63,7 @@
     loading = false,
     error = null,
     onRefresh,
-    limit = 6,
+    limit = MAX_DETECTION_CARDS,
     onLimitChange,
     newDetectionIds = new Set(),
     onFreezeStart,
@@ -73,7 +73,7 @@
   }: Props = $props();
 
   // svelte-ignore state_referenced_locally
-  let selectedLimit = $state(limit);
+  let selectedLimit = $state(normalizeDetectionCardLimit(limit));
 
   // Shared action handlers (review, delete, lock, ignore species). Exclusion
   // state is the shared, server-hydrated excludedSpecies store.
@@ -87,7 +87,7 @@
   let showLimitDropdown = $state(false);
   let dropdownRef = $state<HTMLDivElement | undefined>(undefined);
   let dropdownButtonRef = $state<HTMLButtonElement | undefined>(undefined);
-  const limitOptions = [6, 12, 24, 48];
+  const limitOptions = DETECTION_CARD_LIMITS;
 
   // Guard against a duplicate detection id in the incoming data: a repeated id in a
   // keyed {#each} throws each_key_duplicate and, with no error boundary, white-screens
@@ -104,6 +104,8 @@
     }
     return out;
   });
+
+  const visibleData = $derived(uniqueData.slice(0, selectedLimit));
 
   // Toggle dropdown
   function toggleLimitDropdown() {
@@ -171,18 +173,12 @@
 
   // Updates the number of detections to display and persists the preference
   function handleLimitChange(newLimit: number) {
-    selectedLimit = newLimit;
+    selectedLimit = normalizeDetectionCardLimit(newLimit);
 
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem('recentDetectionLimit', newLimit.toString());
-      } catch (e) {
-        logger.error('Failed to save detection limit:', e);
-      }
-    }
+    setStoredValue('recentDetectionLimit', selectedLimit);
 
     if (onLimitChange) {
-      onLimitChange(newLimit);
+      onLimitChange(selectedLimit);
     }
   }
 </script>
@@ -286,8 +282,12 @@
         {/if}
 
         <!-- Detection Cards Grid -->
-        <div class="detection-cards-grid gap-4">
-          {#each uniqueData.slice(0, selectedLimit) as detection (detection.id)}
+        <div
+          class="detection-cards-grid gap-4"
+          class:single-card={visibleData.length === 1}
+          class:three-cards={visibleData.length === 3}
+        >
+          {#each visibleData as detection (detection.id)}
             <DetectionCard
               {detection}
               isNew={newDetectionIds.has(detection.id)}
@@ -452,11 +452,21 @@
   .detection-cards-grid {
     display: grid;
     grid-template-columns: 1fr;
+    grid-auto-rows: minmax(min-content, 1fr);
+    min-height: clamp(28rem, 65vh, 52rem);
   }
 
   @container (min-width: 640px) {
     .detection-cards-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .three-cards > :global(.detection-card:last-child) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .detection-cards-grid.single-card {
+    grid-template-columns: 1fr;
   }
 </style>

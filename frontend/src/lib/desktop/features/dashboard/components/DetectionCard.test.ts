@@ -21,7 +21,7 @@ function createDetection(overrides: Partial<Detection> = {}): Detection {
   };
 }
 
-describe('DetectionCard spectrogram-only detection', () => {
+describe('DetectionCard media states', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -34,7 +34,7 @@ describe('DetectionCard spectrogram-only detection', () => {
     const img = container.querySelector('img.spectrogram-img');
     expect(img).not.toBeNull();
     expect(img?.getAttribute('src')).toContain('/api/v2/spectrogram/654?size=md&raw=true');
-    expect(container.querySelector('.detection-card-inner.compact')).toBeNull();
+    expect(container.querySelector('.audio-preview')).not.toBeNull();
     // Audio-only controls stay hidden: no play overlay and no audio settings button.
     expect(screen.queryByRole('button', { name: /play/i })).toBeNull();
   });
@@ -59,10 +59,11 @@ describe('DetectionCard spectrogram-only detection', () => {
     expect(container.querySelector('.spectrogram-unavailable')).not.toBeNull();
   });
 
-  it('keeps the compact layout when there is neither audio nor a kept image', () => {
+  it('keeps the species photograph without an audio preview when no media is retained', () => {
     const { container } = render(DetectionCard, { props: { detection: createDetection() } });
 
-    expect(container.querySelector('.detection-card-inner.compact')).not.toBeNull();
+    expect(container.querySelector('.thumbnail-image')).not.toBeNull();
+    expect(container.querySelector('.audio-preview')).toBeNull();
     expect(container.querySelector('img.spectrogram-img')).toBeNull();
   });
 });

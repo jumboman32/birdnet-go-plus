@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { cleanup } from '@testing-library/svelte';
+import { cleanup, fireEvent } from '@testing-library/svelte';
 import { createComponentTestFactory } from '../../../../../test/render-helpers';
 import { setBasePath, resetBasePath } from '$lib/utils/urlHelpers';
 import type { Detection } from '$lib/types/detection.types';
@@ -25,6 +25,21 @@ describe('SpeciesInfoBar', () => {
   afterEach(() => {
     cleanup();
     resetBasePath();
+  });
+
+  it('links the species name to the observation details behind a base path', () => {
+    setBasePath('/birdnet');
+    const { getByRole } = speciesInfoBar.render({ props: { detection: baseDetection } });
+    expect(getByRole('link', { name: baseDetection.commonName }).getAttribute('href')).toBe(
+      '/birdnet/ui/detections/1'
+    );
+  });
+
+  it('uses the existing silhouette fallback when the species image fails', async () => {
+    const { getByRole } = speciesInfoBar.render({ props: { detection: baseDetection } });
+    const image = getByRole('img', { name: baseDetection.commonName });
+    await fireEvent.error(image);
+    expect(image.getAttribute('src')).toContain('/ui/assets/bird-placeholder.svg');
   });
 
   it('builds the species image URL without a base path by default', () => {
