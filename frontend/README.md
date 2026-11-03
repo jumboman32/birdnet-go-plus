@@ -19,9 +19,56 @@ Run the commands from the repository root with [Task](https://taskfile.dev). Tas
 There are two ways to work on the UI:
 
 1. **Watch mode, served by Go.** Run `task frontend-watch` in one terminal and `task dev_server` (or `./bin/birdnet-go realtime`) in another, then open `http://localhost:8080`. When `frontend/dist` exists on disk next to the working directory, the Go server serves the UI from disk instead of the embedded copy, so a rebuild is picked up without recompiling Go. `air` ignores the `frontend` directory.
-2. **Vite dev server.** Run the backend as above, then `task frontend-dev` and open `http://localhost:5173`. Vite proxies `/api` to `http://localhost:8080`.
+2. **Vite dev server.** Start the isolated test backend described below, then run `task frontend-dev` and open `http://localhost:5173`. Vite proxies `/api` to `http://127.0.0.1:8081`. For a Go development backend on port 8080, set `BIRDNET_DEV_BACKEND=http://127.0.0.1:8080` before starting Vite.
 
 Without Task, the same scripts run from `frontend/`: `npm run dev`, `npm run build`, `npm run build -- --watch`.
+
+## Windows: start the test backend first
+
+The frontend needs a separately running BirdNET-Go backend. `ECONNREFUSED` for
+`/api/v2/app/config` means it cannot connect to that backend. Reinstalling npm
+packages does not start the backend.
+
+1. Download **Windows-Rarity-Backend** from the
+   [Windows development build](https://github.com/jumboman32/birdnet-go-plus/actions/workflows/rarity-development-build.yml).
+   This package supplies the backend; Vite supplies the current branch's frontend.
+2. Extract the ZIP into a new folder outside your production installation. Open
+   PowerShell in that extracted folder and run:
+
+   ```powershell
+   node .\start-development.mjs
+   ```
+
+   Leave this terminal open. The launcher uses port **8081**, an empty test
+   database, and its own `development-data` folder. Capture is initially disabled.
+   See [the launcher instructions](../scripts/development/README.md).
+
+3. Open a second PowerShell terminal and run:
+
+   ```powershell
+   cd "$env:USERPROFILE\Documents\birdnet-go-plus\frontend"
+   npm.cmd ci
+   npm.cmd run dev
+   ```
+
+4. Open <http://localhost:5173/ui/dashboard>. Configure a microphone and enable an
+   acoustic model in this test dashboard to collect test detections. An empty
+   dashboard is expected until test detections have been collected.
+
+The default proxy uses `127.0.0.1:8081`, avoiding the production port and Windows
+IPv4/IPv6 `localhost` resolution differences. Vite does not start a backend.
+For another development backend, set the address before starting Vite:
+
+```powershell
+$env:BIRDNET_DEV_BACKEND = 'http://127.0.0.1:8081'
+npm.cmd run dev
+```
+
+You can also put `BIRDNET_DEV_BACKEND=http://127.0.0.1:8081` in the Git-ignored
+`frontend/.env.development.local`. Restart Vite after changing the address.
+This affects development proxying only; production builds use the backend
+serving the UI. Use a separate test backend for verification and deletion tests,
+since those actions change its data.
 
 ## Tests and checks
 
