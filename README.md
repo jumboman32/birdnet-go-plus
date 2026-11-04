@@ -1,8 +1,12 @@
 # BirdNET-Go+
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
-- Recent eBird observations and BirdCast migration context.
 - eBird and Cornell Compare Calls links in Detection Details.
 - Separate Windows development launcher for testing.
+- UI Changes
+<p align="left">
+  <img src="ui1.png" alt="BirdNET-Go Plus UI" width="800">
+</p>
+
 Numeric rarity scores require historical checklist data; an eBird API key alone is insufficient. BirdCast does not affect the score.
 
 Built on the work of the BirdNET-Go contributors.
