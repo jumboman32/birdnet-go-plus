@@ -4,7 +4,8 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 - Separate Windows development launcher for testing.
 - UI Changes
 <p align="left">
-  <img src="ui1.png" alt="BirdNET-Go Plus UI" width="800">
+  <img src="ui1.png" alt="BirdNET-Go Plus UI" width="750">
+  <img src="ui2.png" alt="BirdNET-Go Plus UI 2" width="750">
 </p>
 
 Numeric rarity scores require historical checklist data; an eBird API key alone is insufficient. BirdCast does not affect the score.
