@@ -6064,5 +6064,25 @@
       "patternTransient": "Transitoire",
       "patternSustained": "Persistant"
     }
+  },
+  "calendar": {
+    "title": "Calendrier des oiseaux",
+    "description": "Tendances historiques eBird comparées aux détections enregistrées du microphone.",
+    "arrivals": "Arrivées attendues",
+    "peak": "Pic historique",
+    "departures": "Départs attendus",
+    "expected": "Fréquence historique des signalements",
+    "heard": "Jours de détection",
+    "noCoverage": "Aucune donnée de station pour cette semaine",
+    "missingTitle": "Les données du calendrier ne sont pas importées",
+    "missingHint": "Générez un calendrier depuis votre export eBird pour comparer les tendances saisonnières.",
+    "week": "Semaine {week}",
+    "evidence": "{samples} listes sur {years} ans",
+    "stationCoverage": "{days} jours avec des détections enregistrées par la station",
+    "expectedThisWeek": "Attendus cette semaine",
+    "heardThisWeek": "Entendus cette semaine",
+    "allSpecies": "Toutes les espèces",
+    "caveat": "Une détection manquante ne prouve pas une absence. Les jours de détection ne mesurent pas la durée d’écoute. Le calendrier est un instantané daté.",
+    "snapshot": "Instantané : {date}"
   }
 }

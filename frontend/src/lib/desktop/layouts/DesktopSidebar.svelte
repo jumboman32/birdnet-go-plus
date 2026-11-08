@@ -46,6 +46,7 @@ Performance Optimizations:
   import type { AuthConfig } from '../../../app.d';
   import {
     LayoutDashboard,
+    CalendarDays,
     Radio,
     BarChart3,
     Search,
@@ -181,6 +182,7 @@ Performance Optimizations:
   // in the section render loop type-check.
   let routeCache: Record<string, boolean> = $derived.by(() => ({
     dashboard: actualRoute === '/ui/dashboard' || actualRoute === '/ui/',
+    calendar: actualRoute === '/ui/calendar',
     liveStream: actualRoute.startsWith('/ui/live-stream'),
     analytics: actualRoute.startsWith('/ui/analytics'),
     analyticsSummary: actualRoute === '/ui/analytics/summary',
@@ -238,6 +240,7 @@ Performance Optimizations:
   // PERFORMANCE OPTIMIZATION: Cache navigation URL transformations
   let navigationUrls = $derived({
     dashboard: onNavigate ? '/' : '/ui/dashboard',
+    calendar: onNavigate ? '/calendar' : '/ui/calendar',
     liveStream: onNavigate ? '/live-stream' : '/ui/live-stream',
     analyticsSummary: onNavigate ? '/analytics/summary' : '/ui/analytics/summary',
     analyticsActivity: onNavigate ? '/analytics/activity' : '/ui/analytics/activity',
@@ -305,6 +308,12 @@ Performance Optimizations:
             label: t('analytics.species.title'),
             url: withQuery(navigationUrls.analyticsSpecies),
             routeKey: 'analyticsSpecies',
+          },
+          {
+            icon: CalendarDays,
+            label: t('calendar.title'),
+            url: navigationUrls.calendar,
+            routeKey: 'calendar',
           },
           {
             icon: Search,

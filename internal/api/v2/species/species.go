@@ -129,6 +129,7 @@ func (c *Handler) RegisterRoutes(g *echo.Group) {
 	g.GET("/species", c.GetSpeciesInfo)
 	g.GET("/species/all", c.GetAllSpecies)
 	g.GET("/species/local-rarity", c.GetLocalRarity)
+	g.GET("/species/calendar", c.GetCalendar, c.AuthMiddleware)
 	g.GET("/species/taxonomy", c.GetSpeciesTaxonomy)
 	g.GET("/species/dictionary/:locale", c.ServeSpeciesDictionary)
 

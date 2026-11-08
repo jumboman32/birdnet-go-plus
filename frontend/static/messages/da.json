@@ -6064,5 +6064,25 @@
       "patternTransient": "Forbigående",
       "patternSustained": "Vedvarende"
     }
+  },
+  "calendar": {
+    "title": "Fuglekalender",
+    "description": "Historiske eBird-mønstre sammenlignet med gemte mikrofondetektioner.",
+    "arrivals": "Forventede ankomster",
+    "peak": "Historisk højdepunkt",
+    "departures": "Forventede afgange",
+    "expected": "Historisk rapporteringshyppighed",
+    "heard": "Dage registreret",
+    "noCoverage": "Ingen stationsdata for denne uge",
+    "missingTitle": "Kalenderdata er ikke importeret",
+    "missingHint": "Opret en kalender fra din eBird-eksport for at sammenligne sæsonmønstre.",
+    "week": "Uge {week}",
+    "evidence": "{samples} tjeklister over {years} år",
+    "stationCoverage": "{days} dage med gemte stationsdetektioner",
+    "expectedThisWeek": "Forventet denne uge",
+    "heardThisWeek": "Hørt denne uge",
+    "allSpecies": "Alle arter",
+    "caveat": "En manglende detektion beviser ikke fravær. Dage med registreringer er ikke lyttetid. Kalenderen er et dateret øjebliksbillede.",
+    "snapshot": "Øjebliksbillede: {date}"
   }
 }

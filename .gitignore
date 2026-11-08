@@ -71,6 +71,12 @@ REFACTOR_CHANGELOG.md
 __pycache__/
 *.pyc
 
+# Personal eBird exports and locally derived seasonal profiles.
+/ebd_*/
+*.ebird.local.json
+*.ebird.local.html
+/development-data/bird-calendar*.html
+
 # Release-notes drafts are transient working files (deleted after each release);
 # they must never be committed. See the drafting-release-changelog skill.
 RELEASE_NOTES_DRAFT.md

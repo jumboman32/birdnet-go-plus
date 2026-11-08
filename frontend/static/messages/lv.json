@@ -6064,5 +6064,25 @@
       "patternTransient": "Īslaicīgs",
       "patternSustained": "Ilgstošs"
     }
+  },
+  "calendar": {
+    "title": "Putnu kalendārs",
+    "description": "Vēsturiskās eBird tendences salīdzinājumā ar saglabātajiem mikrofona novērojumiem.",
+    "arrivals": "Paredzamā ierašanās",
+    "peak": "Vēsturiskais maksimums",
+    "departures": "Paredzamā aizlidošana",
+    "expected": "Vēsturiskais ziņojumu biežums",
+    "heard": "Dienas ar novērojumiem",
+    "noCoverage": "Šai nedēļai nav stacijas datu",
+    "missingTitle": "Kalendāra dati nav importēti",
+    "missingHint": "Izveidojiet kalendāru no eBird eksporta, lai salīdzinātu sezonālās tendences.",
+    "week": "{week}. nedēļa",
+    "evidence": "{samples} saraksti {years} gados",
+    "stationCoverage": "{days} dienas ar saglabātiem stacijas novērojumiem",
+    "expectedThisWeek": "Šonedēļ paredzamie",
+    "heardThisWeek": "Šonedēļ dzirdētie",
+    "allSpecies": "Visas sugas",
+    "caveat": "Neatklāšana nepierāda neesamību. Novērojumu dienas nav klausīšanās ilgums. Kalendārs ir datēts momentuzņēmums.",
+    "snapshot": "Momentuzņēmums: {date}"
   }
 }

@@ -6064,5 +6064,25 @@
       "patternTransient": "Přechodný",
       "patternSustained": "Trvalý"
     }
+  },
+  "calendar": {
+    "title": "Ptačí kalendář",
+    "description": "Historické vzorce eBird ve srovnání s uloženými detekcemi mikrofonu.",
+    "arrivals": "Očekávané přílety",
+    "peak": "Historické maximum",
+    "departures": "Očekávané odlety",
+    "expected": "Historická četnost hlášení",
+    "heard": "Dny s detekcí",
+    "noCoverage": "Pro tento týden nejsou záznamy stanice",
+    "missingTitle": "Data kalendáře nebyla importována",
+    "missingHint": "Vytvořte kalendář z exportu eBird pro porovnání sezónních vzorců.",
+    "week": "Týden {week}",
+    "evidence": "{samples} seznamů za {years} let",
+    "stationCoverage": "{days} dnů s uloženými detekcemi stanice",
+    "expectedThisWeek": "Očekávané tento týden",
+    "heardThisWeek": "Slyšené tento týden",
+    "allSpecies": "Všechny druhy",
+    "caveat": "Chybějící detekce nedokazuje nepřítomnost. Dny s detekcemi nejsou dobou poslechu. Kalendář je datovaný snímek.",
+    "snapshot": "Snímek: {date}"
   }
 }

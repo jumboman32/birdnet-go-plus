@@ -70,6 +70,7 @@ BirdNET configuration
 | `birdnet.rangefilter.model` | string | range filter model version: "legacy" for v1, "v3" for geomodel v3.0, or empty/default for v2 |
 | `birdnet.rangefilter.modelpath` | string | path to external meta model file (empty for embedded) |
 | `birdnet.rangefilter.labelspath` | string | path to geomodel labels file (required when geomodel differs from classifier labels) |
+| `birdnet.rangefilter.localdatapath` | string | optional private eBird seasonal occurrence profile |
 | `birdnet.rangefilter.threshold` | number | rangefilter species occurrence threshold |
 | `birdnet.rangefilter.passunmappedspecies` | boolean | true to pass through species absent from geomodel (score 1.0); false to filter them out (score 0.0) |
 | `birdnet.modelpath` | string | path to external model file (empty for embedded) |

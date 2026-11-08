@@ -242,6 +242,9 @@ type rangeFilterService struct {
 	speciesCacheMu sync.RWMutex
 	speciesCache   map[string]*speciesCacheEntry
 
+	// localOccurrence caches an immutable private profile independently of native inference.
+	localOccurrence localOccurrenceCache
+
 	// debug gates debug log lines like BirdNET.Debug (on the globally published
 	// settings). May be nil in tests; use the Debug helper.
 	debug debugFunc
@@ -575,6 +578,7 @@ func (rfs *rangeFilterService) probableSpecies(date time.Time, week float32, set
 		// legacy path has no geomodel label set, so resolution falls to the classifier
 		// labels and the reverse lookup.
 		addUserOverrideSpeciesScores(rfs.debug, &speciesScores, settings, nil)
+		speciesScores = rfs.supplementLocalSpecies(speciesScores, date, settings, res.state, excluder)
 
 		sort.Sort(ByScore(speciesScores))
 		return speciesScores, nil, true, res.state, nil
@@ -594,6 +598,7 @@ func (rfs *rangeFilterService) probableSpecies(date time.Time, week float32, set
 		// tagging is applied here so the species endpoint and occurrence index see the
 		// same rows as before.
 		speciesScores, _ := scoreProbableSpecies(rfs.debug, excluder, res.scores, res.allGeoLabels, res.cachedMapping, res.coveredLabels, settings)
+		speciesScores = rfs.supplementLocalSpecies(speciesScores, date, settings, res.state, excluder)
 		sort.Sort(ByScore(speciesScores))
 		return speciesScores, res.geomodel, true, res.state, nil
 	}

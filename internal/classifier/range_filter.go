@@ -23,8 +23,8 @@ import (
 const syntheticOverrideScore = 1.0
 
 // SpeciesScore holds a species label, its associated score, and override provenance.
-// Synthetic provenance distinguishes score-1.0 rows appended solely to admit user
-// overrides from native geomodel scores.
+// Synthetic provenance distinguishes user overrides and private local-occurrence
+// supplements from native geomodel scores.
 type SpeciesScore struct {
 	Score               float64
 	Label               string
@@ -210,6 +210,18 @@ func BuildRangeFilter(o *Orchestrator) error {
 			logger.String("duration", time.Since(start).String()))
 	}
 
+	// Supplement the gate through the same helper as the read and daily-update paths.
+	// Existing scores are irrelevant here; only newly admitted labels are appended.
+	gateScores := make([]SpeciesScore, 0, len(includedSpecies))
+	for _, label := range includedSpecies {
+		gateScores = append(gateScores, SpeciesScore{Label: label})
+	}
+	supplemented := rfs.supplementLocalSpecies(gateScores, today, settings, res.state, excluder)
+	if settings.BirdNET.RangeFilter.LocalDataPath != "" {
+		GetLogger().Info("Seasonal local range supplement applied",
+			logger.Int("species_added", len(supplemented)-len(gateScores)))
+	}
+	includedSpecies = speciesScoreLabels(supplemented)
 	o.logRangeFilterParticipation()
 
 	if settings.BirdNET.RangeFilter.Debug {

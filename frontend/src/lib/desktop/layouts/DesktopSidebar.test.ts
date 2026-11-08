@@ -235,13 +235,14 @@ describe('DesktopSidebar - flat task-grouped sections', () => {
   it('renders analytics items within their sections in spec order', () => {
     const { container } = sidebarTest.render({ currentRoute: '/ui/dashboard' });
 
-    // EXPLORE: Summary, Species, Search
+    // EXPLORE: Summary, Species, Calendar, Search
     const exploreGroup = container.querySelector('#nav-section-explore')?.closest('[role="group"]');
     const exploreButtons = Array.from(exploreGroup?.querySelectorAll('button') ?? []);
     const exploreLabels = exploreButtons.map(b => b.textContent.trim()).filter(Boolean);
     expect(exploreLabels[0]).toContain('analytics.hub.tabs.summary');
     expect(exploreLabels[1]).toContain('analytics.species.title');
-    expect(exploreLabels[2]).toContain('navigation.search');
+    expect(exploreLabels[2]).toContain('calendar.title');
+    expect(exploreLabels[3]).toContain('navigation.search');
 
     // PATTERNS: Activity, Trends, Nocturnal, Biodiversity
     const patternsGroup = container

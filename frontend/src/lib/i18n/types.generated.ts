@@ -4439,7 +4439,25 @@ export type TranslationKey =
   | 'health.detail.pattern'
   | 'health.detail.patternNone'
   | 'health.detail.patternTransient'
-  | 'health.detail.patternSustained';
+  | 'health.detail.patternSustained'
+  | 'calendar.title'
+  | 'calendar.description'
+  | 'calendar.arrivals'
+  | 'calendar.peak'
+  | 'calendar.departures'
+  | 'calendar.expected'
+  | 'calendar.heard'
+  | 'calendar.noCoverage'
+  | 'calendar.missingTitle'
+  | 'calendar.missingHint'
+  | 'calendar.week' // params: week
+  | 'calendar.evidence' // params: samples, years
+  | 'calendar.stationCoverage' // params: days
+  | 'calendar.expectedThisWeek'
+  | 'calendar.heardThisWeek'
+  | 'calendar.allSpecies'
+  | 'calendar.caveat'
+  | 'calendar.snapshot'; // params: date;
 
 /**
  * Parameter types for translations that require parameters
@@ -5023,6 +5041,10 @@ export type TranslationParams = {
   'analysis.gallery.preview.dialogNotice': { build: string | number };
   'analysis.gallery.optimize.bannerTitle': { count: string | number };
   'analysis.gallery.optimize.fromTo': { from: string | number; to: string | number };
+  'calendar.week': { week: string | number };
+  'calendar.evidence': { samples: string | number; years: string | number };
+  'calendar.stationCoverage': { days: string | number };
+  'calendar.snapshot': { date: string | number };
 };
 
 /**

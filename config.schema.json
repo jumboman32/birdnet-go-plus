@@ -1885,6 +1885,10 @@
           "type": "string",
           "description": "path to geomodel labels file (required when geomodel differs from classifier labels)"
         },
+        "localdatapath": {
+          "type": "string",
+          "description": "optional private eBird seasonal occurrence profile"
+        },
         "threshold": {
           "type": "number",
           "description": "rangefilter species occurrence threshold"

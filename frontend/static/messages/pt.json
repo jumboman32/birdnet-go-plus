@@ -6064,5 +6064,25 @@
       "patternTransient": "Transitório",
       "patternSustained": "Persistente"
     }
+  },
+  "calendar": {
+    "title": "Calendário de aves",
+    "description": "Padrões históricos do eBird comparados com deteções guardadas do microfone.",
+    "arrivals": "Chegadas esperadas",
+    "peak": "Pico histórico",
+    "departures": "Partidas esperadas",
+    "expected": "Frequência histórica de registos",
+    "heard": "Dias com deteção",
+    "noCoverage": "Sem registos da estação nesta semana",
+    "missingTitle": "Os dados do calendário não foram importados",
+    "missingHint": "Gere um calendário a partir da exportação eBird para comparar padrões sazonais.",
+    "week": "Semana {week}",
+    "evidence": "{samples} listas em {years} anos",
+    "stationCoverage": "{days} dias com deteções guardadas da estação",
+    "expectedThisWeek": "Esperadas nesta semana",
+    "heardThisWeek": "Ouvidas nesta semana",
+    "allSpecies": "Todas as espécies",
+    "caveat": "Uma deteção em falta não comprova ausência. Os dias com deteções não medem o tempo de escuta. O calendário é um retrato datado.",
+    "snapshot": "Retrato: {date}"
   }
 }

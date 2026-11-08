@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BirdNET-Go+ · Bird calendar</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, sans-serif;
+      background: #080e1b;
+      color: #e4ecf7;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 32px;
+      max-width: 1600px;
+      margin-inline: auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    .brand {
+      color: #75b7ff;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+    }
+    h1 {
+      font-size: 32px;
+      margin: 10px 0;
+      letter-spacing: -0.03em;
+    }
+    p {
+      color: #a9b9cd;
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+    .tag {
+      border: 1px solid #2a3b51;
+      background: #132238;
+      border-radius: 20px;
+      padding: 8px 14px;
+      white-space: nowrap;
+    }
+    .panel {
+      border: 1px solid #25334a;
+      background: #101b2c;
+      border-radius: 16px;
+      padding: 22px;
+      margin-top: 22px;
+    }
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    select,
+    input,
+    button {
+      font: inherit;
+      color: inherit;
+      background: #18273d;
+      border: 1px solid #344760;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    input {
+      flex: 1;
+      min-width: 200px;
+    }
+    button {
+      cursor: pointer;
+    }
+    button:hover,
+    button:focus-visible {
+      background: #284363;
+      outline: 2px solid #70b7ff;
+    }
+    h2 {
+      font-size: 20px;
+      margin: 0 0 8px;
+    }
+    h3 {
+      font-size: 14px;
+      margin: 0 0 12px;
+      color: #a9c0dc;
+    }
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .summary {
+      background: #142238;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .summary ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 210px;
+      overflow: auto;
+    }
+    .summary li {
+      padding: 5px 0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .heard {
+      color: #70d8bf;
+      font-weight: 600;
+    }
+    .muted {
+      color: #91a4bb;
+      font-size: 13px;
+    }
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 18px 0 14px;
+      font-size: 13px;
+      color: #a9b9cd;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+      background: #f4f8ff;
+      box-shadow: 0 0 0 1px #07121f;
+    }
+    .table-scroll {
+      overflow: auto;
+      max-height: 670px;
+      border: 1px solid #26364c;
+      border-radius: 9px;
+    }
+    table {
+      border-collapse: separate;
+      border-spacing: 3px;
+      table-layout: fixed;
+      min-width: 1280px;
+      width: 100%;
+    }
+    th {
+      font-size: 11px;
+      color: #a9b9cd;
+      font-weight: 500;
+      background: #101b2c;
+      position: sticky;
+      top: 0;
+      z-index: 3;
+    }
+    .name {
+      width: 230px;
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: #101b2c;
+      z-index: 2;
+      padding: 8px;
+    }
+    th.name {
+      z-index: 4;
+    }
+    .name small {
+      display: block;
+      color: #8094ae;
+      margin-top: 3px;
+      font-size: 11px;
+      font-style: italic;
+    }
+    td.week {
+      height: 31px;
+      padding: 0;
+    }
+    .cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 3px;
+      min-height: 31px;
+    }
+    .selected {
+      outline: 2px solid #8dbfff;
+      outline-offset: 0;
+    }
+    .month {
+      font-size: 10px;
+      height: 18px;
+    }
+    #details {
+      border-left: 3px solid #70b7ff;
+      padding-left: 14px;
+      margin-top: 18px;
+      min-height: 45px;
+    }
+    footer {
+      margin: 22px 0 10px;
+      font-size: 12px;
+      color: #8397b2;
+      line-height: 1.7;
+    }
+    details {
+      margin-top: 14px;
+    }
+    summary {
+      cursor: pointer;
+      color: #bad0e9;
+    }
+  </style>
+  <header>
+    <div>
+      <div class="brand">BirdNET-Go+</div>
+      <h1>Bird calendar</h1>
+      <p id="subtitle"></p>
+    </div>
+    <div class="tag" id="year"></div>
+  </header>
+  <section class="panel">
+    <div class="toolbar">
+      <button id="previous" aria-label="Previous week">←</button
+      ><label for="week">Week</label
+      ><select id="week"></select
+      ><button id="next" aria-label="Next week">→</button
+      ><button id="today">This week</button>
+    </div>
+    <p id="week-evidence" class="muted"></p>
+    <div class="columns">
+      <div class="summary">
+        <h3>Expected arrivals</h3>
+        <ul id="arrivals"></ul>
+      </div>
+      <div class="summary">
+        <h3>Historical peak</h3>
+        <ul id="peaks"></ul>
+      </div>
+      <div class="summary">
+        <h3>Expected departures</h3>
+        <ul id="departures"></ul>
+      </div>
+    </div>
+    <div id="details" aria-live="polite">
+      Select a weekly cell to compare a species with your microphone.
+    </div>
+  </section>
+  <section class="panel">
+    <div class="toolbar">
+      <h2>Historical expectation × microphone detections</h2>
+      <input
+        id="search"
+        type="search"
+        placeholder="Search common or scientific name"
+        aria-label="Search birds"
+      /><select id="filter" aria-label="Filter species">
+        <option value="expected">Expected this week</option>
+        <option value="all">All species</option>
+        <option value="heard">Heard this week</option>
+        <option value="arrival">Arriving this week</option>
+        <option value="peak">Peaking this week</option>
+        <option value="departure">Departing this week</option>
+        <option value="resident">Year-round species</option>
+      </select>
+    </div>
+    <div class="legend">
+      <span>Blue intensity = historical checklist reporting frequency</span
+      ><span><i class="dot"></i> = saved microphone detection</span
+      ><span>Striped = insufficient historical samples</span>
+    </div>
+    <div class="table-scroll">
+      <table
+        aria-label="Weekly historical bird occurrence with microphone detections"
+      >
+        <thead id="head"></thead>
+        <tbody id="body"></tbody>
+      </table>
+    </div>
+    <p id="row-count" class="muted"></p>
+  </section>
+  <section class="panel">
+    <h2>Read this calendar</h2>
+    <p id="coverage"></p>
+    <p>
+      Not hearing a bird does not establish that it is absent. Historical
+      checklist frequency measures birds reported by people across different
+      habitats; microphone detection depends on vocal activity, weather,
+      recording uptime and model settings. A dot represents saved detections,
+      including unverified identifications. Reviews marked false positive are
+      excluded.
+    </p>
+    <details>
+      <summary>Methods and limitations</summary>
+      <p>
+        Historical rates use independent complete locality-days from the ten
+        prior calendar years, smoothed over the selected week and its two
+        neighboring weeks. Each window needs at least 100 checklists across
+        three years. Arrival and departure markers describe sustained crossings
+        of the larger of 2% reporting frequency or 20% of that species' annual
+        maximum; peaks are periods at or above 80% of its maximum. These are
+        estimates of seasonal reporting patterns, not precise migration dates.
+        Seasons wrap across New Year. Common birds expected throughout the year
+        are identified as year-round.
+      </p>
+      <p>
+        Weeks begin January 1; week 52 includes December 31. February 29 shares
+        February 28's seasonal bin. These are seasonal periods, not ISO week
+        numbers. Weeks with no saved station detections have unknown microphone
+        coverage, rather than assumed continuous listening. Repeated calls count
+        toward total detections but each species counts at most once per day for
+        the comparison.
+      </p>
+    </details>
+  </section>
+  <footer id="attribution"></footer>
+  <script id="calendar-data" type="application/json">
+    "__CALENDAR_DATA__"
+  </script>
+  <script>
+    const data = JSON.parse(
+      document.getElementById("calendar-data").textContent,
+    );
+    const byId = (id) => document.getElementById(id);
+    const node = (tag, text, className) => {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    };
+    const percentage = (value) =>
+      value === null
+        ? "insufficient historical data"
+        : `${(value * 100).toFixed(1)}% of complete checklists`;
+    let selected = data.currentWeek;
+    let inspectedBird = null;
+    const reference = 2001;
+    const shortDate = (date) =>
+      date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    function period(index) {
+      const start = new Date(reference, 0, 1 + index * 7);
+      const end =
+        index === 51
+          ? new Date(reference, 11, 31)
+          : new Date(reference, 0, 7 + index * 7);
+      return `${shortDate(start)}–${shortDate(end)}`;
+    }
+    byId("subtitle").textContent =
+      `${data.region} · ${data.radius} km historical survey area · ${data.firstHistoricalYear}–${data.lastHistoricalYear} eBird baseline`;
+    byId("year").textContent = `Microphone comparison: ${data.year}`;
+    byId("attribution").textContent =
+      `${data.citation} Personal derived report subject to the export's terms of use. Snapshot: ${new Date(data.generated).toLocaleString("en-US", { timeZone: data.timezone })} (${data.timezone}). No live connection or external scripts are required. Regenerate this report to include newer detections.`;
+    byId("coverage").textContent = data.firstDetectionDate
+      ? `Saved station records span ${data.firstDetectionDate} through ${data.lastDetectionDate}: ${data.totalDetections.toLocaleString()} species detections. This report includes all saved station sources. The station-day count means days with at least one saved species detection, not measured listening uptime.`
+      : "No saved station detections are available for this comparison year.";
+    for (let index = 0; index < 52; index++) {
+      const option = node("option", `Week ${index + 1} · ${period(index)}`);
+      option.value = index;
+      byId("week").append(option);
+    }
+    function summary(id, key) {
+      const list = byId(id);
+      list.replaceChildren();
+      const birds = data.species
+        .filter((bird) => bird[key].includes(selected))
+        .sort((a, b) => (b.rates[selected] ?? 0) - (a.rates[selected] ?? 0));
+      if (!birds.length)
+        list.append(node("li", "No supported seasonal transition", "muted"));
+      for (const bird of birds) {
+        const item = node("li");
+        item.append(node("span", bird.name));
+        if (bird.heard[selected])
+          item.append(
+            node("span", `· heard ${bird.heard[selected]}d`, "heard"),
+          );
+        list.append(item);
+      }
+    }
+    function details(bird, index) {
+      inspectedBird = bird;
+      const pieces = [
+        `${bird.name} · ${period(index)}`,
+        `Historical: ${percentage(bird.rates[index])} (${data.samples[index]} checklists, ${data.years[index]} years)`,
+      ];
+      pieces.push(
+        data.stationDays[index]
+          ? `Microphone: ${bird.heard[index]} days detected; ${bird.counts[index]} saved detections; ${data.stationDays[index]} station days with saved detections`
+          : "Microphone: no station data for this week; listening coverage unknown",
+      );
+      if (bird.resident) pieces.push("Historically expected year-round");
+      byId("details").textContent = pieces.join(" · ");
+    }
+    function draw() {
+      byId("week").value = selected;
+      const station = data.stationDays[selected]
+        ? `${data.stationDays[selected]} days with saved station detections`
+        : "no station records; microphone coverage unknown";
+      byId("week-evidence").textContent =
+        `${period(selected)} · Historical window: ${data.samples[selected]} complete locality-days across ${data.years[selected]} years · Microphone: ${station}`;
+      summary("arrivals", "arrivals");
+      summary("peaks", "peaks");
+      summary("departures", "departures");
+      const head = node("tr");
+      head.append(node("th", "Species", "name"));
+      for (let index = 0; index < 52; index++) {
+        const th = node("th");
+        const month = node(
+          "div",
+          index === 0 ||
+            new Date(reference, 0, 1 + index * 7).getMonth() !==
+              new Date(reference, 0, 1 + (index - 1) * 7).getMonth()
+            ? new Date(reference, 0, 1 + index * 7).toLocaleString("en-US", {
+                month: "short",
+              })
+            : "",
+          "month",
+        );
+        const button = node("button", String(index + 1), "cell");
+        button.title = period(index);
+        button.setAttribute(
+          "aria-label",
+          `Select week ${index + 1}: ${period(index)}`,
+        );
+        button.onclick = () => {
+          selected = index;
+          draw();
+        };
+        th.append(month, button);
+        head.append(th);
+      }
+      byId("head").replaceChildren(head);
+      const search = byId("search").value.trim().toLowerCase();
+      const filter = byId("filter").value;
+      const birds = data.species
+        .filter((bird) => {
+          if (
+            search &&
+            !`${bird.name} ${bird.scientific}`.toLowerCase().includes(search)
+          )
+            return false;
+          if (filter === "heard") return bird.heard[selected] > 0;
+          if (filter === "arrival") return bird.arrivals.includes(selected);
+          if (filter === "peak") return bird.peaks.includes(selected);
+          if (filter === "departure") return bird.departures.includes(selected);
+          if (filter === "resident") return bird.resident;
+          if (filter === "expected")
+            return (
+              (bird.rates[selected] ?? 0) >= 0.02 || bird.heard[selected] > 0
+            );
+          return true;
+        })
+        .sort(
+          (a, b) =>
+            (b.heard[selected] > 0) - (a.heard[selected] > 0) ||
+            (b.rates[selected] ?? 0) - (a.rates[selected] ?? 0) ||
+            a.name.localeCompare(b.name),
+        );
+      const fragment = document.createDocumentFragment();
+      for (const bird of birds) {
+        const row = node("tr");
+        const name = node("th", bird.name, "name");
+        name.scope = "row";
+        name.append(node("small", bird.scientific));
+        row.append(name);
+        for (let index = 0; index < 52; index++) {
+          const cell = node("td", undefined, "week");
+          const button = node(
+            "button",
+            undefined,
+            `cell${index === selected ? " selected" : ""}`,
+          );
+          const rate = bird.rates[index];
+          button.style.background =
+            rate === null
+              ? "repeating-linear-gradient(135deg,#263346,#263346 3px,#1b283b 3px,#1b283b 6px)"
+              : `rgb(${Math.round(17 + rate * 30)},${Math.round(31 + rate * 125)},${Math.round(47 + rate * 190)})`;
+          button.setAttribute(
+            "aria-label",
+            `${bird.name}, week ${index + 1}: ${percentage(rate)}, ${bird.heard[index]} days detected`,
+          );
+          button.title = `${period(index)} · ${percentage(rate)} · ${bird.heard[index]} days heard`;
+          if (bird.heard[index]) button.append(node("i", undefined, "dot"));
+          button.onclick = () => {
+            selected = index;
+            draw();
+            details(bird, index);
+          };
+          cell.append(button);
+          row.append(cell);
+        }
+        fragment.append(row);
+      }
+      byId("body").replaceChildren(fragment);
+      if (inspectedBird) details(inspectedBird, selected);
+      byId("row-count").textContent =
+        `${birds.length} species shown · Select any weekly cell for sample sizes and microphone counts.`;
+    }
+    byId("week").onchange = (event) => {
+      selected = Number(event.target.value);
+      draw();
+    };
+    byId("previous").onclick = () => {
+      selected = (selected + 51) % 52;
+      draw();
+    };
+    byId("next").onclick = () => {
+      selected = (selected + 1) % 52;
+      draw();
+    };
+    byId("today").onclick = () => {
+      selected = data.currentWeek;
+      draw();
+    };
+    byId("search").oninput = draw;
+    byId("filter").onchange = draw;
+    draw();
+  </script>
+</html>

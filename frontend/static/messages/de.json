@@ -6064,5 +6064,25 @@
       "patternTransient": "Vorübergehend",
       "patternSustained": "Anhaltend"
     }
+  },
+  "calendar": {
+    "title": "Vogelkalender",
+    "description": "Historische eBird-Muster im Vergleich zu gespeicherten Mikrofonerkennungen.",
+    "arrivals": "Erwartete Ankünfte",
+    "peak": "Historischer Höhepunkt",
+    "departures": "Erwartete Abzüge",
+    "expected": "Historische Meldehäufigkeit",
+    "heard": "Tage mit Erkennung",
+    "noCoverage": "Keine Stationsdaten für diese Woche",
+    "missingTitle": "Kalenderdaten wurden nicht importiert",
+    "missingHint": "Erstellen Sie einen Kalender aus Ihrem eBird-Export, um saisonale Muster zu vergleichen.",
+    "week": "Woche {week}",
+    "evidence": "{samples} Checklisten aus {years} Jahren",
+    "stationCoverage": "{days} Tage mit gespeicherten Stationserkennungen",
+    "expectedThisWeek": "Diese Woche erwartet",
+    "heardThisWeek": "Diese Woche gehört",
+    "allSpecies": "Alle Arten",
+    "caveat": "Eine fehlende Erkennung beweist keine Abwesenheit. Erkennungstage sind keine Aufzeichnungslaufzeit. Der Kalender ist eine datierte Momentaufnahme.",
+    "snapshot": "Momentaufnahme: {date}"
   }
 }
