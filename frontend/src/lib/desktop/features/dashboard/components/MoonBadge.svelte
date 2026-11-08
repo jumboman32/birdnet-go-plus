@@ -19,10 +19,10 @@
 </script>
 
 <div
-  class="flex items-center justify-center rounded-full bg-black/50 px-1.5 py-0.5 backdrop-blur-sm {className}"
+  class="flex self-stretch items-center justify-center rounded-full bg-black/50 px-2 py-1 backdrop-blur-sm {className}"
   title={translatedName}
   role="img"
   aria-label={translatedName}
 >
-  <span class="text-sm leading-none">{emoji}</span>
+  <span class="text-base leading-none">{emoji}</span>
 </div>

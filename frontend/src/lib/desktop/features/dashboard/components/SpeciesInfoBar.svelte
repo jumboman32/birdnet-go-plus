@@ -10,6 +10,7 @@
 -->
 <script lang="ts">
   import type { Detection } from '$lib/types/detection.types';
+  import ConfidenceBadge from './ConfidenceBadge.svelte';
   import {
     getSpeciesImageUrl,
     handleBirdImageError,
@@ -128,10 +129,11 @@
     <div class="scientific-name">{detection.scientificName}</div>
   </div>
 
-  <!-- Time Info (right-aligned) -->
+  <!-- Detection time and confidence stay together above the photograph. -->
   <div class="time-info">
     <span class="detection-time">{detection.time}</span>
     <span class="relative-time">{relativeTime}</span>
+    <ConfidenceBadge confidence={detection.confidence} />
   </div>
 </div>
 
@@ -293,18 +295,19 @@
     position: absolute;
     top: 0.75rem;
     left: 0.75rem;
-    max-width: calc(100% - 8.5rem);
+    max-width: calc(100% - 6.5rem);
     z-index: 2;
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
     background: rgb(0 0 0 / 0.65);
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     align-items: center;
     gap: 0.5rem;
   }
 
   .detection-time {
+    flex-shrink: 0;
     font-size: 0.875rem;
     font-weight: 500;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -313,6 +316,9 @@
   }
 
   .relative-time {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 0.75rem;
     color: rgb(255 255 255 / 0.9);
     text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);

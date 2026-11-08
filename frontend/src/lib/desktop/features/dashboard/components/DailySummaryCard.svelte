@@ -1261,16 +1261,18 @@ Responsive Breakpoints:
     --species-col-max-width: 16rem; /* Fallback, matches CONFIG.SPECIES_COLUMN.MAX_WIDTH */
 
     /* Light theme heatmap colors */
-    --heatmap-color-0: #f0f9fc;
-    --heatmap-color-1: #e0f3f8;
-    --heatmap-color-2: #ccebf6;
-    --heatmap-color-3: #99d7ed;
-    --heatmap-color-4: #66c2e4;
-    --heatmap-color-5: #33ade1;
-    --heatmap-color-6: #0099d8;
-    --heatmap-color-7: #0077be;
-    --heatmap-color-8: #005595;
-    --heatmap-color-9: #036;
+    --heatmap-color-0: #e5eee8;
+    --heatmap-color-1: #dcfce7;
+    --heatmap-color-2: #bbf7d0;
+    --heatmap-color-3: #86efac;
+    --heatmap-color-4: #4ade80;
+    --heatmap-color-5: #22c55e;
+    --heatmap-color-6: #16a34a;
+    --heatmap-color-7: #15803d;
+    --heatmap-color-8: #166534;
+    --heatmap-color-9: #14532d;
+    --heatmap-text-5: #000;
+    --heatmap-text-6: #000;
 
     /* Animation durations */
     --anim-count-pop: 600ms;
@@ -1337,11 +1339,11 @@ Responsive Breakpoints:
   }
 
   :global([data-theme='light'] .heatmap-color-0) {
-    background-color: #e2e8f0;
+    background-color: var(--heatmap-color-0, var(--color-base-300));
   }
 
   :global([data-theme='dark'] .heatmap-color-0) {
-    background-color: #1e293b;
+    background-color: var(--heatmap-color-0, var(--color-base-300));
   }
 
   /* ========================================================================
@@ -1397,16 +1399,16 @@ Responsive Breakpoints:
   /* Dark theme heatmap colors - more vibrant and saturated */
   /* Must use .daily-summary-card scope to override the light theme vars defined above */
   :global([data-theme='dark']) .daily-summary-card {
-    --heatmap-color-0: #1e293b;
-    --heatmap-color-1: #164e63;
-    --heatmap-color-2: #0e7490;
-    --heatmap-color-3: #0891b2;
-    --heatmap-color-4: #06b6d4;
-    --heatmap-color-5: #22d3ee;
-    --heatmap-color-6: #38bdf8;
-    --heatmap-color-7: #60a5fa;
-    --heatmap-color-8: #93c5fd;
-    --heatmap-color-9: #bfdbfe;
+    --heatmap-color-0: #18382a;
+    --heatmap-color-1: #174d30;
+    --heatmap-color-2: #166534;
+    --heatmap-color-3: #15803d;
+    --heatmap-color-4: #16a34a;
+    --heatmap-color-5: #22c55e;
+    --heatmap-color-6: #4ade80;
+    --heatmap-color-7: #86efac;
+    --heatmap-color-8: #bbf7d0;
+    --heatmap-color-9: #dcfce7;
     --heatmap-text-1: #fff;
     --heatmap-text-2: #fff;
     --heatmap-text-3: #fff;
@@ -1743,5 +1745,34 @@ Responsive Breakpoints:
 
   :global([data-theme='light']) .daylight-dusk {
     background-color: rgb(139 92 246 / 0.15); /* violet-500/15 */
+  }
+
+  /* Opaque nighttime shades remain distinct from the forest-green card surface. */
+  :global([data-theme='dark']) .daylight-deep-night {
+    background-color: #586d8f;
+  }
+
+  :global([data-theme='dark']) .daylight-night {
+    background-color: #6878a5;
+  }
+
+  :global([data-theme='dark']) .daylight-evening {
+    background-color: #716dc2;
+  }
+
+  :global([data-theme='dark']) .daylight-pre-dawn {
+    background-color: #8a83df;
+  }
+
+  :global([data-theme='dark']) .daylight-dusk {
+    background-color: #9d78d0;
+  }
+
+  :global([data-theme='dark']) .daylight-deep-night,
+  :global([data-theme='dark']) .daylight-night,
+  :global([data-theme='dark']) .daylight-evening,
+  :global([data-theme='dark']) .daylight-pre-dawn,
+  :global([data-theme='dark']) .daylight-dusk {
+    box-shadow: inset 0 0 0 1px rgb(192 208 240 / 0.5);
   }
 </style>

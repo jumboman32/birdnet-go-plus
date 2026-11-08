@@ -6066,7 +6066,7 @@
     }
   },
   "calendar": {
-    "title": "Bird calendar",
+    "title": "Bird Calendar",
     "description": "Historical eBird patterns compared with saved microphone detections.",
     "arrivals": "Expected arrivals",
     "peak": "Historical peak",

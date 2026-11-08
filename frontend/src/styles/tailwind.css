@@ -173,10 +173,10 @@
   --color-neutral-hover: #e5e7eb;
   --color-neutral-content: #1f2937;
 
-  /* Base/Surface colors - matching Birdsong mockup dark theme */
-  --color-base-100: #0f172a; /* slate-900 - cards/panels */
-  --color-base-200: #020617; /* slate-950 - page background (darkest) */
-  --color-base-300: #1e293b; /* slate-800 - nested sections, inputs */
+  /* Forest-green surfaces, from the page background to raised panels. */
+  --color-base-100: #0d2118; /* cards/panels */
+  --color-base-200: #06130d; /* page background (darkest) */
+  --color-base-300: #18382a; /* nested sections, inputs */
   --color-base-content: #f1f5f9; /* slate-100 - primary text */
 
   /* Status colors */
@@ -193,14 +193,14 @@
   --color-error-hover: #f87171;
   --color-error-content: #020617;
 
-  /* Surface colors - matching mockup hierarchy */
-  --surface-100: #0f172a; /* slate-900 - card surfaces */
-  --surface-200: #1e293b; /* slate-800 - elevated/nested elements */
-  --surface-300: #334155; /* slate-700 - hover states */
-  --surface-400: #475569; /* slate-600 - active states */
-  --border-100: #1e293b; /* slate-800 - subtle borders */
-  --border-200: #334155; /* slate-700 - prominent borders */
-  --border-300: #475569; /* slate-600 - hover borders, a step lighter than --border-200 */
+  /* Surface and border hierarchy follows the green background palette. */
+  --surface-100: #0d2118; /* card surfaces */
+  --surface-200: #18382a; /* elevated/nested elements */
+  --surface-300: #244d39; /* hover states */
+  --surface-400: #35664b; /* active states */
+  --border-100: #1c3c2c; /* subtle borders */
+  --border-200: #2b513d; /* prominent borders */
+  --border-300: #3a6a4e; /* hover borders */
   --hover-overlay: rgba(255, 255, 255, 0.05);
 
   /* Text colors */

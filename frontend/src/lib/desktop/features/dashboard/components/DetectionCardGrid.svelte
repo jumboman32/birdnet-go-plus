@@ -286,6 +286,7 @@
           class="detection-cards-grid gap-4"
           class:single-card={visibleData.length === 1}
           class:three-cards={visibleData.length === 3}
+          class:three-columns={selectedLimit >= 3}
         >
           {#each visibleData as detection (detection.id)}
             <DetectionCard
@@ -463,6 +464,16 @@
 
     .three-cards > :global(.detection-card:last-child) {
       grid-column: 1 / -1;
+    }
+  }
+
+  @container (min-width: 960px) {
+    .detection-cards-grid.three-columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .three-cards > :global(.detection-card:last-child) {
+      grid-column: auto;
     }
   }
 

@@ -17,10 +17,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import type { Detection } from '$lib/types/detection.types';
-  import ConfidenceBadge from './ConfidenceBadge.svelte';
   import WeatherBadge from './WeatherBadge.svelte';
   import MoonBadge from './MoonBadge.svelte';
-  import SourceBadge from './SourceBadge.svelte';
   import PlayOverlay from './PlayOverlay.svelte';
   import SpeciesInfoBar from './SpeciesInfoBar.svelte';
   import SpectrogramImage from '$lib/desktop/components/media/SpectrogramImage.svelte';
@@ -205,9 +203,8 @@
 >
   <!-- Photograph and metadata remain separate from the audio seek area. -->
   <div class="detection-card-inner">
-    <!-- Top-Left Badges: Confidence + Weather -->
+    <!-- Weather details below the time and confidence row. -->
     <div class="absolute top-14 left-3 right-3 flex flex-wrap items-center gap-2 z-10">
-      <ConfidenceBadge confidence={detection.confidence} />
       {#if detection.weather?.weatherIcon}
         <WeatherBadge
           weatherIcon={detection.weather.weatherIcon}
@@ -220,7 +217,6 @@
       {#if detection.weather?.moonPhaseName && detection.timeOfDay === 'night'}
         <MoonBadge moonPhaseName={detection.weather.moonPhaseName} />
       {/if}
-      <SourceBadge {detection} variant="overlay" />
     </div>
 
     <!-- Bottom Species Info Bar -->
@@ -441,7 +437,11 @@
   :global([data-theme='dark']) .spectrogram-loading,
   :global([data-theme='dark']) .spectrogram-error,
   :global([data-theme='dark']) .spectrogram-placeholder {
-    background: linear-gradient(135deg, rgb(30 41 59 / 0.9) 0%, rgb(15 23 42 / 0.95) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-base-100) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-base-200) 95%, transparent) 100%
+    );
   }
 
   @media (prefers-reduced-motion: reduce) {
