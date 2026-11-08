@@ -27,7 +27,9 @@
     getSpeciesImageUrl,
     handleBirdImageError,
   } from '$lib/desktop/components/ui/image-utils.js';
-  import { t } from '$lib/i18n';
+  import { getLocale, t } from '$lib/i18n';
+  import { fetchWithCSRF } from '$lib/utils/api';
+  import { isPlainObject } from '$lib/utils/security';
   import type { Detection, ImageAttribution } from '$lib/types/detection.types';
   import { hasReviewPermission, isAuthenticated } from '$lib/utils/auth';
   import { formatLocalDateTime } from '$lib/utils/date';
@@ -35,7 +37,6 @@
   import { loggers } from '$lib/utils/logger';
   import { audioUrlFor, getPlaybackDenoiseDefault } from '$lib/utils/playbackDenoise';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
-  import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import {
     Download,
     Camera,
@@ -157,6 +158,9 @@
   let isLoadingTaxonomy = $state(false);
   let detectionError = $state<string | null>(null);
   let imageAttribution = $state<ImageAttribution | null>(null);
+  let speciesDetectionCount = $state<number | null>(null);
+  let isLoadingSpeciesCount = $state(false);
+  let speciesCountError = $state(false);
 
   // Derived state for subspecies with proper typing
   let subspeciesList = $derived<Subspecies[]>(
@@ -170,6 +174,7 @@
   let speciesController: AbortController | null = null;
   let taxonomyController: AbortController | null = null;
   let attributionController: AbortController | null = null;
+  let speciesCountController: AbortController | null = null;
 
   // Validate detection ID to prevent path traversal attacks
   // Only allow alphanumeric characters, hyphens, and underscores
@@ -218,6 +223,7 @@
       speciesController?.abort();
       taxonomyController?.abort();
       attributionController?.abort();
+      speciesCountController?.abort();
       cancelAttributionRetry();
     };
   });
@@ -244,6 +250,9 @@
     speciesInfo = null;
     taxonomyInfo = null;
     imageAttribution = null;
+    speciesCountController?.abort();
+    speciesDetectionCount = null;
+    speciesCountError = false;
 
     try {
       const response = await fetch(buildAppUrl(`/api/v2/detections/${resolvedDetectionId}`), {
@@ -286,6 +295,7 @@
         fetchSpeciesInfo();
         fetchTaxonomy();
         fetchImageAttribution();
+        void fetchSpeciesDetectionCount(detection.scientificName);
       }
     } catch (error) {
       if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) {
@@ -323,6 +333,44 @@
     if (attributionRetryTimer !== undefined) {
       globalThis.clearTimeout(attributionRetryTimer);
       attributionRetryTimer = undefined;
+    }
+  }
+
+  async function fetchSpeciesDetectionCount(scientificName: string) {
+    speciesCountController?.abort();
+    const controller = new AbortController();
+    speciesCountController = controller;
+    speciesDetectionCount = null;
+    speciesCountError = false;
+    isLoadingSpeciesCount = true;
+    try {
+      // Omit date filters to count all saved history; retrieve only one row.
+      const query = new URLSearchParams({
+        queryType: 'species',
+        species: scientificName,
+        numResults: '1',
+        offset: '0',
+      });
+      const result = await fetchWithCSRF<unknown>(buildAppUrl(`/api/v2/detections?${query}`), {
+        signal: controller.signal,
+        cache: 'no-store',
+      });
+      if (controller.signal.aborted) return;
+      if (
+        !isPlainObject(result) ||
+        typeof result.total !== 'number' ||
+        !Number.isSafeInteger(result.total) ||
+        result.total < 0
+      ) {
+        throw new Error('Invalid species detection total');
+      }
+      speciesDetectionCount = result.total;
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      speciesCountError = true;
+      logger.error('Unable to load all-time species detection count', error);
+    } finally {
+      if (!controller.signal.aborted) isLoadingSpeciesCount = false;
     }
   }
 
@@ -637,6 +685,30 @@
             <Headphones size={15} aria-hidden="true" />
             <span>Compare calls</span>
           </a>
+          <div class="species-lifetime-count" role="status">
+            <span
+              >{t('analytics.stats.totalDetections')}<span class="block opacity-70"
+                >{t('analytics.periods.allTime')}</span
+              ></span
+            >
+            <strong>
+              {#if isLoadingSpeciesCount}
+                {t('common.loading')}
+              {:else if speciesDetectionCount !== null}
+                {new Intl.NumberFormat(getLocale()).format(speciesDetectionCount)}
+              {:else}
+                {t('common.unknown')}
+              {/if}
+            </strong>
+            {#if speciesCountError}
+              <button
+                type="button"
+                class="underline hover:no-underline"
+                onclick={() => void fetchSpeciesDetectionCount(det.scientificName)}
+                >{t('common.retry')}</button
+              >
+            {/if}
+          </div>
         </div>
       </div>
     </div>
@@ -730,13 +802,6 @@
           {/if}
         </div>
       </div>
-
-      <!-- Audio Source -->
-      {#if det.source}
-        <div class="meta-section">
-          <SourceBadge detection={det} variant="inline" />
-        </div>
-      {/if}
 
       <!-- Weather -->
       {#if det.weather}
@@ -1211,9 +1276,27 @@
     text-transform: uppercase;
   }
 
+  .species-lifetime-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125rem;
+    margin-left: auto;
+    color: var(--color-base-content);
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    text-align: right;
+  }
+
+  .species-lifetime-count strong {
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+
   .species-resources-actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.625rem;
   }
 
