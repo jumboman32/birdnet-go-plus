@@ -3,6 +3,7 @@
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
 
 - Local Rarity Scoring System
+- Higher Quality Images
 - eBird and Cornell Compare Calls links in Detection Details.
 <p align="left">
   <img src="images/ui3.png" alt="Species details with eBird and Compare calls links" width="500">
