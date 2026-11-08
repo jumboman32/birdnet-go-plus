@@ -1,7 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Button from '$lib/desktop/components/ui/Button.svelte';
-  import { ChevronLeft, ChevronRight, RefreshCw, Search } from '@lucide/svelte';
+  import {
+    CalendarDays,
+    ChevronLeft,
+    ChevronRight,
+    LogIn,
+    LogOut,
+    RefreshCw,
+    Search,
+    TrendingUp,
+  } from '@lucide/svelte';
   import { interpolateRgb, scaleSequential } from 'd3';
   import { getLocale, t } from '$lib/i18n';
   import { ApiError, fetchWithCSRF } from '$lib/utils/api';
@@ -130,16 +139,19 @@
   const seasonalGroups = $derived([
     {
       id: 'arrivals',
+      icon: LogIn,
       title: t('calendar.arrivals'),
       birds: report?.species.filter(bird => bird.arrivals.includes(selectedWeek)) ?? [],
     },
     {
       id: 'peak',
+      icon: TrendingUp,
       title: t('calendar.peak'),
       birds: report?.species.filter(bird => bird.peaks.includes(selectedWeek)) ?? [],
     },
     {
       id: 'departures',
+      icon: LogOut,
       title: t('calendar.departures'),
       birds: report?.species.filter(bird => bird.departures.includes(selectedWeek)) ?? [],
     },
@@ -151,10 +163,13 @@
 </script>
 
 <div class="col-span-12 min-w-0 space-y-6">
-  <header class="flex items-start justify-between gap-4">
-    <div>
-      <h1 class="text-2xl font-bold">{t('calendar.title')}</h1>
-      <p class="mt-1 opacity-70">{t('calendar.description')}</p>
+  <header class="calendar-heading flex items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+      <span class="calendar-emblem" aria-hidden="true"><CalendarDays class="size-7" /></span>
+      <div>
+        <h1 class="text-2xl font-bold">{t('calendar.title')}</h1>
+        <p class="mt-1 opacity-70">{t('calendar.description')}</p>
+      </div>
     </div>
     <Button
       variant="ghost"
@@ -176,7 +191,7 @@
       <Button className="mt-3" onclick={() => void loadCalendar()}>{t('common.retry')}</Button>
     </div>
   {:else if report}
-    <section class="rounded-xl border border-base-300 bg-base-200 p-4 lg:p-6">
+    <section class="season-overview rounded-xl border border-base-300 bg-base-200 p-4 lg:p-6">
       <div class="flex flex-wrap items-center gap-3">
         <Button variant="ghost" aria-label={t('common.previous')} onclick={() => changeWeek(-1)}
           ><ChevronLeft class="size-5" /></Button
@@ -208,12 +223,17 @@
       </p>
       <div class="mt-5 grid grid-cols-3 gap-4">
         {#each seasonalGroups as group (group.id)}
-          <section class="rounded-lg bg-base-100 p-4">
-            <h2 class="mb-3 font-semibold">{group.title}</h2>
-            <ul class="max-h-48 space-y-2 overflow-auto text-sm">
+          <section class="season-card rounded-lg bg-base-100 p-4" data-season={group.id}>
+            <h2 class="season-title mb-3 flex items-center gap-2 font-semibold">
+              <group.icon class="size-4" aria-hidden="true" />
+              {group.title}<span class="season-count"
+                >{new Intl.NumberFormat(getLocale()).format(group.birds.length)}</span
+              >
+            </h2>
+            <ul class="season-list max-h-48 overflow-auto text-sm">
               {#each group.birds as bird (bird.scientific)}<li>
-                  {displayName(bird)}{#if heardAt(bird, selectedWeek)}
-                    <span class="text-success"
+                  <span>{displayName(bird)}</span>{#if heardAt(bird, selectedWeek)}
+                    <span class="heard-badge"
                       >· {t('calendar.heard')}: {heardAt(bird, selectedWeek)}</span
                     >{/if}
                 </li>{:else}<li class="opacity-60">{t('common.ui.noData')}</li>{/each}
@@ -328,6 +348,87 @@
 </div>
 
 <style>
+  .calendar-heading {
+    padding: 0.5rem 0;
+  }
+
+  .calendar-emblem {
+    display: grid;
+    flex-shrink: 0;
+    width: 3.5rem;
+    height: 3.5rem;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--color-base-200));
+    color: var(--color-primary);
+  }
+
+  .season-overview {
+    background-image: linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--color-primary) 7%, transparent),
+      transparent 65%
+    );
+  }
+
+  .season-card {
+    --season-accent: var(--color-primary);
+
+    min-width: 0;
+    border: 1px solid var(--color-base-300);
+    border-top: 3px solid var(--season-accent);
+  }
+
+  .season-card[data-season='peak'] {
+    --season-accent: var(--color-warning);
+  }
+
+  .season-card[data-season='departures'] {
+    --season-accent: var(--color-info);
+  }
+
+  .season-title {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-base-300);
+  }
+
+  .season-title :global(svg) {
+    flex-shrink: 0;
+    color: var(--season-accent);
+  }
+
+  .season-count {
+    margin-left: auto;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    background: var(--color-base-200);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .season-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .season-list li + li {
+    border-top: 1px solid color-mix(in srgb, var(--color-base-300) 55%, transparent);
+  }
+
+  .heard-badge {
+    padding: 0.125rem 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-success) 35%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-success) 10%, transparent);
+    color: var(--color-base-content);
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+  }
+
   .calendar-table {
     min-width: 1280px;
     table-layout: fixed;
