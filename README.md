@@ -8,7 +8,7 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 <p align="left">
   <img src="images/ui3.png" alt="Species details with eBird and Compare calls links" width="500">
 </p>
-- Bird Calendar with expected arrivals, peaks, and departures
+- Bird Calendar with expected arrivals, peaks, and departures using eBird Historic Data (https://ebird.org/data/download)
 <p align="left">
   <img src="images/ui2.png" alt="Bird Calendar with expected arrivals, peaks, and departures" width="800">
 </p>
