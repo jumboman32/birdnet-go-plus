@@ -6064,5 +6064,25 @@
       "patternTransient": "Átmeneti",
       "patternSustained": "Tartós"
     }
+  },
+  "calendar": {
+    "title": "Madárnaptár",
+    "description": "Az eBird történelmi mintázatai a mikrofon mentett észleléseivel összehasonlítva.",
+    "arrivals": "Várható érkezések",
+    "peak": "Történelmi csúcs",
+    "departures": "Várható távozások",
+    "expected": "Történelmi jelentési gyakoriság",
+    "heard": "Észlelési napok",
+    "noCoverage": "Erre a hétre nincs állomásadat",
+    "missingTitle": "A naptár adatai nincsenek importálva",
+    "missingHint": "Készítsen naptárt az eBird-exportból az évszakos mintázatok összehasonlításához.",
+    "week": "{week}. hét",
+    "evidence": "{samples} megfigyelési lista {years} évből",
+    "stationCoverage": "{days} nap mentett állomásészlelésekkel",
+    "expectedThisWeek": "Ezen a héten várható",
+    "heardThisWeek": "Ezen a héten hallott",
+    "allSpecies": "Minden faj",
+    "caveat": "Az észlelés hiánya nem bizonyítja a távollétet. Az észlelési napok nem mérik a hallgatási időt. A naptár dátumozott pillanatkép.",
+    "snapshot": "Pillanatkép: {date}"
   }
 }

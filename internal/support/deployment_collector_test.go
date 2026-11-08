@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/tphakala/birdnet-go/internal/diagnostics"
 )
 
 // --- Systemd service file tests ---
@@ -128,5 +129,15 @@ func TestCollectDeploymentInfo_Orchestration(t *testing.T) {
 	assert.Len(t, info.DataDirectoryFiles, 1)
 	assert.Equal(t, "birdnet.db", info.DataDirectoryFiles[0].Name)
 	assert.Empty(t, info.SystemdServiceFile)
-	assert.Nil(t, info.DockerMounts)
+	// The test runner can itself be inside a container or WSL environment.
+	// Verify that orchestration preserves the collected mounts in either case.
+	mounts, err := diagnostics.CollectMounts()
+	require.NoError(t, err)
+	require.Len(t, info.DockerMounts, len(mounts))
+	for index, mount := range mounts {
+		assert.Equal(t, mount.Source, info.DockerMounts[index].Source)
+		assert.Equal(t, mount.Destination, info.DockerMounts[index].Destination)
+		assert.Equal(t, mount.FSType, info.DockerMounts[index].Type)
+		assert.Equal(t, mount.Options, info.DockerMounts[index].Options)
+	}
 }

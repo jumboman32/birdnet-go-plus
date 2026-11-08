@@ -61,7 +61,9 @@ const (
 
 	// Response body size limits
 	responseBodyPreviewLimit = 200 // Bytes to show in error messages
-	responseBodyDebugLimit   = 500 // Bytes to show in debug logs
+	// Request enough detail for wide photographic cards and high-density displays.
+	wikiPhotoThumbnailSize = "1280"
+	responseBodyDebugLimit = 500 // Bytes to show in debug logs
 
 	// Request ID configuration
 	requestIDLength = 8 // Length of UUID prefix used for request tracking
@@ -1692,7 +1694,7 @@ func (l *wikiMediaProvider) queryThumbnail(ctx context.Context, reqID, scientifi
 		"piprop":        "thumbnail|name",
 		"pilicense":     "free",
 		"titles":        scientificName,
-		"pithumbsize":   "400",
+		"pithumbsize":   wikiPhotoThumbnailSize,
 		// Redirect following stays on: most bird articles are titled by common
 		// name, so a scientific name usually only resolves through its redirect.
 		// The redirect target is validated below instead.

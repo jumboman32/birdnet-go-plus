@@ -1,7 +1,7 @@
 <!--
   DetectionCard.svelte
 
-  A card component displaying a detection with a prominent spectrogram background.
+  A card component displaying a detection with a prominent species photograph and compact audio preview.
   Features overlaid metadata including confidence, weather, species info, and action menu.
 
   Props:
@@ -17,10 +17,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import type { Detection } from '$lib/types/detection.types';
-  import ConfidenceBadge from './ConfidenceBadge.svelte';
   import WeatherBadge from './WeatherBadge.svelte';
   import MoonBadge from './MoonBadge.svelte';
-  import SourceBadge from './SourceBadge.svelte';
   import PlayOverlay from './PlayOverlay.svelte';
   import SpeciesInfoBar from './SpeciesInfoBar.svelte';
   import SpectrogramImage from '$lib/desktop/components/media/SpectrogramImage.svelte';
@@ -203,66 +201,10 @@
     (isMenuOpen || isAudioSettingsOpen || isAudibleBatsOpen) && 'z-[60]'
   )}
 >
-  <!-- Inner container with overflow-hidden for spectrogram clipping -->
-  <!-- Compact (shorter) layout when there is no spectrogram to display -->
-  <div class="detection-card-inner" class:compact={!showsSpectrogram}>
-    <!-- Spectrogram Background (hidden when this detection has neither a clip nor a kept image) -->
-    {#if detection.clipName}
-      <div class="spectrogram-container">
-        {#if loader.showSpinner}
-          <div class="spectrogram-loading">
-            <span class="loading loading-spinner loading-md text-[var(--color-base-content)]/50"
-            ></span>
-            {#if loader.isQueued}
-              <span class="text-xs text-[var(--color-base-content)]/40 mt-1"
-                >{t('components.audio.waiting')}</span
-              >
-            {:else if loader.isGenerating}
-              <span class="text-xs text-[var(--color-base-content)]/40 mt-1"
-                >{t('components.audio.generating')}</span
-              >
-            {/if}
-          </div>
-        {/if}
-
-        {#if loader.error}
-          <div class="spectrogram-error">
-            <span class="text-sm text-[var(--color-base-content)]/50"
-              >{t('components.audio.spectrogramUnavailable')}</span
-            >
-          </div>
-        {:else if loader.spectrogramUrl}
-          <img
-            src={loader.spectrogramUrl}
-            alt={t('components.audio.spectrogramForSpecies', { species: detection.commonName })}
-            class="spectrogram-image"
-            class:opacity-0={loader.state === 'loading'}
-            decoding="async"
-            onload={() => loader.handleImageLoad()}
-            onerror={() => loader.handleImageError()}
-          />
-        {/if}
-      </div>
-    {:else if detection.spectrogramOnly}
-      <!-- Retention removed the audio but kept the image: no loader, no polling. Same
-           size and raw flag as the list view's player so the same cached file is used. -->
-      <div class="spectrogram-container">
-        <SpectrogramImage
-          detectionId={detection.id.toString()}
-          size="md"
-          raw={true}
-          cover
-          alt={t('components.audio.spectrogramForSpecies', { species: detection.commonName })}
-        />
-      </div>
-    {:else}
-      <!-- Neutral background placeholder keeps the card's shape/aspect ratio -->
-      <div class="spectrogram-container spectrogram-placeholder"></div>
-    {/if}
-
-    <!-- Top-Left Badges: Confidence + Weather -->
-    <div class="absolute top-3 left-3 flex items-center gap-2 z-10">
-      <ConfidenceBadge confidence={detection.confidence} />
+  <!-- Photograph and metadata remain separate from the audio seek area. -->
+  <div class="detection-card-inner">
+    <!-- Weather details below the time and confidence row. -->
+    <div class="absolute top-14 left-3 right-3 flex flex-wrap items-center gap-2 z-10">
       {#if detection.weather?.weatherIcon}
         <WeatherBadge
           weatherIcon={detection.weather.weatherIcon}
@@ -275,26 +217,79 @@
       {#if detection.weather?.moonPhaseName && detection.timeOfDay === 'night'}
         <MoonBadge moonPhaseName={detection.weather.moonPhaseName} />
       {/if}
-      <SourceBadge {detection} variant="overlay" />
     </div>
-
-    <!-- Center Play Button (hidden when this detection has no clip) -->
-    {#if detection.clipName}
-      <PlayOverlay
-        detectionId={detection.id}
-        {onFreezeStart}
-        {onFreezeEnd}
-        gainValue={audioGainValue}
-        filterFreq={audioFilterFreq}
-        playbackSpeed={audioPlaybackSpeed}
-        onAudioContextAvailable={handleAudioContextAvailable}
-        audibleBatsSrc={audibleBats.url}
-      />
-    {/if}
 
     <!-- Bottom Species Info Bar -->
     <SpeciesInfoBar {detection} />
   </div>
+
+  {#if showsSpectrogram}
+    <div class="audio-preview group">
+      <!-- Spectrogram Background (hidden when this detection has neither a clip nor a kept image) -->
+      {#if detection.clipName}
+        <div class="spectrogram-container">
+          {#if loader.showSpinner}
+            <div class="spectrogram-loading">
+              <span class="loading loading-spinner loading-md text-[var(--color-base-content)]/50"
+              ></span>
+              {#if loader.isQueued}
+                <span class="text-xs text-[var(--color-base-content)]/40 mt-1"
+                  >{t('components.audio.waiting')}</span
+                >
+              {:else if loader.isGenerating}
+                <span class="text-xs text-[var(--color-base-content)]/40 mt-1"
+                  >{t('components.audio.generating')}</span
+                >
+              {/if}
+            </div>
+          {/if}
+
+          {#if loader.error}
+            <div class="spectrogram-error">
+              <span class="text-sm text-[var(--color-base-content)]/50"
+                >{t('components.audio.spectrogramUnavailable')}</span
+              >
+            </div>
+          {:else if loader.spectrogramUrl}
+            <img
+              src={loader.spectrogramUrl}
+              alt={t('components.audio.spectrogramForSpecies', { species: detection.commonName })}
+              class="spectrogram-image"
+              class:opacity-0={loader.state === 'loading'}
+              decoding="async"
+              onload={() => loader.handleImageLoad()}
+              onerror={() => loader.handleImageError()}
+            />
+          {/if}
+        </div>
+      {:else if detection.spectrogramOnly}
+        <!-- Retention removed the audio but kept the image: no loader, no polling. Same
+           size and raw flag as the list view's player so the same cached file is used. -->
+        <div class="spectrogram-container">
+          <SpectrogramImage
+            detectionId={detection.id.toString()}
+            size="md"
+            raw={true}
+            cover
+            alt={t('components.audio.spectrogramForSpecies', { species: detection.commonName })}
+          />
+        </div>
+      {/if}
+      <!-- Center Play Button (hidden when this detection has no clip) -->
+      {#if detection.clipName}
+        <PlayOverlay
+          detectionId={detection.id}
+          {onFreezeStart}
+          {onFreezeEnd}
+          gainValue={audioGainValue}
+          filterFreq={audioFilterFreq}
+          playbackSpeed={audioPlaybackSpeed}
+          onAudioContextAvailable={handleAudioContextAvailable}
+          audibleBatsSrc={audibleBats.url}
+        />
+      {/if}
+    </div>
+  {/if}
 
   <!-- Top-Right Controls - OUTSIDE overflow-hidden container -->
   <div class="absolute top-2 right-2 z-50 flex items-center gap-1.5">
@@ -345,20 +340,62 @@
 
 <style>
   .detection-card {
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-base-100);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
   }
 
   .detection-card-inner {
     position: relative;
-    height: 15rem; /* ~240px - taller for better spectrogram visibility, especially low frequencies */
+    flex: 1;
+    min-height: 16rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .detection-card:focus-within {
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .detection-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+
+  .audio-preview {
+    flex-shrink: 0;
+    position: relative;
+    height: 5rem;
+    margin-top: 0.375rem;
     border-radius: 0.75rem;
     overflow: hidden;
   }
 
-  /* Without a spectrogram, the card only needs room for the top badges and the
-     bottom species-info bar, so collapse the reserved height. */
-  .detection-card-inner.compact {
-    height: 7rem; /* ~112px - fits badges + species-info bar without overlap */
+  /* Keep playback discoverable on touch and when navigating by keyboard. */
+  .audio-preview :global(.play-button) {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .audio-preview :global(.play-button:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .audio-preview :global(.controls-bar) {
+    opacity: 1;
+  }
+
+  .audio-preview :global(.seek-overlay:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
   }
 
   /* Spectrogram container */
@@ -400,7 +437,22 @@
   :global([data-theme='dark']) .spectrogram-loading,
   :global([data-theme='dark']) .spectrogram-error,
   :global([data-theme='dark']) .spectrogram-placeholder {
-    background: linear-gradient(135deg, rgb(30 41 59 / 0.9) 0%, rgb(15 23 42 / 0.95) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-base-100) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-base-200) 95%, transparent) 100%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .detection-card,
+    .spectrogram-image {
+      transition: none;
+    }
+
+    .detection-card.new-detection {
+      animation: none;
+    }
   }
 
   /* New detection animation */

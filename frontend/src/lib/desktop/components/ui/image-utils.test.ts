@@ -3,8 +3,51 @@ import {
   handleBirdImageError,
   THUMBNAIL_RETRY_DELAYS_MS,
   BIRD_PLACEHOLDER_PATH,
+  getSpeciesImageInfoUrl,
+  getSpeciesImageUrl,
 } from './image-utils';
 import { setBasePath, resetBasePath } from '$lib/utils/urlHelpers';
+
+describe('species photo URLs', () => {
+  afterEach(resetBasePath);
+
+  it('uses a fresh shared cache generation for photos and their attribution', () => {
+    const image = new URL(getSpeciesImageUrl('Sciurus carolinensis'), 'http://localhost');
+    const attribution = new URL(getSpeciesImageInfoUrl('Sciurus carolinensis'), 'http://localhost');
+    expect(image.searchParams.get('v')).toBe('3');
+    expect(attribution.searchParams.get('v')).toBe(image.searchParams.get('v'));
+    expect(image.searchParams.get('name')).toBe('Sciurus carolinensis');
+    expect(image.href).not.toBe(
+      'http://localhost/api/v2/media/species-image?name=Sciurus%20carolinensis'
+    );
+  });
+
+  it('preserves reverse-proxy prefixes and encodes the complete scientific name', () => {
+    setBasePath('/birdnet');
+    const image = new URL(getSpeciesImageUrl('Sciurus carolinensis & test'), 'http://localhost');
+    expect(image.pathname).toBe('/birdnet/api/v2/media/species-image');
+    expect(image.searchParams.get('name')).toBe('Sciurus carolinensis & test');
+    expect(image.searchParams.size).toBe(2);
+    expect(getSpeciesImageInfoUrl('Sciurus carolinensis')).toContain(
+      '/birdnet/api/v2/media/species-image/info?'
+    );
+  });
+
+  it('refreshes server-supplied proxy URLs without losing their parameters or base path', () => {
+    setBasePath('/birdnet');
+    const image = new URL(
+      getSpeciesImageUrl(
+        'Sciurus carolinensis',
+        '/birdnet/api/v2/media/image/Sciurus%20carolinensis?size=large&v=old#photo'
+      ),
+      'http://localhost'
+    );
+    expect(image.pathname).toBe('/birdnet/api/v2/media/image/Sciurus%20carolinensis');
+    expect(image.searchParams.get('v')).toBe('3');
+    expect(image.searchParams.get('size')).toBe('large');
+    expect(image.hash).toBe('#photo');
+  });
+});
 
 /**
  * Builds an <img> attached to the document, because the retry only restores the src of

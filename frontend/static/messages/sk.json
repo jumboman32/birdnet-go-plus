@@ -6064,5 +6064,25 @@
       "patternTransient": "Prechodný",
       "patternSustained": "Trvalý"
     }
+  },
+  "calendar": {
+    "title": "Vtáčí kalendár",
+    "description": "Historické vzorce eBird v porovnaní s uloženými detekciami mikrofónu.",
+    "arrivals": "Očakávané prílety",
+    "peak": "Historické maximum",
+    "departures": "Očakávané odlety",
+    "expected": "Historická frekvencia hlásení",
+    "heard": "Dni s detekciou",
+    "noCoverage": "Pre tento týždeň nie sú záznamy stanice",
+    "missingTitle": "Údaje kalendára neboli importované",
+    "missingHint": "Vytvorte kalendár z exportu eBird na porovnanie sezónnych vzorcov.",
+    "week": "Týždeň {week}",
+    "evidence": "{samples} zoznamov za {years} rokov",
+    "stationCoverage": "{days} dní s uloženými detekciami stanice",
+    "expectedThisWeek": "Očakávané tento týždeň",
+    "heardThisWeek": "Počuté tento týždeň",
+    "allSpecies": "Všetky druhy",
+    "caveat": "Chýbajúca detekcia nedokazuje neprítomnosť. Dni s detekciami nie sú časom počúvania. Kalendár je datovaná snímka.",
+    "snapshot": "Snímka: {date}"
   }
 }

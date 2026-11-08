@@ -6064,5 +6064,25 @@
       "patternTransient": "Övergående",
       "patternSustained": "Ihållande"
     }
+  },
+  "calendar": {
+    "title": "Fågelkalender",
+    "description": "Historiska eBird-mönster jämförda med sparade mikrofondetektioner.",
+    "arrivals": "Förväntade ankomster",
+    "peak": "Historisk topp",
+    "departures": "Förväntade avresor",
+    "expected": "Historisk rapporteringsfrekvens",
+    "heard": "Dagar registrerade",
+    "noCoverage": "Inga stationsdata för den här veckan",
+    "missingTitle": "Kalenderdata har inte importerats",
+    "missingHint": "Skapa en kalender från din eBird-export för att jämföra säsongsmönster.",
+    "week": "Vecka {week}",
+    "evidence": "{samples} checklistor över {years} år",
+    "stationCoverage": "{days} dagar med sparade stationsdetektioner",
+    "expectedThisWeek": "Förväntade denna vecka",
+    "heardThisWeek": "Hörda denna vecka",
+    "allSpecies": "Alla arter",
+    "caveat": "En utebliven detektion bevisar inte frånvaro. Registreringsdagar mäter inte lyssningstid. Kalendern är en daterad ögonblicksbild.",
+    "snapshot": "Ögonblicksbild: {date}"
   }
 }

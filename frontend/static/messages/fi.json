@@ -6064,5 +6064,25 @@
       "patternTransient": "Ohimenevä",
       "patternSustained": "Jatkuva"
     }
+  },
+  "calendar": {
+    "title": "Lintukalenteri",
+    "description": "eBirdin historialliset kausivaihtelut verrattuna tallennettuihin mikrofonihavaintoihin.",
+    "arrivals": "Odotetut saapumiset",
+    "peak": "Historiallinen huippu",
+    "departures": "Odotetut lähdöt",
+    "expected": "Historiallinen ilmoitustiheys",
+    "heard": "Havaintopäivät",
+    "noCoverage": "Ei aseman tietoja tältä viikolta",
+    "missingTitle": "Kalenteritietoja ei ole tuotu",
+    "missingHint": "Luo kalenteri eBird-vientitiedostosta kausivaihtelujen vertailua varten.",
+    "week": "Viikko {week}",
+    "evidence": "{samples} havaintolistaa {years} vuoden ajalta",
+    "stationCoverage": "{days} päivää, joilta on tallennettuja asemahavaintoja",
+    "expectedThisWeek": "Odotetut tällä viikolla",
+    "heardThisWeek": "Kuullut tällä viikolla",
+    "allSpecies": "Kaikki lajit",
+    "caveat": "Havainnon puuttuminen ei todista poissaoloa. Havaintopäivät eivät mittaa kuunteluaikaa. Kalenteri on päivätty tilannekuva.",
+    "snapshot": "Tilannekuva: {date}"
   }
 }

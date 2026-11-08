@@ -61,6 +61,7 @@
   let SoundscapePage = $state<Component | null>(null);
   let ReviewPage = $state<Component | null>(null);
   let Species = $state<Component | null>(null);
+  let BirdCalendar = $state<Component | null>(null);
   let Search = $state<Component | null>(null);
   let About = $state<Component | null>(null);
   let Help = $state<Component | null>(null);
@@ -149,6 +150,7 @@
   const routeConfigs: RouteConfig[] = [
     { route: 'login', page: 'login', titleKey: 'auth.loginTitle', component: '' },
     { route: 'dashboard', page: 'dashboard', titleKey: 'navigation.dashboard', component: '' },
+    { route: 'calendar', page: 'calendar', titleKey: 'calendar.title', component: 'calendar' },
     {
       route: 'live-stream',
       page: 'live-stream',
@@ -293,6 +295,12 @@
             const module =
               await import('./lib/desktop/features/analytics/pages/ActivityPage.svelte');
             ActivityPage = module.default;
+          }
+          break;
+        case 'calendar':
+          if (!BirdCalendar) {
+            const module = await import('./lib/desktop/views/BirdCalendar.svelte');
+            BirdCalendar = module.default;
           }
           break;
         case 'analytics-trends':
@@ -471,6 +479,7 @@
     [uiPath() + '/']: findRouteConfig('dashboard'),
     [uiPath()]: findRouteConfig('dashboard'),
     [uiPath('dashboard')]: findRouteConfig('dashboard'),
+    [uiPath('calendar')]: findRouteConfig('calendar'),
     [uiPath('login')]: findRouteConfig('login'),
     [uiPath('live-stream')]: findRouteConfig('live-stream'),
     [uiPath('notifications')]: findRouteConfig('notifications'),
@@ -854,6 +863,8 @@
       {@render renderRoute(TrendsPage)}
     {:else if currentRoute === 'analytics-biodiversity'}
       {@render renderRoute(BiodiversityPage)}
+    {:else if currentRoute === 'calendar'}
+      {@render renderRoute(BirdCalendar)}
     {:else if currentRoute === 'analytics-nocturnal'}
       {@render renderRoute(NocturnalPage)}
     {:else if currentRoute === 'analytics-weather'}

@@ -7,6 +7,30 @@ import { buildAppUrl } from '$lib/utils/urlHelpers';
 /** Static asset path of the bird-silhouette placeholder (before base-path resolution). */
 export const BIRD_PLACEHOLDER_PATH = '/ui/assets/bird-placeholder.svg';
 
+// Keep every view on the same cache generation after enabling animal-photo fallbacks.
+// Old 404 responses can remain cached by the browser for a full day.
+const SPECIES_PHOTO_CACHE_VERSION = '3';
+const IMAGE_URL_PARSER_BASE = 'http://birdnet.invalid';
+
+/** Build a base-path-aware photo URL that bypasses cached pre-fallback misses. */
+export function getSpeciesImageUrl(scientificName: string, preferredUrl?: string): string {
+  if (preferredUrl) {
+    const url = new URL(buildAppUrl(preferredUrl), IMAGE_URL_PARSER_BASE);
+    url.searchParams.set('v', SPECIES_PHOTO_CACHE_VERSION);
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+  return buildAppUrl(
+    `/api/v2/media/species-image?name=${encodeURIComponent(scientificName)}&v=${SPECIES_PHOTO_CACHE_VERSION}`
+  );
+}
+
+/** Build the matching versioned attribution URL for a species photograph. */
+export function getSpeciesImageInfoUrl(scientificName: string): string {
+  return buildAppUrl(
+    `/api/v2/media/species-image/info?name=${encodeURIComponent(scientificName)}&v=${SPECIES_PHOTO_CACHE_VERSION}`
+  );
+}
+
 /**
  * Delays, in milliseconds, before each retry of a failed thumbnail.
  *

@@ -17,9 +17,8 @@
   import { api } from '$lib/utils/api';
   import { formatNumber, formatDateTime } from '$lib/utils/formatters';
   import { getLogger } from '$lib/utils/logger';
-  import { buildAppUrl } from '$lib/utils/urlHelpers';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
+  import { getSpeciesImageUrl, handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import LoadingSpinner from '$lib/desktop/components/ui/LoadingSpinner.svelte';
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import type { SourceInfo } from '$lib/types/detection.types';
@@ -652,9 +651,7 @@
                       <div class="w-8 h-8 rounded-full bg-[var(--color-base-200)] overflow-hidden">
                         <!-- PERFORMANCE OPTIMIZATION: Enhanced image loading for species thumbnails -->
                         <img
-                          src={buildAppUrl(
-                            `/api/v2/media/species-image?name=${encodeURIComponent(detection.scientificName ?? '')}`
-                          )}
+                          src={getSpeciesImageUrl(detection.scientificName ?? '')}
                           alt={detection.commonName ||
                             t('analytics.recentDetections.unknownSpecies')}
                           class="w-full h-full object-cover"
@@ -719,9 +716,7 @@
                   class="w-10 h-10 rounded-full bg-[var(--color-base-200)] overflow-hidden shrink-0"
                 >
                   <img
-                    src={buildAppUrl(
-                      `/api/v2/media/species-image?name=${encodeURIComponent(detection.scientificName ?? '')}`
-                    )}
+                    src={getSpeciesImageUrl(detection.scientificName ?? '')}
                     alt={detection.commonName || t('analytics.recentDetections.unknownSpecies')}
                     class="w-full h-full object-cover"
                     onerror={handleBirdImageError}

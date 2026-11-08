@@ -6064,5 +6064,25 @@
       "patternTransient": "Transitorio",
       "patternSustained": "Persistente"
     }
+  },
+  "calendar": {
+    "title": "Calendario degli uccelli",
+    "description": "Andamenti storici eBird confrontati con i rilevamenti salvati del microfono.",
+    "arrivals": "Arrivi previsti",
+    "peak": "Picco storico",
+    "departures": "Partenze previste",
+    "expected": "Frequenza storica delle segnalazioni",
+    "heard": "Giorni di rilevamento",
+    "noCoverage": "Nessun dato della stazione per questa settimana",
+    "missingTitle": "I dati del calendario non sono stati importati",
+    "missingHint": "Genera un calendario dalla tua esportazione eBird per confrontare gli andamenti stagionali.",
+    "week": "Settimana {week}",
+    "evidence": "{samples} liste in {years} anni",
+    "stationCoverage": "{days} giorni con rilevamenti salvati della stazione",
+    "expectedThisWeek": "Previsti questa settimana",
+    "heardThisWeek": "Sentiti questa settimana",
+    "allSpecies": "Tutte le specie",
+    "caveat": "Un rilevamento mancante non dimostra assenza. I giorni di rilevamento non misurano il tempo di ascolto. Il calendario è un’istantanea datata.",
+    "snapshot": "Istantanea: {date}"
   }
 }

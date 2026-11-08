@@ -18,7 +18,7 @@ import (
 const (
 	aviCommonsProviderName = "avicommons"
 	aviCommonsBaseURL      = "https://static.avicommons.org"
-	aviCommonsDefaultSize  = "320" // Default image size (e.g., 240, 320, 480, 900)
+	aviCommonsDefaultSize  = "900" // Preserve detail when photographs fill wide detection cards.
 	bytesPerKB             = 1024  // Bytes per kilobyte for size calculations
 )
 

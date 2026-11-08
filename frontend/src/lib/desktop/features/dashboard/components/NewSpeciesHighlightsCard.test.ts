@@ -39,6 +39,18 @@ describe('NewSpeciesHighlightsCard', () => {
     cleanup();
   });
 
+  it('refreshes cached misses even when the API supplies its own proxy thumbnail URL', () => {
+    const view = card.render({
+      props: {
+        data: [summary({ thumbnail_url: '/api/v2/media/image/Turdus%20merula' })],
+        selectedDate: '2026-09-07',
+        isToday: true,
+      },
+    });
+    const image = view.getByRole('img', { name: 'Common Blackbird' });
+    expect(image.getAttribute('src')).toBe('/api/v2/media/image/Turdus%20merula?v=3');
+  });
+
   it('dedupes duplicate scientific_name rows to one tile instead of crashing (Sentry BIRDNET-GO-2HP)', () => {
     // Two rows with the same scientific_name both qualify as new species. A bare
     // scientific_name key would collide (each_key_duplicate); the highlights list now

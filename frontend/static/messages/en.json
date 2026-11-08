@@ -6064,5 +6064,25 @@
       "patternTransient": "Transient",
       "patternSustained": "Sustained"
     }
+  },
+  "calendar": {
+    "title": "Bird Calendar",
+    "description": "Historical eBird patterns compared with saved microphone detections.",
+    "arrivals": "Expected arrivals",
+    "peak": "Historical peak",
+    "departures": "Expected departures",
+    "expected": "Historical reporting frequency",
+    "heard": "Days detected",
+    "noCoverage": "No station records for this week",
+    "missingTitle": "Calendar data has not been imported",
+    "missingHint": "Generate a calendar from your eBird export to compare seasonal patterns.",
+    "week": "Week {week}",
+    "evidence": "{samples} checklists across {years} years",
+    "stationCoverage": "{days} days with saved station detections",
+    "expectedThisWeek": "Expected this week",
+    "heardThisWeek": "Heard this week",
+    "allSpecies": "All species",
+    "caveat": "A missing detection does not establish absence. Saved detection days are not listening uptime. The calendar is a dated snapshot.",
+    "snapshot": "Snapshot: {date}"
   }
 }

@@ -91,6 +91,7 @@ func setDefaultConfig() {
 	viper.SetDefault("birdnet.rangefilter.debug", false)
 	viper.SetDefault("birdnet.rangefilter.model", RangeFilterModelLatest)
 	viper.SetDefault("birdnet.rangefilter.threshold", 0.01)
+	viper.SetDefault("birdnet.rangefilter.localdatapath", "")
 
 	// Perch model configuration.
 	// OverrideThreshold defaults false so Perch follows birdnet.threshold until the

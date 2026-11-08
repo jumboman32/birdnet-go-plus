@@ -6064,5 +6064,25 @@
       "patternTransient": "Voorbijgaand",
       "patternSustained": "Aanhoudend"
     }
+  },
+  "calendar": {
+    "title": "Vogelkalender",
+    "description": "Historische eBird-patronen vergeleken met opgeslagen microfoondetecties.",
+    "arrivals": "Verwachte aankomsten",
+    "peak": "Historische piek",
+    "departures": "Verwacht vertrek",
+    "expected": "Historische meldingsfrequentie",
+    "heard": "Dagen gedetecteerd",
+    "noCoverage": "Geen stationgegevens voor deze week",
+    "missingTitle": "Kalendergegevens zijn niet geïmporteerd",
+    "missingHint": "Maak een kalender van uw eBird-export om seizoenspatronen te vergelijken.",
+    "week": "Weeknummer {week}",
+    "evidence": "{samples} lijsten over {years} jaar",
+    "stationCoverage": "{days} dagen met opgeslagen stationdetecties",
+    "expectedThisWeek": "Deze week verwacht",
+    "heardThisWeek": "Deze week gehoord",
+    "allSpecies": "Alle soorten",
+    "caveat": "Een ontbrekende detectie bewijst geen afwezigheid. Detectiedagen meten geen luistertijd. De kalender is een gedateerde momentopname.",
+    "snapshot": "Momentopname: {date}"
   }
 }

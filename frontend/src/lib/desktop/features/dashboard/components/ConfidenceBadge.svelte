@@ -17,6 +17,7 @@
 -->
 <script lang="ts">
   import { cn } from '$lib/utils/cn';
+  import { t } from '$lib/i18n';
   import { confidenceColorClasses } from '$lib/desktop/features/dashboard/utils/confidenceColors';
 
   interface Props {
@@ -36,12 +37,15 @@
 
   const confidencePercent = $derived(normalizeConfidence(confidence));
   const colorClasses = $derived(confidenceColorClasses(confidencePercent));
+  const confidenceLabel = $derived(
+    t('detections.detail.aria.confidence', { confidence: confidencePercent })
+  );
 </script>
 
 <div
   class={cn('confidence-badge', colorClasses, className)}
-  title="Confidence: {confidencePercent}%"
-  aria-label="Confidence: {confidencePercent}%"
+  title={confidenceLabel}
+  aria-label={confidenceLabel}
 >
   {confidencePercent}%
 </div>

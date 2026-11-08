@@ -25,9 +25,11 @@
 -->
 
 <script lang="ts">
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
+  import {
+    getSpeciesImageInfoUrl,
+    handleBirdImageError,
+  } from '$lib/desktop/components/ui/image-utils.js';
   import type { ImageAttribution } from '$lib/types/detection.types';
-  import { buildAppUrl } from '$lib/utils/urlHelpers';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
   import { validateProtocolURL } from '$lib/utils/security';
   import { t } from '$lib/i18n';
@@ -110,7 +112,7 @@
     imageAttribution = null;
 
     try {
-      const url = buildAppUrl(`/api/v2/media/species-image/info?name=${encodeURIComponent(name)}`);
+      const url = getSpeciesImageInfoUrl(name);
       const response = await fetch(url);
       if (response.ok) {
         const data = (await response.json()) as ImageAttribution;

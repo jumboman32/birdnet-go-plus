@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import tailwindcss from '@tailwindcss/vite'
 import { svelteTesting } from '@testing-library/svelte/vite'
@@ -14,6 +14,7 @@ const MESSAGES_SOURCE_DIR = './static/messages'
 const LOCALES_PLACEHOLDER = '__SUPPORTED_LOCALES_PLACEHOLDER__'
 const PRODUCTION_ASSET_BASE = '/ui/assets/'
 const DEVELOPMENT_ENTRY = '/ui/dashboard'
+const DEFAULT_DEVELOPMENT_BACKEND = 'http://127.0.0.1:8081'
 
 /**
  * Return sorted *.json filenames from static/messages/, or [] if missing.
@@ -163,7 +164,7 @@ export default defineConfig(({ command, isPreview, mode }) => ({
     open: command === 'serve' && !isPreview ? (mode === 'rarity' ? RARITY_PREVIEW_ENTRY : DEVELOPMENT_ENTRY) : false,
     proxy: mode === 'rarity' ? undefined : {
       '/api': {
-        target: 'http://localhost:8080',
+        target: loadEnv(mode, process.cwd(), 'BIRDNET_DEV_').BIRDNET_DEV_BACKEND || DEFAULT_DEVELOPMENT_BACKEND,
         changeOrigin: true,
       },
     },

@@ -34,7 +34,10 @@
   import SpectrogramPlayer from '$lib/desktop/components/media/SpectrogramPlayer.svelte';
   import SpectrogramImage from '$lib/desktop/components/media/SpectrogramImage.svelte';
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
+  import {
+    getSpeciesImageUrl,
+    handleBirdImageError,
+  } from '$lib/desktop/components/ui/image-utils.js';
   import { t } from '$lib/i18n';
   import type { Detection } from '$lib/types/detection.types';
   import { useImageDelayedLoading } from '$lib/utils/delayedLoading.svelte.js';
@@ -118,7 +121,7 @@
   // configured base path so the image resolves through reverse proxies.
   function getThumbnailUrl(scientificName: string): string {
     // TODO: Replace with actual thumbnail API endpoint
-    return buildAppUrl(`/api/v2/media/species-image?name=${encodeURIComponent(scientificName)}`);
+    return getSpeciesImageUrl(scientificName);
   }
 
   // Thumbnail loading handlers

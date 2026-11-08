@@ -6064,5 +6064,25 @@
       "patternTransient": "Przejściowy",
       "patternSustained": "Utrzymujący się"
     }
+  },
+  "calendar": {
+    "title": "Kalendarz ptaków",
+    "description": "Historyczne wzorce eBird w porównaniu z zapisanymi wykryciami mikrofonu.",
+    "arrivals": "Spodziewane przyloty",
+    "peak": "Historyczny szczyt",
+    "departures": "Spodziewane odloty",
+    "expected": "Historyczna częstość zgłoszeń",
+    "heard": "Dni z wykryciami",
+    "noCoverage": "Brak danych stacji dla tego tygodnia",
+    "missingTitle": "Nie zaimportowano danych kalendarza",
+    "missingHint": "Utwórz kalendarz z eksportu eBird, aby porównać wzorce sezonowe.",
+    "week": "Tydzień {week}",
+    "evidence": "{samples} list z {years} lat",
+    "stationCoverage": "{days} dni z zapisanymi wykryciami stacji",
+    "expectedThisWeek": "Spodziewane w tym tygodniu",
+    "heardThisWeek": "Słyszane w tym tygodniu",
+    "allSpecies": "Wszystkie gatunki",
+    "caveat": "Brak wykrycia nie dowodzi nieobecności. Dni z wykryciami nie mierzą czasu nasłuchu. Kalendarz jest datowanym obrazem danych.",
+    "snapshot": "Stan danych: {date}"
   }
 }

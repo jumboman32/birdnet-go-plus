@@ -17,8 +17,10 @@
   - className?: string - Additional CSS classes
 -->
 <script lang="ts">
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
-  import { buildAppUrl } from '$lib/utils/urlHelpers';
+  import {
+    getSpeciesImageUrl,
+    handleBirdImageError,
+  } from '$lib/desktop/components/ui/image-utils.js';
 
   interface Props {
     scientificName: string;
@@ -48,7 +50,7 @@
   class={`${sizeClasses} relative overflow-hidden rounded-lg bg-[var(--color-base-100)] shadow-md shrink-0 ${className}`}
 >
   <img
-    src={buildAppUrl(`/api/v2/media/species-image?name=${encodeURIComponent(scientificName)}`)}
+    src={getSpeciesImageUrl(scientificName)}
     alt={commonName}
     class="w-full h-full object-cover"
     onerror={handleBirdImageError}
