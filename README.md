@@ -1,8 +1,14 @@
 # BirdNET-Go+
+
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
+
+- Six photographic detection cards, a wider dashboard, and a dark green theme.
+- Weekly bird calendar comparing local eBird history with microphone detections.
 - Recent eBird observations and BirdCast migration context.
 - eBird and Cornell Compare Calls links in Detection Details.
 - Separate Windows development launcher for testing.
+
+The calendar uses a private local eBird import and refreshes automatically when its watcher is running.
 Numeric rarity scores require historical checklist data; an eBird API key alone is insufficient. BirdCast does not affect the score.
 
 Built on the work of the BirdNET-Go contributors.
