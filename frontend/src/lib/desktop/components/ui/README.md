@@ -619,21 +619,28 @@ Utility functions for image handling.
 
 ```typescript
 export function handleBirdImageError(e: Event): boolean;
+export function getSpeciesImageUrl(scientificName: string, preferredUrl?: string): string;
+export function getSpeciesImageInfoUrl(scientificName: string): string;
 ```
 
 **Usage:**
 
 ```svelte
 <script>
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
+  import {
+    getSpeciesImageUrl,
+    handleBirdImageError,
+  } from '$lib/desktop/components/ui/image-utils.js';
 </script>
 
-<img src="/api/species-image/{species}" alt="Bird" onerror={handleBirdImageError} />
+<img src={getSpeciesImageUrl(species)} alt="Bird" onerror={handleBirdImageError} />
 ```
 
 **Features:**
 
 - Bird-specific error handling
+- Shared base-path-aware, versioned photo and attribution URLs so every view
+  recovers from cached misses after image-provider updates.
 - Automatic placeholder fallback
 - Bounded retry of the original URL, because the media proxy answers "not resolved
   yet" for a species whose image is still being fetched in the background. Each retry

@@ -47,7 +47,9 @@ describe('SpeciesInfoBar', () => {
 
     const img = container.querySelector('img');
     if (!img) throw new Error('expected an <img> to be rendered');
-    expect(img.getAttribute('src')).toBe('/api/v2/media/species-image?name=Cardellina%20pusilla');
+    expect(img.getAttribute('src')).toBe(
+      '/api/v2/media/species-image?name=Cardellina%20pusilla&v=3'
+    );
   });
 
   it('prefixes the species image URL with the configured base path (regression)', () => {
@@ -60,7 +62,7 @@ describe('SpeciesInfoBar', () => {
     const img = container.querySelector('img');
     if (!img) throw new Error('expected an <img> to be rendered');
     expect(img.getAttribute('src')).toBe(
-      '/birdnet/api/v2/media/species-image?name=Cardellina%20pusilla'
+      '/birdnet/api/v2/media/species-image?name=Cardellina%20pusilla&v=3'
     );
   });
 });

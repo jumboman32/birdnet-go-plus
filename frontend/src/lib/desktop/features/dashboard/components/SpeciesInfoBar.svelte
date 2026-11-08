@@ -10,7 +10,10 @@
 -->
 <script lang="ts">
   import type { Detection } from '$lib/types/detection.types';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
+  import {
+    getSpeciesImageUrl,
+    handleBirdImageError,
+  } from '$lib/desktop/components/ui/image-utils.js';
   import { formatRelativeTime } from '$lib/utils/formatters';
   import { Bird, Check, CircleHelp } from '@lucide/svelte';
   import { cn } from '$lib/utils/cn';
@@ -45,9 +48,7 @@
 
   // Species photo URL: buildAppUrl prepends the configured base path so the
   // image resolves correctly behind reverse proxies (e.g. /birdnet/...).
-  const thumbnailUrl = $derived(
-    buildAppUrl(`/api/v2/media/species-image?name=${encodeURIComponent(detection.scientificName)}`)
-  );
+  const thumbnailUrl = $derived(getSpeciesImageUrl(detection.scientificName));
 
   // Localized common name for display in the visitor's UI locale. Falls back to
   // the server-provided common name, then the scientific name.

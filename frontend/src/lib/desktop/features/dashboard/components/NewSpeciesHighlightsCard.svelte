@@ -8,11 +8,10 @@ Shows up to 12 species, ordered by novelty category then detection count.
 
 <script lang="ts">
   import Card from '$lib/desktop/components/ui/Card.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
+  import { getSpeciesImageUrl, handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import { t } from '$lib/i18n';
   import type { DailySpeciesSummary } from '$lib/types/detection.types';
   import { buildSpeciesDetectionUrl } from '$lib/utils/detectionUrls';
-  import { buildAppUrl } from '$lib/utils/urlHelpers';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
   import { speciesTrackingSettings } from '$lib/stores/settings';
   import { confidenceColorClasses } from '$lib/desktop/features/dashboard/utils/confidenceColors';
@@ -118,9 +117,7 @@ Shows up to 12 species, ordered by novelty category then detection count.
   }
 
   function thumbnailUrl(item: DailySpeciesSummary): string {
-    return item.thumbnail_url
-      ? buildAppUrl(item.thumbnail_url)
-      : buildAppUrl(`/api/v2/media/species-image?name=${encodeURIComponent(item.scientific_name)}`);
+    return getSpeciesImageUrl(item.scientific_name, item.thumbnail_url);
   }
 </script>
 

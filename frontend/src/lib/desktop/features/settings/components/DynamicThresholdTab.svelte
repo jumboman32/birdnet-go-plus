@@ -32,7 +32,10 @@
   import { api } from '$lib/utils/api';
   import { loggers } from '$lib/utils/logger';
   import { toastActions } from '$lib/stores/toast';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
+  import {
+    getSpeciesImageUrl,
+    handleBirdImageError,
+  } from '$lib/desktop/components/ui/image-utils.js';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
   import { SETTINGS_ROUTES } from '$lib/utils/settingsRoutes';
   import { handleAppLinkClick } from '$lib/stores/navigation.svelte';
@@ -544,9 +547,7 @@
                   >
                     {#if threshold.scientificName}
                       <img
-                        src={buildAppUrl(
-                          `/api/v2/media/species-image?name=${encodeURIComponent(threshold.scientificName)}`
-                        )}
+                        src={getSpeciesImageUrl(threshold.scientificName)}
                         alt=""
                         class="w-full h-full object-cover"
                         onerror={handleBirdImageError}

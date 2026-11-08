@@ -5,7 +5,7 @@
   import SpectrogramImage from '$lib/desktop/components/media/SpectrogramImage.svelte';
   import MobileAudioPlayer from '$lib/desktop/components/media/MobileAudioPlayer.svelte';
   import DatePicker from '$lib/desktop/components/ui/DatePicker.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
+  import { getSpeciesImageUrl, handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import TimeOfDayIcon, { isTimeOfDay } from '$lib/desktop/components/ui/TimeOfDayIcon.svelte';
   import { getLocale, t } from '$lib/i18n';
   import { dashboardSettings } from '$lib/stores/settings';
@@ -911,9 +911,7 @@
                         <!-- decoding="async": Decode image off-main-thread to prevent UI blocking -->
                         <!-- fetchpriority="low": Lower network priority for species thumbnails -->
                         <img
-                          src={buildAppUrl(
-                            `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                          )}
+                          src={getSpeciesImageUrl(result.scientificName)}
                           alt={displayName || t('search.detailsPanel.unknownSpecies')}
                           class="w-full h-full object-cover"
                           onload={e => {
@@ -1120,9 +1118,7 @@
                               title={t('search.detailsPanel.clickToCollapse')}
                             >
                               <img
-                                src={buildAppUrl(
-                                  `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                                )}
+                                src={getSpeciesImageUrl(result.scientificName)}
                                 alt={displayName || t('search.detailsPanel.unknownSpecies')}
                                 class="w-full h-full object-cover"
                                 onload={e => {
@@ -1201,9 +1197,7 @@
                       class="w-12 h-9 rounded-md overflow-hidden bg-[var(--color-base-200)] shrink-0"
                     >
                       <img
-                        src={buildAppUrl(
-                          `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                        )}
+                        src={getSpeciesImageUrl(result.scientificName)}
                         alt={displayName || t('search.detailsPanel.unknownSpecies')}
                         class="w-full h-full object-cover"
                         onerror={handleBirdImageError}

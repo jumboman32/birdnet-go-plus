@@ -22,7 +22,11 @@
   import SpectrogramImage from '$lib/desktop/components/media/SpectrogramImage.svelte';
   import VerificationBadges from '$lib/desktop/components/ui/VerificationBadges.svelte';
   import ErrorAlert from '$lib/desktop/components/ui/ErrorAlert.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
+  import {
+    getSpeciesImageInfoUrl,
+    getSpeciesImageUrl,
+    handleBirdImageError,
+  } from '$lib/desktop/components/ui/image-utils.js';
   import { t } from '$lib/i18n';
   import type { Detection, ImageAttribution } from '$lib/types/detection.types';
   import { hasReviewPermission, isAuthenticated } from '$lib/utils/auth';
@@ -332,9 +336,7 @@
     const { signal } = controller;
 
     try {
-      const url = buildAppUrl(
-        `/api/v2/media/species-image/info?name=${encodeURIComponent(detection.scientificName)}`
-      );
+      const url = getSpeciesImageInfoUrl(detection.scientificName);
       const response = await fetch(url, { signal });
       if (signal.aborted) return;
       if (response.ok) {
@@ -551,9 +553,7 @@
         <!-- Species thumbnail with credit overlay -->
         <div class="hero-thumbnail">
           <img
-            src={buildAppUrl(
-              `/api/v2/media/species-image?name=${encodeURIComponent(det.scientificName)}`
-            )}
+            src={getSpeciesImageUrl(det.scientificName)}
             alt={displayName}
             class="w-full h-full object-contain"
             onerror={handleBirdImageError}

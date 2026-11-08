@@ -58,6 +58,7 @@ Responsive Breakpoints:
     buildSpeciesHourUrl,
   } from '$lib/utils/detectionUrls';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
+  import { getSpeciesImageUrl } from '$lib/desktop/components/ui/image-utils';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
   import { loggers } from '$lib/utils/logger';
   import { LRUCache } from '$lib/utils/LRUCache';
@@ -1071,11 +1072,7 @@ Responsive Breakpoints:
                 <div class="species-label-col shrink-0 flex items-center gap-2 pr-4">
                   {#if showThumbnails}
                     <BirdThumbnailPopup
-                      thumbnailUrl={item.thumbnail_url
-                        ? buildAppUrl(item.thumbnail_url)
-                        : buildAppUrl(
-                            `/api/v2/media/species-image?name=${encodeURIComponent(item.scientific_name)}`
-                          )}
+                      thumbnailUrl={getSpeciesImageUrl(item.scientific_name, item.thumbnail_url)}
                       commonName={item.common_name}
                       scientificName={item.scientific_name}
                       detectionUrl={urlBuilders.species(item)}
