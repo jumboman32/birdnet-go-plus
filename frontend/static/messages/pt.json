@@ -2067,6 +2067,7 @@
     },
     "periods": {
       "today": "Hoje",
+      "last3Days": "Últimos 3 dias",
       "lastWeek": "Últimos 7 dias",
       "lastMonth": "Últimos 30 dias",
       "last90Days": "Últimos 90 dias",

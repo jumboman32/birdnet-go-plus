@@ -2067,6 +2067,7 @@
     },
     "periods": {
       "today": "Dnes",
+      "last3Days": "Posledné 3 dni",
       "lastWeek": "Posledných 7 dní",
       "lastMonth": "Posledných 30 dní",
       "last90Days": "Posledných 90 dní",

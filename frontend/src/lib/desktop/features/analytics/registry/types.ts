@@ -26,7 +26,8 @@ export type ChartGroup =
   'overview' | 'patterns' | 'trends' | 'biodiversity' | 'quality' | 'nocturnal';
 
 /** Date-range presets shared by the control bar and the registry fetchers. */
-export type DateRangePreset = 'week' | 'month' | 'quarter' | 'year' | 'custom';
+export type DateRangePreset =
+  'today' | 'threeDays' | 'week' | 'month' | 'quarter' | 'year' | 'custom';
 
 /**
  * Resolved analytics parameters shared across the control bar, the registry

@@ -2067,6 +2067,7 @@
     },
     "periods": {
       "today": "Šodien",
+      "last3Days": "Pēdējās 3 dienas",
       "lastWeek": "Pēdējās 7 dienas",
       "lastMonth": "Pēdējās 30 dienas",
       "last90Days": "Pēdējās 90 dienas",

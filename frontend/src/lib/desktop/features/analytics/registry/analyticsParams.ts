@@ -5,7 +5,7 @@
  * registry fetchers.
  *
  * URL contract (all in the `?query`):
- *   range   week|month|quarter|year|custom (omitted when `month`, the default)
+ *   range   today|threeDays|week|month|quarter|year|custom (omitted when `month`, the default)
  *   start   YYYY-MM-DD, only meaningful (and serialised) when range=custom
  *   end     YYYY-MM-DD, only meaningful (and serialised) when range=custom
  *   species comma-separated scientific names (omitted when none selected)
@@ -15,7 +15,15 @@ import { getLocalDateString, parseLocalDateString } from '$lib/utils/date';
 
 import type { AnalyticsParams, DateRangePreset } from './types';
 
-const VALID_RANGES = new Set<string>(['week', 'month', 'quarter', 'year', 'custom']);
+const VALID_RANGES = new Set<string>([
+  'today',
+  'threeDays',
+  'week',
+  'month',
+  'quarter',
+  'year',
+  'custom',
+]);
 
 /** Default range when the URL omits `range`. Matches the legacy page default. */
 export const DEFAULT_RANGE: DateRangePreset = 'month';
@@ -33,6 +41,9 @@ function subtractLocalDays(base: Date, days: number): Date {
 
 /** Rolling-window lengths in days for the preset ranges. */
 const RANGE_DAYS: Record<Exclude<DateRangePreset, 'custom'>, number> = {
+  // API dates are inclusive: today and the two preceding local calendar days.
+  today: 0,
+  threeDays: 2,
   week: 7,
   month: 30,
   quarter: 90,

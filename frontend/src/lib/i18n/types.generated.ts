@@ -1608,6 +1608,7 @@ export type TranslationKey =
   | 'analytics.stats.totalSpecies'
   | 'analytics.stats.overallAverage'
   | 'analytics.periods.today'
+  | 'analytics.periods.last3Days'
   | 'analytics.periods.lastWeek'
   | 'analytics.periods.lastMonth'
   | 'analytics.periods.last90Days'

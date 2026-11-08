@@ -2067,6 +2067,7 @@
     },
     "periods": {
       "today": "Tänään",
+      "last3Days": "Viimeiset 3 päivää",
       "lastWeek": "Viimeiset 7 päivää",
       "lastMonth": "Viimeiset 30 päivää",
       "last90Days": "Viimeiset 90 päivää",

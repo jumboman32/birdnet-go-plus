@@ -52,6 +52,8 @@
   // Reuses the existing analytics.periods.* strings; `quarter` (90 days) maps to
   // the legacy "Last 90 Days" label.
   const RANGE_LABEL_KEYS: Record<DateRangePreset, TranslationKey> = {
+    today: 'analytics.periods.today',
+    threeDays: 'analytics.periods.last3Days',
     week: 'analytics.periods.lastWeek',
     month: 'analytics.periods.lastMonth',
     quarter: 'analytics.periods.last90Days',

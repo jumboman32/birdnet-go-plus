@@ -2067,6 +2067,7 @@
     },
     "periods": {
       "today": "I dag",
+      "last3Days": "Seneste 3 dage",
       "lastWeek": "Sidste 7 dage",
       "lastMonth": "Sidste 30 dage",
       "last90Days": "Sidste 90 dage",
