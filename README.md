@@ -2,6 +2,7 @@
 
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
 
+- Local Rarity Scoring System
 - eBird and Cornell Compare Calls links in Detection Details.
 <p align="left">
   <img src="images/ui3.png" alt="Species details with eBird and Compare calls links" width="500">
@@ -12,10 +13,8 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 </p>
 - UI Changes
 <p align="left">
-  <img src="images/ui1.png" alt="Recent detection card with audio playback" width="750">
+  <img src="images/ui1.png" alt="Recent detection card with audio playback" width="500">
 </p>
-
-Numeric rarity scores require historical checklist data; an eBird API key alone is insufficient. BirdCast does not affect the score.
 
 Built on the work of the BirdNET-Go contributors.
 
