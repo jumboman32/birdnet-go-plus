@@ -72,7 +72,7 @@ If you end up locking yourself out, authentication can be turned off with the fo
 
 ```bash
 # For host system installations
-./reset_auth.sh [path/to/config.yaml]
+./scripts/reset_auth.sh [path/to/config.yaml]
 
 # For Docker deployments
 docker exec $(docker ps | grep birdnet-go | awk '{print $1}') reset_auth.sh

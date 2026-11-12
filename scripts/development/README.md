@@ -33,7 +33,7 @@ multi-year complete-checklist sample needed for a numeric score.
 
 Obtain an authorized all-species eBird Basic Dataset and matching Sampling Event
 Data, then use the repository's `scripts/import-local-rarity.py` as described in
-[the rarity documentation](https://github.com/jumboman32/birdnet-go-plus/blob/feature/local-rarity-score/docs/local-rarity.md).
+[the rarity documentation](../../doc/local-rarity.md).
 Before launching the backend, set the generated file's path in PowerShell:
 
 ```powershell

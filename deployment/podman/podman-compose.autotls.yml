@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  birdnet-go:
+    image: ghcr.io/tphakala/birdnet-go:nightly
+    container_name: birdnet-go
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "80:8080" # ACME HTTP-01 challenges + HTTPS redirect
+      - "443:8443" # HTTPS/AutoTLS
+    environment:
+      - TZ=${TZ:-UTC}
+      - BIRDNET_UID=${BIRDNET_UID:-1000}
+      - BIRDNET_GID=${BIRDNET_GID:-1000}
+      # Configure AutoTLS
+      - BIRDNET_SECURITY_AUTOTLS=true
+      - BIRDNET_SECURITY_HOST=${BIRDNET_HOST} # Required: Your domain name
+      # Optional: uncomment to configure other settings via environment variables
+      # - BIRDNET_LOCALE=en-us
+      # - BIRDNET_LATITUDE=60.192059
+      # - BIRDNET_LONGITUDE=24.945831
+      # - BIRDNET_SENSITIVITY=1.0
+      # - BIRDNET_OVERLAP=1.5
+    volumes:
+      - ./config:/config
+      - ./data:/data
+      # Host mounts for .local names and DNS-SD discovery (opt-in): uncomment only when the
+      # host has avahi and D-Bus (the quadlets handle Avahi themselves). D-Bus needs keep-id
+      # and a non-root uid (uid 0 on the system bus is host root). Never :z or :Z.
+      # See doc/wiki/rtsp-troubleshooting.md.
+      # - /run/avahi-daemon:/run/avahi-daemon:ro
+      # - /run/dbus:/run/dbus:ro
+      - ./certs:/certs # For Let's Encrypt certificates
+    # For ALSA audio input (sound card)
+    devices:
+      - /dev/snd:/dev/snd
+    # Rootless audio (opt-in): to give the app sound-card access under rootless
+    # Podman, uncomment userns_mode + group_add below AND add this at the very top
+    # of the file (podman-compose pods conflict with a per-container userns):
+    #   x-podman:
+    #     in_pod: false
+    # keep-id runs the app as your host UID, so an EXISTING install must re-own
+    # its volumes first (see deployment/podman/README.md). It needs the crun OCI runtime
+    # (install crun; Podman then uses it) and a recent podman-compose.
+    #userns_mode: keep-id
+    #group_add:
+    #  - keep-groups
+    # Podman uses bridge networking - no need for host.docker.internal
+
+  # Optional: Add Cloudflared for secure internet access through Cloudflare Tunnel
+  # This is an alternative to AutoTLS if you prefer Cloudflare's solution
+  # cloudflared:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: birdnet-cloudflared
+  #   restart: unless-stopped
+  #   # Two options for running cloudflared:
+  #   # 1. Using a tunnel token (recommended for most users)
+  #   command: tunnel run
+  #   environment:
+  #     - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+  #   # 2. Alternative: Using config file (uncomment these and comment the above)
+  #   # command: tunnel --config /etc/cloudflared/config.yml run
+  #   # volumes:
+  #   #   - ./cloudflared:/etc/cloudflared
+  #   depends_on:
+  #     - birdnet-go
+
+volumes:
+  config:
+    driver: local
+  data:
+    driver: local
+  certs:
+    driver: local

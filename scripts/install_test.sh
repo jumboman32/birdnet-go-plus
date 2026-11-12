@@ -25,8 +25,8 @@
 set -u
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-INSTALL_SH="${REPO_ROOT}/install.sh"
-PODMAN_INSTALL_SH="${REPO_ROOT}/podman-install.sh"
+INSTALL_SH="${REPO_ROOT}/scripts/install.sh"
+PODMAN_INSTALL_SH="${REPO_ROOT}/scripts/podman-install.sh"
 CONFIG_TEMPLATE="${REPO_ROOT}/internal/conf/config.yaml"
 
 if [ ! -f "$INSTALL_SH" ]; then
@@ -1688,8 +1688,8 @@ cp "$QUADLET_DIR/birdnet-go.container" "${WORK}/tpl-heredoc.container"
 TEMPLATE_NAMES="standard autotls heredoc"
 tpl_path() {
     case "$1" in
-        standard) printf '%s' "${REPO_ROOT}/Podman/quadlet/birdnet-go.container" ;;
-        autotls) printf '%s' "${REPO_ROOT}/Podman/quadlet/birdnet-go-autotls.container" ;;
+        standard) printf '%s' "${REPO_ROOT}/deployment/podman/quadlet/birdnet-go.container" ;;
+        autotls) printf '%s' "${REPO_ROOT}/deployment/podman/quadlet/birdnet-go-autotls.container" ;;
         heredoc) printf '%s' "${WORK}/tpl-heredoc.container" ;;
     esac
 }
@@ -1839,7 +1839,7 @@ assert_eq "autotls config: autotls container name" "1" "$(grep -c '^ContainerNam
 assert_eq "autotls config: D-Bus mount on" "1" "$(dbus_count)"
 assert_eq "autotls config: Avahi mount present" "1" "$(avahi_count)"
 
-# 6. cwd without Podman/: the heredoc fallback, same expectations as 1.
+# 6. cwd without deployment/podman/: the heredoc fallback, same expectations as 1.
 fresh_quadlet_dir; printf '[Container]\nUserNS=keep-id\n' > "$unit"
 run_create_quadlet "$nopodman_dir" ""
 assert_eq "heredoc fallback: D-Bus mount on" "1" "$(dbus_count)"

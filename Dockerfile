@@ -425,9 +425,9 @@ COPY --from=models --chown=root:root / /models/
 RUN chmod 0755 /models && find /models -mindepth 1 -type f -exec chmod 0644 {} +
 
 # Include reset_auth tool and startup scripts from the build stage.
-COPY --from=build --chmod=755 /home/dev-user/src/BirdNET-Go/reset_auth.sh /usr/bin/
-COPY --from=build --chmod=755 /home/dev-user/src/BirdNET-Go/Docker/entrypoint.sh /usr/bin/
-COPY --from=build --chmod=755 /home/dev-user/src/BirdNET-Go/Docker/startup-wrapper.sh /usr/bin/
+COPY --from=build --chmod=755 /home/dev-user/src/BirdNET-Go/scripts/reset_auth.sh /usr/bin/
+COPY --from=build --chmod=755 /home/dev-user/src/BirdNET-Go/deployment/docker/entrypoint.sh /usr/bin/
+COPY --from=build --chmod=755 /home/dev-user/src/BirdNET-Go/deployment/docker/startup-wrapper.sh /usr/bin/
 
 # Create config and data directories with proper permissions for rootless compatibility
 # Make them world-writable so non-root users can create subdirectories
@@ -467,8 +467,8 @@ LABEL podman.network.bridge="true"
 # Usage information for different runtimes
 LABEL usage.docker="docker run -d --name birdnet-go -p 8080:8080 -v ./config:/config -v ./data:/data --device /dev/snd:/dev/snd ghcr.io/tphakala/birdnet-go:latest"
 LABEL usage.podman="podman run -d --name birdnet-go -p 8080:8080 -v ./config:/config -v ./data:/data --device /dev/snd:/dev/snd ghcr.io/tphakala/birdnet-go:podman-latest"
-LABEL usage.compose.docker="Use Docker/docker-compose.yml"
-LABEL usage.compose.podman="Use Podman/podman-compose.yml"
+LABEL usage.compose.docker="Use deployment/docker/docker-compose.yml"
+LABEL usage.compose.podman="Use deployment/podman/podman-compose.yml"
 
 # Add healthcheck to monitor container status
 # Uses /health endpoint and validates JSON status via jq to avoid false positives

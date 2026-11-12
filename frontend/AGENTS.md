@@ -1,8 +1,8 @@
 # Frontend Development Guide (Svelte 5)
 
 Applies to everything under `frontend/`. Run commands from `frontend/` unless
-noted. Frontend test rules are in the Testing section below (the root
-`TESTING.md` covers Go tests only).
+noted. Frontend test rules are in the Testing section below. Go test rules are in
+`internal/AGENTS.md`.
 
 ## Tech Stack
 

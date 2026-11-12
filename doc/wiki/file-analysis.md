@@ -5,7 +5,7 @@ File analysis works best with WAV files which are recorded in 48k sample rate, B
 Running a file analysis for single file
 
 ```text
-raspberry$ ./birdnet-go file soundscape.wav --threshold 0.1
+raspberry$ ./birdnet-go file data/samples/soundscape.wav --threshold 0.1
 Read config file: /etc/birdnet-go/config.yaml
 BirdNET GLOBAL 6K V2.4 FP32 model initialized, using 4 threads of available 4 CPUs
 Analysis completed, total time elapsed: 8 second(s)
