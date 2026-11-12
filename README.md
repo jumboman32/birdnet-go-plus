@@ -3,7 +3,7 @@
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
 
 <p align="center">
-  <img src="images/ui1.png" alt="Photographic White-throated Sparrow detection card with confidence, weather, and audio playback" width="706" />
+  <img src="images/ui4.png" alt="detection card with confidence, weather, and audio playback" width="966" />
 </p>
 
 - Six photographic detection cards, a wider dashboard, and a dark green theme.
@@ -17,16 +17,15 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 
 **Bird calendar** — Compare expected arrivals, migration peaks, and departures with birds detected by your microphone.
 
-![Bird calendar showing seasonal species lists alongside local detection counts](images/ui2.png)
+![Bird calendar showing seasonal species lists alongside local detection counts](images/bird-calendar.png)
 
 **Detection details** — Review species confidence and open eBird profiles or Cornell's call comparisons.
 
 <p align="center">
-  <img src="images/ui3.png" alt="Baltimore Oriole species panel with verification status, confidence, and eBird and Compare calls links" width="612" />
+  <img src="images/species-details.png" alt="Ruby-crowned Kinglet species panel with confidence, lifetime detection count, and eBird and Compare calls links" width="526" />
 </p>
 
 The calendar uses a private local eBird import and refreshes automatically when its watcher is running.
-Numeric rarity scores require historical checklist data; an eBird API key alone is insufficient. BirdCast does not affect the score.
 
 **Regional species checklist** — Track lifetime species progress against county and state eBird lists, with an optional county override.
 
@@ -37,7 +36,7 @@ Numeric rarity scores require historical checklist data; an eBird API key alone 
 Build this fork from source on apt-based Linux or macOS with Homebrew installed. Install Git and [Task](https://taskfile.dev/docs/installation), then run:
 
 ```bash
-git clone --branch feature/photographic-detection-cards https://github.com/jumboman32/birdnet-go-plus.git
+git clone --branch main https://github.com/jumboman32/birdnet-go-plus.git
 cd birdnet-go-plus
 task setup-dev
 ```
