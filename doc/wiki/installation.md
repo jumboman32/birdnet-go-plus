@@ -1,5 +1,9 @@
 # Installation
 
+> Container examples inherited from upstream use upstream images, which do not
+> include this fork's features. Build your own image from this repository, or
+> use the [fork installation instructions](../../README.md).
+
 This document provides instructions for installing BirdNET-Go.
 
 There are four main ways to install BirdNET-Go:
@@ -170,7 +174,7 @@ Two premade files are available in the repository:
 - Device mounts for sound card access
 - An optional Cloudflared service (commented out) for secure internet access
 
-Please refer to the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up BirdNET-Go with Docker Compose, including [Portainer](docker_compose_guide.md#using-portainer) and [switching an existing install](docker_compose_guide.md#switching-an-existing-install-optional) (optional). Unraid users can find a host networking template in the [Unraid README](https://github.com/tphakala/birdnet-go/blob/main/Unraid/README.md).
+Please refer to the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up BirdNET-Go with Docker Compose, including [Portainer](docker_compose_guide.md#using-portainer) and [switching an existing install](docker_compose_guide.md#switching-an-existing-install-optional) (optional).
 
 ## Manual Docker Installation (Advanced, Linux only)
 

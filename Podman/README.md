@@ -1,5 +1,9 @@
 # BirdNET-Go Podman Configuration Files
 
+> Container examples inherited from upstream use upstream images, which do not
+> include this fork's features. Build your own image from this repository, or
+> use the [fork installation instructions](../README.md).
+
 This directory contains Podman-specific configuration files for running BirdNET-Go with the Podman container runtime.
 
 ## Compose Files
