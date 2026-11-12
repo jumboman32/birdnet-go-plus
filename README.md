@@ -16,12 +16,12 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 
 **Bird calendar** — Compare expected arrivals, migration peaks, and departures with birds detected by your microphone.
 
-![Bird calendar showing seasonal species lists alongside local detection counts](images/ui2.png)
+![Bird calendar showing seasonal species lists alongside local detection counts](images/bird-calendar.png)
 
 **Detection details** — Review species confidence and open eBird profiles or Cornell's call comparisons.
 
 <p align="center">
-  <img src="images/ui3.png" alt="Ruby-crowned Kinglet species panel with confidence, lifetime detection count, and eBird and Compare calls links" width="526" />
+  <img src="images/species-details.png" alt="Ruby-crowned Kinglet species panel with confidence, lifetime detection count, and eBird and Compare calls links" width="526" />
 </p>
 
 The calendar uses a private local eBird import and refreshes automatically when its watcher is running.
