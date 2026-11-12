@@ -8,6 +8,7 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 
 - Six photographic detection cards, a wider dashboard, and a dark green theme.
 - Weekly bird calendar comparing local eBird history with microphone detections.
+- Regional species checklist tracking lifetime detections against county and state eBird species lists.
 - Recent eBird observations and BirdCast migration context.
 - eBird and Cornell Compare Calls links in Detection Details.
 - Separate Windows development launcher for testing.
@@ -26,6 +27,10 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 
 The calendar uses a private local eBird import and refreshes automatically when its watcher is running.
 Numeric rarity scores require historical checklist data; an eBird API key alone is insufficient. BirdCast does not affect the score.
+
+**Regional species checklist** — Track lifetime species progress against county and state eBird lists, with an optional county override.
+
+![Regional species progress showing county and state checklist totals and an eBird county selector](images/ui5.png)
 
 ## Install
 
