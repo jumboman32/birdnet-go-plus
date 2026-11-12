@@ -3,7 +3,7 @@
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
 
 <p align="center">
-  <img src="images/ui4.png" alt="detection card with confidence, weather, and audio playback" width="706" />
+  <img src="images/ui4.png" alt="detection card with confidence, weather, and audio playback" width="966" />
 </p>
 
 - Six photographic detection cards, a wider dashboard, and a dark green theme.
