@@ -2,14 +2,53 @@
 
 A custom fork of BirdNET-Go with additional tools for exploring local bird and wildlife detections.
 
+<p align="center">
+  <img src="images/ui1.png" alt="Photographic White-throated Sparrow detection card with confidence, weather, and audio playback" width="706" />
+</p>
+
 - Six photographic detection cards, a wider dashboard, and a dark green theme.
 - Weekly bird calendar comparing local eBird history with microphone detections.
 - Recent eBird observations and BirdCast migration context.
 - eBird and Cornell Compare Calls links in Detection Details.
 - Separate Windows development launcher for testing.
 
+## A closer look
+
+**Bird calendar** — Compare expected arrivals, migration peaks, and departures with birds detected by your microphone.
+
+![Bird calendar showing seasonal species lists alongside local detection counts](images/ui2.png)
+
+**Detection details** — Review species confidence and open eBird profiles or Cornell's call comparisons.
+
+<p align="center">
+  <img src="images/ui3.png" alt="Baltimore Oriole species panel with verification status, confidence, and eBird and Compare calls links" width="612" />
+</p>
+
 The calendar uses a private local eBird import and refreshes automatically when its watcher is running.
 Numeric rarity scores require historical checklist data; an eBird API key alone is insufficient. BirdCast does not affect the score.
+
+## Install
+
+Build this fork from source on apt-based Linux or macOS with Homebrew installed. Install Git and [Task](https://taskfile.dev/docs/installation), then run:
+
+```bash
+git clone --branch feature/photographic-detection-cards https://github.com/jumboman32/birdnet-go-plus.git
+cd birdnet-go-plus
+task setup-dev
+```
+
+If setup installed Go, reload your shell profile (`source ~/.profile`) before building:
+
+```bash
+task
+./bin/birdnet-go realtime
+```
+
+Open <http://localhost:8080/ui/dashboard> and configure your location, audio source, and acoustic model in Settings. Keep the working directory for configuration, recordings, and database files.
+
+For a packaged Windows development build, extract the complete package into a separate directory and run `Start-Development.cmd`. Node.js is required. Open <http://localhost:8081/ui/dashboard>; see the [Windows launcher guide](scripts/development/README.md) for details.
+
+The calendar's local eBird dataset is a separate import; see the [eBird profile guide](tools/ebird-profile/README.md). Standard upstream Docker images do not include this fork's changes.
 
 Built on the work of the BirdNET-Go contributors.
 
