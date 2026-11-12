@@ -27,7 +27,7 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 
 The calendar uses a private local eBird import and refreshes automatically when its watcher is running.
 
-**Regional species checklist** ? Track lifetime species progress against county and state eBird lists, with an optional county override.
+**Regional species checklist** — Track lifetime species progress against county and state eBird lists, with an optional county override.
 
 ![Regional species progress showing county and state checklist totals and an eBird county selector](images/ui5.png)
 
