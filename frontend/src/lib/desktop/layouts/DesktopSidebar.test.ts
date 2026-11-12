@@ -211,25 +211,20 @@ describe('DesktopSidebar - flat task-grouped sections', () => {
     expect(screen.queryByLabelText('navigation.analyticsSubmenu')).toBeNull();
   });
 
-  it('does not render About as a top-level item; it lives under Help and activates the Help section on /ui/about', async () => {
-    sidebarTest.render({ currentRoute: '/ui/about' });
-
-    // About is now a Help subitem. With the Help section auto-expanded on /ui/about,
-    // the About entry is rendered and marked current.
-    await waitFor(() => {
-      expect(screen.getByText('navigation.about')).toBeInTheDocument();
-    });
+  it('keeps About accessible without the removed Help section', async () => {
+    const onNavigate = vi.fn();
+    sidebarTest.render({ currentRoute: '/ui/about', onNavigate });
 
     const aboutBtn = getBtn('navigation.about');
-    expect(aboutBtn.getAttribute('aria-current')).toBe('page');
+    expect(aboutBtn).toHaveAttribute('aria-current', 'page');
+    expect(aboutBtn.closest('.flyout-container')).toBeNull();
+    expect(screen.queryByText('navigation.help')).toBeNull();
+    expect(screen.queryByText('navigation.helpAndSupport')).toBeNull();
+    expect(screen.queryByText('navigation.reportBug')).toBeNull();
+    expect(screen.queryByText('navigation.askQuestion')).toBeNull();
 
-    // Negative: it is NOT a flat nav-section item (not at the top level).
-    expect(aboutBtn.closest('[aria-labelledby^="nav-section-"]')).toBeNull();
-
-    // Positive: it IS inside the Help collapsible section container.
-    const helpContainer = screen.getByText('navigation.help').closest('.flyout-container');
-    expect(helpContainer).not.toBeNull();
-    expect(helpContainer?.contains(aboutBtn)).toBe(true);
+    await fireEvent.click(aboutBtn);
+    expect(onNavigate).toHaveBeenCalledWith('/about');
   });
 
   it('renders analytics items within their sections in spec order', () => {

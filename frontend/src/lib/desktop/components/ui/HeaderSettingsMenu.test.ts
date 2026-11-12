@@ -6,7 +6,7 @@ import HeaderSettingsMenu from './HeaderSettingsMenu.svelte';
 /**
  * Guards the fix for issue #4112: dashboard customization (Edit + Reset) is an
  * admin-only affordance in the settings menu. This asserts the menu-level
- * gating; guests still get the neutral menu items (theme toggle, help links).
+ * gating; guests still get the neutral menu items (theme toggle, repository link).
  * The server-side 401 on the settings PATCH and DashboardPage's isEditing guard
  * are the actual boundaries that stop a guest from customizing.
  */
@@ -18,7 +18,7 @@ import HeaderSettingsMenu from './HeaderSettingsMenu.svelte';
 const EDIT_LABEL = t('dashboard.editMode.editDashboard');
 const RESET_LABEL = t('dashboard.editMode.resetDashboard');
 const THEME_LABEL = t('navigation.theme');
-const REPORT_BUG_LABEL = t('navigation.reportBug');
+const GITHUB_LABEL = t('navigation.github');
 const MENU_LABEL = t('navigation.settingsMenu');
 
 // Opens the dropdown and returns a query scope limited to the menu itself, so
@@ -47,8 +47,17 @@ describe('HeaderSettingsMenu dashboard customization gating (#4112)', () => {
 
     // Neutral, guest-safe items remain available.
     expect(menu.getByText(THEME_LABEL)).toBeInTheDocument();
-    expect(menu.getByText(REPORT_BUG_LABEL)).toBeInTheDocument();
+    expect(menu.getByText(GITHUB_LABEL)).toBeInTheDocument();
   });
+
+  it.each([false, true])(
+    'omits removed help links when accessAllowed is %s',
+    async accessAllowed => {
+      const menu = await renderAndOpen({ securityEnabled: true, accessAllowed });
+      expect(menu.queryByText(t('navigation.reportBug'))).toBeNull();
+      expect(menu.queryByText(t('navigation.askQuestion'))).toBeNull();
+    }
+  );
 
   it('shows Edit and Reset Dashboard to authenticated users', async () => {
     const menu = await renderAndOpen({ securityEnabled: true, accessAllowed: true });

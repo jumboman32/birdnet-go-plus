@@ -722,8 +722,8 @@ Or add it to your startup script or systemd service file if you've created one m
 
 ### Diagnostics and Issue Reports
 
-Open **Help -> Report a Bug** in the application to copy version and system
-information or generate a diagnostic archive. Review diagnostics before sharing
+Open **Settings -> Support -> Diagnostics** to generate a diagnostic archive.
+Find version information on the **About** page. Review diagnostics before sharing
 and keep full archives private; include only relevant, redacted logs in public
 issues. The standalone upstream support script is not distributed with this fork.
 

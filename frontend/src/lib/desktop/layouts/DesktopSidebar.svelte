@@ -70,10 +70,6 @@ Performance Optimizations:
     LifeBuoy,
     Paintbrush,
     Brain,
-    CircleHelp,
-    Bug,
-    MessageCircleQuestion,
-    ExternalLink,
     Activity,
     ArrowDownToLine,
     TrendingUp,
@@ -133,7 +129,6 @@ Performance Optimizations:
   let loginRedirectUrl = $state('/ui/');
   let settingsExpanded = $state(false);
   let systemExpanded = $state(false);
-  let helpExpanded = $state(false);
 
   // Single flyout state (mutual exclusion built-in)
   let activeFlyout = $state<string | null>(null);
@@ -200,9 +195,6 @@ Performance Optimizations:
     systemTerminal: actualRoute === '/ui/system/terminal',
     systemHealth: actualRoute === '/ui/system/health',
     systemImportExport: actualRoute === '/ui/system/import-export',
-    help: actualRoute.startsWith('/ui/help'),
-    helpExact: actualRoute === '/ui/help',
-    helpReportBug: actualRoute === '/ui/help/report-bug',
     settings: actualRoute.startsWith('/ui/settings'),
     settingsAnalysis: actualRoute === '/ui/settings/analysis',
     settingsMain: actualRoute === '/ui/settings/main',
@@ -216,16 +208,11 @@ Performance Optimizations:
     settingsUserInterface: actualRoute === '/ui/settings/userinterface',
   }));
 
-  // Help section is "active" for both the Help routes and the About page (About
-  // now lives under Help). /ui/about does not startWith /ui/help, so combine them.
-  let helpSection = $derived(routeCache.help || routeCache.about);
-
   // Auto-expand sections when route matches (only when not collapsed)
   $effect(() => {
     if (!isCollapsed) {
       if (routeCache.settings) settingsExpanded = true;
       if (routeCache.system) systemExpanded = true;
-      if (helpSection) helpExpanded = true;
     }
   });
 
@@ -250,8 +237,6 @@ Performance Optimizations:
     analyticsSpecies: onNavigate ? '/analytics/species' : '/ui/analytics/species',
     search: onNavigate ? '/search' : '/ui/search',
     about: onNavigate ? '/about' : '/ui/about',
-    help: onNavigate ? '/help' : '/ui/help',
-    helpReportBug: onNavigate ? '/help/report-bug' : '/ui/help/report-bug',
     systemOverview: onNavigate ? '/system' : '/ui/system',
     systemDatabase: onNavigate ? '/system/database' : '/ui/system/database',
     systemInference: onNavigate ? '/system/inference' : '/ui/system/inference',
@@ -401,35 +386,6 @@ Performance Optimizations:
     },
   ]);
 
-  let helpItems: NavItem[] = $derived([
-    {
-      icon: LifeBuoy,
-      label: t('navigation.helpAndSupport'),
-      url: navigationUrls.help,
-      routeKey: 'helpExact',
-    },
-    {
-      icon: Info,
-      label: t('navigation.about'),
-      url: navigationUrls.about,
-      routeKey: 'about',
-    },
-    {
-      icon: Bug,
-      label: t('navigation.reportBug'),
-      url: navigationUrls.helpReportBug,
-      routeKey: 'helpReportBug',
-    },
-    {
-      type: 'link',
-      icon: MessageCircleQuestion,
-      label: t('navigation.askQuestion'),
-      href: appState.projectLinks.discussionsUrl,
-      ariaLabel: t('navigation.askQuestionAriaLabel'),
-      trailingIcon: ExternalLink,
-    },
-  ]);
-
   let settingsItems: NavItem[] = $derived([
     {
       icon: SlidersHorizontal,
@@ -546,7 +502,6 @@ Performance Optimizations:
       // Sidebar is now collapsed - close expanded sections
       settingsExpanded = false;
       systemExpanded = false;
-      helpExpanded = false;
     }
   });
 </script>
@@ -693,23 +648,15 @@ Performance Optimizations:
             onToggleFlyout={toggleFlyout}
           />
 
-          <!-- Help (Collapsible) -->
-          <CollapsibleNavSection
-            icon={CircleHelp}
-            label={t('navigation.help')}
-            ariaLabel={t('navigation.helpSubmenu')}
-            items={helpItems}
+          <NavFlatItem
+            icon={Info}
+            label={t('navigation.about')}
+            url={navigationUrls.about}
+            active={routeCache.about}
             {isCollapsed}
-            expanded={helpExpanded}
-            routeActive={helpSection}
-            {routeCache}
-            onToggleExpanded={() => (helpExpanded = !helpExpanded)}
             onNavigate={navigate}
             {showTooltip}
             {hideTooltip}
-            {activeFlyout}
-            sectionId="help"
-            onToggleFlyout={toggleFlyout}
           />
 
           <!-- Settings (Collapsible) -->

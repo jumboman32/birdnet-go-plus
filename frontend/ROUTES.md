@@ -34,8 +34,6 @@ All pages live under the `/ui/` prefix. `/` redirects to `/ui/dashboard` on the 
 | `/ui/analytics/review`          | `analytics-review`       | `features/analytics/pages/ReviewPage`       |                                                                                 |
 | `/ui/analytics/species`         | `species`                | `features/analytics/pages/Species`          |                                                                                 |
 | `/ui/about`                     | `about`                  | `views/About`                               |                                                                                 |
-| `/ui/help`                      | `help`                   | `views/Help`                                |                                                                                 |
-| `/ui/help/report-bug`           | `report-bug`             | `views/ReportBug`                           |                                                                                 |
 | `/ui/system`                    | `system`                 | `views/System`                              | Server-side auth                                                                |
 | `/ui/system/database`           | `system`                 | `views/System`                              | Server-side auth; section of the system page                                    |
 | `/ui/system/terminal`           | `system`                 | `views/System`                              | Server-side auth; section of the system page                                    |
@@ -70,7 +68,7 @@ The server registers the page routes in `registerSPARoutes` (`internal/api/serve
 
 - **Behind authentication:** `/ui/system`, the catch-all `/ui/system/*` (which covers `/ui/system/database`, `/ui/system/terminal`, `/ui/system/inference`, `/ui/system/import-export` and `/ui/system/health`), `/ui/settings`, the listed settings pages (`main`, `audio`, `detectionfilters`, `integrations`, `notifications`, `security`, `species`, `support`, `userinterface`), and the catch-all `/ui/settings/*`, which also covers `/ui/settings/analysis`. An unauthenticated browser request is redirected to `/login`. The check is skipped when no authentication is configured or the client qualifies for the subnet bypass.
 - **Public shell:** `/login`, `/ui`, `/ui/`, `/ui/dashboard`, `/ui/detections`, `/ui/detections/:id`, `/ui/notifications`, `/ui/analytics`, the `/ui/analytics/*` pages that are listed there, `/ui/search` and `/ui/about`.
-- **Public catch-all:** every other `/ui/*` path, including `/ui/login`, `/ui/live-stream`, `/ui/help`, `/ui/help/report-bug` and any other path that is not listed above.
+- **Public catch-all:** every other `/ui/*` path, including `/ui/login`, `/ui/live-stream` and any other path that is not listed above.
 
 The page shell is public so the app can load and show the login form. The v2 API is the actual security boundary: with `Security.PrivateMode` on, the API answers 401 to unauthenticated requests and the app then renders the login form.
 

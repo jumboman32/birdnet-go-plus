@@ -11,16 +11,7 @@
   import { api } from '$lib/utils/api';
   import { getLogger } from '$lib/utils/logger';
   import { resetDateToToday } from '$lib/utils/datePersistence';
-  import {
-    Settings,
-    Sun,
-    Moon,
-    Pencil,
-    RotateCcw,
-    Bug,
-    MessageCircleQuestion,
-    ExternalLink,
-  } from '@lucide/svelte';
+  import { Settings, Sun, Moon, Pencil, RotateCcw } from '@lucide/svelte';
   import GithubIcon from '$lib/desktop/components/ui/GithubIcon.svelte';
   import { dropdown } from '$lib/utils/transitions';
   import { appState } from '$lib/stores/appState.svelte';
@@ -224,31 +215,6 @@
 
         <!-- Divider -->
         <div class="my-1 border-t border-[var(--color-base-content)]/10" aria-hidden="true"></div>
-
-        <!-- Report Bug -->
-        <button
-          onclick={() => {
-            isOpen = false;
-            navigation.navigate('/ui/help/report-bug');
-          }}
-          class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-normal text-[var(--color-base-content)] transition-colors duration-150 hover:bg-[var(--color-base-content)]/10"
-        >
-          <Bug class="size-4 shrink-0 text-[var(--color-base-content)]/70" />
-          <span>{t('navigation.reportBug')}</span>
-        </button>
-
-        <!-- Ask a Question -->
-        <a
-          href={appState.projectLinks.discussionsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-normal text-[var(--color-base-content)] transition-colors duration-150 hover:bg-[var(--color-base-content)]/10"
-          aria-label={t('navigation.askQuestionAriaLabel')}
-        >
-          <MessageCircleQuestion class="size-4 shrink-0 text-[var(--color-base-content)]/70" />
-          <span class="flex-1">{t('navigation.askQuestion')}</span>
-          <ExternalLink class="size-3 text-[var(--color-base-content)]/40" />
-        </a>
 
         <!-- GitHub link -->
         <a
