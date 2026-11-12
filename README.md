@@ -21,7 +21,7 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 **Detection details** — Review species confidence and open eBird profiles or Cornell's call comparisons.
 
 <p align="center">
-  <img src="images/ui3.png" alt="Baltimore Oriole species panel with verification status, confidence, and eBird and Compare calls links" width="612" />
+  <img src="images/ui3.png" alt="Ruby-crowned Kinglet species panel with confidence, lifetime detection count, and eBird and Compare calls links" width="526" />
 </p>
 
 The calendar uses a private local eBird import and refreshes automatically when its watcher is running.
