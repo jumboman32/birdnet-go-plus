@@ -3,7 +3,10 @@ import { request } from 'node:http';
 import { resolve } from 'node:path';
 import { createServer, resolveConfig, type ViteDevServer } from 'vite';
 
-describe('Vite development routes', () => {
+// Starting a real Vite server loads plugins and scans dependencies on cold checkouts.
+const VITE_SERVER_TIMEOUT_MS = 30_000;
+
+describe('Vite development routes', { timeout: VITE_SERVER_TIMEOUT_MS }, () => {
   let server: ViteDevServer | undefined;
   let origin: string;
 
@@ -18,11 +21,11 @@ describe('Vite development routes', () => {
     if (!address || typeof address === 'string')
       throw new Error('Dev server did not bind a TCP port');
     origin = `http://127.0.0.1:${address.port}`;
-  });
+  }, VITE_SERVER_TIMEOUT_MS);
 
   afterAll(async () => {
     await server?.close();
-  });
+  }, VITE_SERVER_TIMEOUT_MS);
 
   function get(
     path: string,

@@ -76,6 +76,9 @@ __pycache__/
 *.ebird.local.json
 *.ebird.local.html
 /development-data/bird-calendar*.html
+/development-data/*.db*
+/development-data/database-backup-*/
+/frontend/src/lib/desktop/views/Windows-Rarity-Backend/
 
 # Release-notes drafts are transient working files (deleted after each release);
 # they must never be committed. See the drafting-release-changelog skill.

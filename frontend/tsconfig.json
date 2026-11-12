@@ -36,5 +36,5 @@
     "vitest.reverse-proxy.config.ts",
     "vitest.browser.config.ts"
   ],
-  "exclude": ["node_modules", "dist", ".svelte-kit"]
+  "exclude": ["node_modules", "dist", ".svelte-kit", "src/lib/desktop/views/Windows-Rarity-Backend"]
 }

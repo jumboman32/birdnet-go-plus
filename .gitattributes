@@ -1,3 +1,6 @@
 # Shell scripts must keep LF endings: Task runs scripts/build-version.sh on
 # every invocation, and a CRLF checkout (core.autocrlf=true) breaks sh parsing.
 *.sh text eol=lf
+
+# Frontend format checks require LF, including on Windows checkouts.
+frontend/** text=auto eol=lf

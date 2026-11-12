@@ -361,6 +361,7 @@ export default [
       'playwright-report/',
       'test-results/',
       'blob-report/',
+      'src/lib/desktop/views/Windows-Rarity-Backend/',
     ],
   },
 ];
