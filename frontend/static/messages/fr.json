@@ -906,6 +906,16 @@
         "tabsHeading": "Onglets d'informations de détection",
         "tabList": "Onglets des détails de détection",
         "speciesHeadingSuffix": "détails de détection"
+      },
+      "resources": {
+        "heading": "Ressources sur l’espèce",
+        "ariaLabel": "Ressources externes sur l’espèce",
+        "viewEbird": "Voir sur eBird",
+        "viewEbirdAria": "Voir {name} sur eBird (ouvre un nouvel onglet)",
+        "exploreEbird": "Explorer eBird",
+        "exploreEbirdAria": "Explorer eBird (ouvre un nouvel onglet)",
+        "compareCalls": "Comparer les cris",
+        "compareCallsAria": "Comparer les cris de {name} sur Cornell All About Birds (ouvre un nouvel onglet)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Aujourd'hui",
+      "last3Days": "3 derniers jours",
       "lastWeek": "7 derniers jours",
       "lastMonth": "30 derniers jours",
       "last90Days": "90 derniers jours",

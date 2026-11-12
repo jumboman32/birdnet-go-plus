@@ -906,6 +906,16 @@
         "tabsHeading": "Észlelési információk lapjai",
         "tabList": "Észlelés részleteinek lapjai",
         "speciesHeadingSuffix": "észlelés részletei"
+      },
+      "resources": {
+        "heading": "Fajinformációk",
+        "ariaLabel": "Külső fajinformációk",
+        "viewEbird": "Megtekintés az eBirdön",
+        "viewEbirdAria": "{name} megtekintése az eBirdön (új lapon nyílik meg)",
+        "exploreEbird": "Az eBird felfedezése",
+        "exploreEbirdAria": "Az eBird felfedezése (új lapon nyílik meg)",
+        "compareCalls": "Hangok összehasonlítása",
+        "compareCallsAria": "{name} hangjainak összehasonlítása a Cornell All About Birds oldalon (új lapon nyílik meg)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Ma",
+      "last3Days": "Elmúlt 3 nap",
       "lastWeek": "Utolsó 7 nap",
       "lastMonth": "Utolsó 30 nap",
       "last90Days": "Utolsó 90 nap",

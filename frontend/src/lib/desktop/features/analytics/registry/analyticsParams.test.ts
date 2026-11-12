@@ -20,6 +20,19 @@ describe('formatDateForAPI', () => {
 });
 
 describe('resolveDateRange', () => {
+  it('resolves short presets to inclusive local calendar dates and preserves them in URLs', () => {
+    for (const [range, expectedStart] of [
+      ['today', '2026-06-19'],
+      ['threeDays', '2026-06-17'],
+    ]) {
+      const params = parseAnalyticsParams(`?range=${range}`, { now: NOW });
+      expect(params.range).toBe(range);
+      expect(formatDateForAPI(params.startDate)).toBe(expectedStart);
+      expect(formatDateForAPI(params.endDate)).toBe('2026-06-19');
+      expect(serializeAnalyticsParams(params)).toBe(`range=${range}`);
+    }
+  });
+
   it('resolves preset windows ending at now', () => {
     const [weekStart, weekEnd] = resolveDateRange('week', '', '', NOW);
     expect(formatDateForAPI(weekEnd)).toBe('2026-06-19');

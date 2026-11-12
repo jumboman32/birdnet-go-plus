@@ -906,6 +906,16 @@
         "tabsHeading": "Karty s informáciami o detekcii",
         "tabList": "Karty podrobností detekcie",
         "speciesHeadingSuffix": "podrobnosti detekcie"
+      },
+      "resources": {
+        "heading": "Informácie o druhu",
+        "ariaLabel": "Externé informácie o druhu",
+        "viewEbird": "Zobraziť na eBird",
+        "viewEbirdAria": "Zobraziť {name} na eBird (otvorí novú kartu)",
+        "exploreEbird": "Preskúmať eBird",
+        "exploreEbirdAria": "Preskúmať eBird (otvorí novú kartu)",
+        "compareCalls": "Porovnať hlasy",
+        "compareCallsAria": "Porovnať hlasy druhu {name} na Cornell All About Birds (otvorí novú kartu)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Dnes",
+      "last3Days": "Posledné 3 dni",
       "lastWeek": "Posledných 7 dní",
       "lastMonth": "Posledných 30 dní",
       "last90Days": "Posledných 90 dní",

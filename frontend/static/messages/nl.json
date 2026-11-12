@@ -906,6 +906,16 @@
         "tabsHeading": "Tabbladen met herkenningsinformatie",
         "tabList": "Tabbladen met herkenningsdetails",
         "speciesHeadingSuffix": "herkenningsdetails"
+      },
+      "resources": {
+        "heading": "Informatie over de soort",
+        "ariaLabel": "Externe informatie over de soort",
+        "viewEbird": "Bekijken op eBird",
+        "viewEbirdAria": "{name} bekijken op eBird (opent een nieuw tabblad)",
+        "exploreEbird": "eBird verkennen",
+        "exploreEbirdAria": "eBird verkennen (opent een nieuw tabblad)",
+        "compareCalls": "Roepen vergelijken",
+        "compareCallsAria": "Roepen van {name} vergelijken op Cornell All About Birds (opent een nieuw tabblad)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Vandaag",
+      "last3Days": "Laatste 3 dagen",
       "lastWeek": "Laatste 7 dagen",
       "lastMonth": "Laatste 30 dagen",
       "last90Days": "Laatste 90 dagen",

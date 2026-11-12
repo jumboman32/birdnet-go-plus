@@ -906,6 +906,16 @@
         "tabsHeading": "Havaintotietojen välilehdet",
         "tabList": "Havainnon tietojen välilehdet",
         "speciesHeadingSuffix": "havainnon tiedot"
+      },
+      "resources": {
+        "heading": "Lajin lisätiedot",
+        "ariaLabel": "Lajin ulkoiset tietolähteet",
+        "viewEbird": "Näytä eBirdissä",
+        "viewEbirdAria": "Näytä {name} eBirdissä (avautuu uuteen välilehteen)",
+        "exploreEbird": "Tutustu eBirdiin",
+        "exploreEbirdAria": "Tutustu eBirdiin (avautuu uuteen välilehteen)",
+        "compareCalls": "Vertaa ääniä",
+        "compareCallsAria": "Vertaa lajin {name} ääniä Cornell All About Birds -sivustolla (avautuu uuteen välilehteen)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Tänään",
+      "last3Days": "Viimeiset 3 päivää",
       "lastWeek": "Viimeiset 7 päivää",
       "lastMonth": "Viimeiset 30 päivää",
       "last90Days": "Viimeiset 90 päivää",

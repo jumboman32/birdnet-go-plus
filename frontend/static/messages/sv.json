@@ -906,6 +906,16 @@
         "tabsHeading": "Flikar med detekteringsinformation",
         "tabList": "Flikar med detekteringsdetaljer",
         "speciesHeadingSuffix": "detekteringsinformation"
+      },
+      "resources": {
+        "heading": "Artresurser",
+        "ariaLabel": "Externa artresurser",
+        "viewEbird": "Visa på eBird",
+        "viewEbirdAria": "Visa {name} på eBird (öppnas i en ny flik)",
+        "exploreEbird": "Utforska eBird",
+        "exploreEbirdAria": "Utforska eBird (öppnas i en ny flik)",
+        "compareCalls": "Jämför läten",
+        "compareCallsAria": "Jämför läten från {name} på Cornell All About Birds (öppnas i en ny flik)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Idag",
+      "last3Days": "Senaste 3 dagarna",
       "lastWeek": "Senaste 7 dagarna",
       "lastMonth": "Senaste 30 dagarna",
       "last90Days": "Senaste 90 dagarna",

@@ -27,14 +27,16 @@
     getSpeciesImageUrl,
     handleBirdImageError,
   } from '$lib/desktop/components/ui/image-utils.js';
-  import { t } from '$lib/i18n';
+  import { getLocale, t } from '$lib/i18n';
+  import { fetchWithCSRF } from '$lib/utils/api';
+  import { getEBirdLink } from '$lib/utils/ebird';
+  import { isPlainObject } from '$lib/utils/security';
   import type { Detection, ImageAttribution } from '$lib/types/detection.types';
   import { hasReviewPermission, isAuthenticated } from '$lib/utils/auth';
   import { formatLocalDateTime } from '$lib/utils/date';
   import { buildAppUrl, getCurrentPathWithQuery } from '$lib/utils/urlHelpers';
   import { loggers } from '$lib/utils/logger';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
-  import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import {
     Download,
     Camera,
@@ -48,32 +50,6 @@
     ExternalLink,
     Headphones,
   } from '@lucide/svelte';
-
-  // Custom feature: external species resources.
-  // eBird profile URLs use taxon codes, which cannot be reliably derived from a
-  // BirdNET scientific name or from BirdNET's own speciesCode field.
-  // Known eBird codes link directly to profiles; other species use a targeted
-  // web search rather than risking an incorrect eBird species page.
-  const EBIRD_CODES: Record<string, string> = {
-    'Zonotrichia albicollis': 'whtspa', // White-throated Sparrow
-    'Cyanocitta cristata': 'blujay', // Blue Jay
-    'Melanerpes carolinus': 'rebwoo', // Red-bellied Woodpecker
-    'Cardinalis cardinalis': 'norcar', // Northern Cardinal
-    'Dryobates pubescens': 'dowwoo', // Downy Woodpecker
-  };
-
-  function getEBirdLink(scientificName: string): { href: string; direct: boolean } {
-    const name = scientificName.trim();
-    const code = EBIRD_CODES[name];
-    if (code) {
-      return { href: `https://ebird.org/species/${code}`, direct: true };
-    }
-    const query = `site:ebird.org/species/ "${name}"`;
-    return {
-      href: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
-      direct: false,
-    };
-  }
 
   function getCornellCallsLink(commonName: string): string {
     // Cornell's All About Birds guide uses English common-name URL slugs.
@@ -156,6 +132,9 @@
   let isLoadingTaxonomy = $state(false);
   let detectionError = $state<string | null>(null);
   let imageAttribution = $state<ImageAttribution | null>(null);
+  let speciesDetectionCount = $state<number | null>(null);
+  let isLoadingSpeciesCount = $state(false);
+  let speciesCountError = $state(false);
 
   // Derived state for subspecies with proper typing
   let subspeciesList = $derived<Subspecies[]>(
@@ -169,6 +148,7 @@
   let speciesController: AbortController | null = null;
   let taxonomyController: AbortController | null = null;
   let attributionController: AbortController | null = null;
+  let speciesCountController: AbortController | null = null;
 
   // Validate detection ID to prevent path traversal attacks
   // Only allow alphanumeric characters, hyphens, and underscores
@@ -217,6 +197,7 @@
       speciesController?.abort();
       taxonomyController?.abort();
       attributionController?.abort();
+      speciesCountController?.abort();
       cancelAttributionRetry();
     };
   });
@@ -243,6 +224,9 @@
     speciesInfo = null;
     taxonomyInfo = null;
     imageAttribution = null;
+    speciesCountController?.abort();
+    speciesDetectionCount = null;
+    speciesCountError = false;
 
     try {
       const response = await fetch(buildAppUrl(`/api/v2/detections/${resolvedDetectionId}`), {
@@ -285,6 +269,7 @@
         fetchSpeciesInfo();
         fetchTaxonomy();
         fetchImageAttribution();
+        void fetchSpeciesDetectionCount(detection.scientificName);
       }
     } catch (error) {
       if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) {
@@ -322,6 +307,44 @@
     if (attributionRetryTimer !== undefined) {
       globalThis.clearTimeout(attributionRetryTimer);
       attributionRetryTimer = undefined;
+    }
+  }
+
+  async function fetchSpeciesDetectionCount(scientificName: string) {
+    speciesCountController?.abort();
+    const controller = new AbortController();
+    speciesCountController = controller;
+    speciesDetectionCount = null;
+    speciesCountError = false;
+    isLoadingSpeciesCount = true;
+    try {
+      // Omit date filters to count all saved history; retrieve only one row.
+      const query = new URLSearchParams({
+        queryType: 'species',
+        species: scientificName,
+        numResults: '1',
+        offset: '0',
+      });
+      const result = await fetchWithCSRF<unknown>(buildAppUrl(`/api/v2/detections?${query}`), {
+        signal: controller.signal,
+        cache: 'no-store',
+      });
+      if (controller.signal.aborted) return;
+      if (
+        !isPlainObject(result) ||
+        typeof result.total !== 'number' ||
+        !Number.isSafeInteger(result.total) ||
+        result.total < 0
+      ) {
+        throw new Error('Invalid species detection total');
+      }
+      speciesDetectionCount = result.total;
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      speciesCountError = true;
+      logger.error('Unable to load all-time species detection count', error);
+    } finally {
+      if (!controller.signal.aborted) isLoadingSpeciesCount = false;
     }
   }
 
@@ -610,9 +633,8 @@
         </div>
       </div>
 
-      <!-- Custom feature: contextual bird reference links -->
-      <div class="species-resources" aria-label="External species resources">
-        <h4 class="species-resources-heading">Species resources</h4>
+      <div class="species-resources" aria-label={t('detections.detail.resources.ariaLabel')}>
+        <h4 class="species-resources-heading">{t('detections.detail.resources.heading')}</h4>
         <div class="species-resources-actions">
           <a
             href={ebirdLink.href}
@@ -620,22 +642,50 @@
             rel="noopener noreferrer"
             class="species-resource-button species-resource-button-primary"
             aria-label={ebirdLink.direct
-              ? `View ${det.commonName} on eBird (opens new tab)`
-              : `Find ${det.scientificName} on eBird (opens search in new tab)`}
+              ? t('detections.detail.resources.viewEbirdAria', { name: det.commonName })
+              : t('detections.detail.resources.exploreEbirdAria')}
           >
             <ExternalLink size={15} aria-hidden="true" />
-            <span>{ebirdLink.direct ? 'View on eBird' : 'Find on eBird'}</span>
+            <span
+              >{ebirdLink.direct
+                ? t('detections.detail.resources.viewEbird')
+                : t('detections.detail.resources.exploreEbird')}</span
+            >
           </a>
           <a
             href={getCornellCallsLink(det.commonName)}
             target="_blank"
             rel="noopener noreferrer"
             class="species-resource-button species-resource-button-secondary"
-            aria-label={`Compare ${det.commonName} calls on Cornell All About Birds (opens new tab)`}
+            aria-label={t('detections.detail.resources.compareCallsAria', { name: det.commonName })}
           >
             <Headphones size={15} aria-hidden="true" />
-            <span>Compare calls</span>
+            <span>{t('detections.detail.resources.compareCalls')}</span>
           </a>
+          <div class="species-lifetime-count" role="status">
+            <span
+              >{t('analytics.stats.totalDetections')}<span class="block opacity-70"
+                >{t('analytics.periods.allTime')}</span
+              ></span
+            >
+            <strong>
+              {#if isLoadingSpeciesCount}
+                {t('common.loading')}
+              {:else if speciesDetectionCount !== null}
+                {new Intl.NumberFormat(getLocale()).format(speciesDetectionCount)}
+              {:else}
+                {t('common.unknown')}
+              {/if}
+            </strong>
+            {#if speciesCountError}
+              <button
+                type="button"
+                class="underline hover:no-underline"
+                onclick={() => void fetchSpeciesDetectionCount(det.scientificName)}
+                >{t('common.retry')}</button
+              >
+            {/if}
+          </div>
         </div>
       </div>
     </div>
@@ -729,13 +779,6 @@
           {/if}
         </div>
       </div>
-
-      <!-- Audio Source -->
-      {#if det.source}
-        <div class="meta-section">
-          <SourceBadge detection={det} variant="inline" />
-        </div>
-      {/if}
 
       <!-- Weather -->
       {#if det.weather}
@@ -1209,9 +1252,27 @@
     text-transform: uppercase;
   }
 
+  .species-lifetime-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125rem;
+    margin-left: auto;
+    color: var(--color-base-content);
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    text-align: right;
+  }
+
+  .species-lifetime-count strong {
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+
   .species-resources-actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.625rem;
   }
 

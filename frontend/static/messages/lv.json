@@ -906,6 +906,16 @@
         "tabsHeading": "Atklāšanas informācijas cilnes",
         "tabList": "Atklāšanas detaļu cilnes",
         "speciesHeadingSuffix": "atklāšanas informācija"
+      },
+      "resources": {
+        "heading": "Sugas informācija",
+        "ariaLabel": "Ārējie sugas informācijas avoti",
+        "viewEbird": "Skatīt eBird",
+        "viewEbirdAria": "Skatīt {name} vietnē eBird (atver jaunu cilni)",
+        "exploreEbird": "Izpētīt eBird",
+        "exploreEbirdAria": "Izpētīt eBird (atver jaunu cilni)",
+        "compareCalls": "Salīdzināt balsis",
+        "compareCallsAria": "Salīdzināt {name} balsis vietnē Cornell All About Birds (atver jaunu cilni)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Šodien",
+      "last3Days": "Pēdējās 3 dienas",
       "lastWeek": "Pēdējās 7 dienas",
       "lastMonth": "Pēdējās 30 dienas",
       "last90Days": "Pēdējās 90 dienas",

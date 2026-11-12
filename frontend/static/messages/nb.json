@@ -906,6 +906,16 @@
         "tabsHeading": "Faner med registreringsinformasjon",
         "tabList": "Faner for registreringsdetaljer",
         "speciesHeadingSuffix": "registreringsdetaljer"
+      },
+      "resources": {
+        "heading": "Artsressurser",
+        "ariaLabel": "Eksterne artsressurser",
+        "viewEbird": "Se på eBird",
+        "viewEbirdAria": "Se {name} på eBird (åpnes i en ny fane)",
+        "exploreEbird": "Utforsk eBird",
+        "exploreEbirdAria": "Utforsk eBird (åpnes i en ny fane)",
+        "compareCalls": "Sammenlign lyder",
+        "compareCallsAria": "Sammenlign lyder fra {name} på Cornell All About Birds (åpnes i en ny fane)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "I dag",
+      "last3Days": "Siste 3 dager",
       "lastWeek": "Siste 7 dager",
       "lastMonth": "Siste 30 dager",
       "last90Days": "Siste 90 dager",

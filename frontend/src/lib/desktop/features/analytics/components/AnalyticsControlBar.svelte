@@ -63,6 +63,8 @@
   let speciesExpanded = $state(false);
 
   const dateRangeOptions = $derived([
+    { value: 'today', label: t('analytics.periods.today') },
+    { value: 'threeDays', label: t('analytics.periods.last3Days') },
     { value: 'week', label: t('analytics.advanced.dateRangeOptions.week') },
     { value: 'month', label: t('analytics.advanced.dateRangeOptions.month') },
     { value: 'quarter', label: t('analytics.advanced.dateRangeOptions.quarter') },

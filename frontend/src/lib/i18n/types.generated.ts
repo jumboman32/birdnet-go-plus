@@ -724,6 +724,14 @@ export type TranslationKey =
   | 'detections.detail.aria.tabsHeading'
   | 'detections.detail.aria.tabList'
   | 'detections.detail.aria.speciesHeadingSuffix'
+  | 'detections.detail.resources.heading'
+  | 'detections.detail.resources.ariaLabel'
+  | 'detections.detail.resources.viewEbird'
+  | 'detections.detail.resources.viewEbirdAria' // params: name
+  | 'detections.detail.resources.exploreEbird'
+  | 'detections.detail.resources.exploreEbirdAria'
+  | 'detections.detail.resources.compareCalls'
+  | 'detections.detail.resources.compareCallsAria' // params: name
   | 'detections.headers.dateTime'
   | 'detections.headers.weather'
   | 'detections.headers.source'
@@ -1608,6 +1616,7 @@ export type TranslationKey =
   | 'analytics.stats.totalSpecies'
   | 'analytics.stats.overallAverage'
   | 'analytics.periods.today'
+  | 'analytics.periods.last3Days'
   | 'analytics.periods.lastWeek'
   | 'analytics.periods.lastMonth'
   | 'analytics.periods.last90Days'
@@ -4642,6 +4651,8 @@ export type TranslationParams = {
   'detections.detail.aria.downloadAudioClip': { name: string | number };
   'detections.detail.aria.audioRecordingFor': { name: string | number };
   'detections.detail.aria.confidence': { confidence: string | number };
+  'detections.detail.resources.viewEbirdAria': { name: string | number };
+  'detections.detail.resources.compareCallsAria': { name: string | number };
   'detections.pagination.showing': {
     from: string | number;
     to: string | number;

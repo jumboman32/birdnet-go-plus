@@ -906,6 +906,16 @@
         "tabsHeading": "Detection information tabs",
         "tabList": "Detection details tabs",
         "speciesHeadingSuffix": "detection details"
+      },
+      "resources": {
+        "heading": "Species resources",
+        "ariaLabel": "External species resources",
+        "viewEbird": "View on eBird",
+        "viewEbirdAria": "View {name} on eBird (opens new tab)",
+        "exploreEbird": "Explore eBird",
+        "exploreEbirdAria": "Explore eBird (opens new tab)",
+        "compareCalls": "Compare calls",
+        "compareCallsAria": "Compare {name} calls on Cornell All About Birds (opens new tab)"
       }
     },
     "headers": {
@@ -2067,6 +2077,7 @@
     },
     "periods": {
       "today": "Today",
+      "last3Days": "Last 3 days",
       "lastWeek": "Last 7 days",
       "lastMonth": "Last 30 days",
       "last90Days": "Last 90 days",

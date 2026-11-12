@@ -1,15 +1,20 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { waitFor, cleanup } from '@testing-library/svelte';
+import { waitFor, cleanup, fireEvent, within } from '@testing-library/svelte';
 import { createComponentTestFactory } from '../../../test/render-helpers';
 import DetectionDetail from './DetectionDetail.svelte';
 import AudioPlayer from '$lib/desktop/components/media/AudioPlayer.svelte';
 import type { Detection } from '$lib/types/detection.types';
+import { fetchWithCSRF } from '$lib/utils/api';
+
+vi.mock('$lib/utils/api', async importOriginal => ({
+  ...(await importOriginal<typeof import('$lib/utils/api')>()),
+  fetchWithCSRF: vi.fn().mockResolvedValue({ total: 0 }),
+}));
 
 // Heavy / context-dependent children are not relevant to the fetch-race logic.
 vi.mock('$lib/desktop/components/media/AudioPlayer.svelte');
 vi.mock('$lib/desktop/components/data/ConfidenceCircle.svelte');
 vi.mock('$lib/desktop/components/data/WeatherDetails.svelte');
-vi.mock('$lib/desktop/features/dashboard/components/SourceBadge.svelte');
 vi.mock('$lib/desktop/components/ui/VerificationBadges.svelte');
 
 const detailTest = createComponentTestFactory(DetectionDetail);
@@ -37,6 +42,122 @@ function makeDetection(overrides: Partial<Detection>): Detection {
 // so a typo cannot silently desync the two.
 const FRESH_SCIENTIFIC = 'Fresh-sci-B';
 const STALE_SCIENTIFIC = 'Stale-sci-A';
+
+describe('DetectionDetail all-time species count', () => {
+  beforeEach(() => {
+    vi.mocked(fetchWithCSRF).mockReset();
+    vi.mocked(fetchWithCSRF).mockResolvedValue({ total: 12345 });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.endsWith('/api/v2/detections/one')) {
+          return Promise.resolve(
+            jsonResponse(
+              makeDetection({ scientificName: 'Cyanocitta cristata', commonName: 'Blue Jay' })
+            )
+          );
+        }
+        if (url.endsWith('/api/v2/detections/two')) {
+          return Promise.resolve(
+            jsonResponse(
+              makeDetection({
+                id: 2,
+                scientificName: 'Cardinalis cardinalis',
+                commonName: 'Northern Cardinal',
+              })
+            )
+          );
+        }
+        return Promise.resolve(jsonResponse({}));
+      })
+    );
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+    vi.mocked(fetchWithCSRF).mockReset();
+    vi.mocked(fetchWithCSRF).mockResolvedValue({ total: 0 });
+  });
+
+  it('shows the full-history total in the species box and requests only one result', async () => {
+    const { container } = detailTest.render({ detectionId: 'one' });
+    await waitFor(() => expect(within(container).getByText('12,345')).toBeInTheDocument());
+    const count = within(container).getByText('12,345');
+    const box = count.closest('.hero-identity-card');
+    expect(box?.querySelector('a[href="https://ebird.org/species/blujay"]')).not.toBeNull();
+    const request = vi.mocked(fetchWithCSRF).mock.calls.at(0);
+    const url = new URL(String(request?.[0]), 'http://birdnet.invalid');
+    expect(url.searchParams.get('species')).toBe('Cyanocitta cristata');
+    expect(url.searchParams.get('queryType')).toBe('species');
+    expect(url.searchParams.get('numResults')).toBe('1');
+    expect(url.searchParams.has('date')).toBe(false);
+    expect(url.searchParams.has('start_date')).toBe(false);
+    expect(url.searchParams.has('end_date')).toBe(false);
+  });
+
+  it('displays a valid zero count', async () => {
+    vi.mocked(fetchWithCSRF).mockResolvedValue({ total: 0 });
+    const { container } = detailTest.render({ detectionId: 'one' });
+    await waitFor(() =>
+      expect(container.querySelector('.species-lifetime-count strong')).toHaveTextContent('0')
+    );
+  });
+
+  it('links birds outside the former short list directly to eBird', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      jsonResponse(
+        makeDetection({ scientificName: 'Turdus migratorius', commonName: 'American Robin' })
+      )
+    );
+    const { container } = detailTest.render({ detectionId: 'one' });
+    await waitFor(() =>
+      expect(
+        within(container).getByRole('link', {
+          name: 'detections.detail.resources.viewEbirdAria',
+        })
+      ).toHaveAttribute('href', 'https://ebird.org/species/amerob')
+    );
+  });
+
+  it('offers a retry on failure instead of displaying a false zero', async () => {
+    vi.mocked(fetchWithCSRF).mockRejectedValueOnce(new Error('Offline'));
+    const { container } = detailTest.render({ detectionId: 'one' });
+    await waitFor(() =>
+      expect(within(container).getByRole('button', { name: 'common.retry' })).toBeInTheDocument()
+    );
+    expect(container.querySelector('.species-lifetime-count strong')).toHaveTextContent(
+      'common.unknown'
+    );
+    vi.mocked(fetchWithCSRF).mockResolvedValue({ total: 12 });
+    await fireEvent.click(within(container).getByRole('button', { name: 'common.retry' }));
+    await waitFor(() =>
+      expect(container.querySelector('.species-lifetime-count strong')).toHaveTextContent('12')
+    );
+  });
+
+  it('drops a stale count when navigating to another species', async () => {
+    let resolveOld: ((value: { total: number }) => void) | undefined;
+    vi.mocked(fetchWithCSRF).mockReturnValueOnce(
+      new Promise(resolve => {
+        resolveOld = resolve;
+      })
+    );
+    vi.mocked(fetchWithCSRF).mockResolvedValue({ total: 7 });
+    const { container, rerender } = detailTest.render({ detectionId: 'one' });
+    await waitFor(() => expect(fetchWithCSRF).toHaveBeenCalledTimes(1));
+    const oldSignal = vi.mocked(fetchWithCSRF).mock.calls[0]?.[1]?.signal;
+    await rerender({ detectionId: 'two' });
+    await waitFor(() =>
+      expect(container.querySelector('.species-lifetime-count strong')).toHaveTextContent('7')
+    );
+    expect(oldSignal?.aborted).toBe(true);
+    resolveOld?.({ total: 999 });
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(container.querySelector('.species-lifetime-count strong')).toHaveTextContent('7');
+  });
+});
 
 /** Minimal fetch Response stub carrying a JSON body. */
 function jsonResponse(body: unknown): Response {
