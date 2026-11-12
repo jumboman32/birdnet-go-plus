@@ -1,20 +1,10 @@
-# AI Agent Instructions for BirdNET-Go
+# AI Agent Instructions for BirdNET-Go+
 
-These instructions apply to every AI coding agent working on this repository
-(Claude Code, Codex, Cursor, Antigravity, Gemini CLI, Windsurf, Copilot, and others)
-and to human contributors. They are the single source of project guidance.
-
-BirdNET-Go is a Go implementation of BirdNET for real-time bird sound
-identification, aimed at hobby birders and home users. It is an open source
-project run for fun by volunteers, so avoidable rework and support load matter.
-
-External contributors (anyone other than the maintainer) must also review
-[`CONTRIBUTING.md`](CONTRIBUTING.md) before starting work, in particular
-"Submitting Changes": it covers branch naming, commit message format, the PR
-template, and what to expect for feature PRs, which should be discussed with
-the maintainer before any code is written. If you are an agent working for an
-external contributor, read it and tell them before building a feature that has
-not been discussed.
+This repository is an independent fork of BirdNET-Go. Follow the user's goals
+for this fork; do not assume changes are intended for the upstream project.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for the fork's development workflow.
+These instructions and the module guides below apply to coding agents and
+contributors.
 
 ## Module Guides
 
@@ -44,7 +34,7 @@ yourself before touching code in that area.
 - **Frontend**: Svelte 5 (runes), TypeScript, Tailwind CSS v4, Vite, Vitest
 - **Build system**: [Task](https://taskfile.dev) (`Taskfile.yml`)
 - **Linting**: `golangci-lint` (Go), `npm run check:all` (frontend)
-- **Review**: every PR receives an automated CodeRabbit review
+- **Review**: repository CI and optional automated reviews
 
 | Path         | Purpose                        |
 | ------------ | ------------------------------ |
@@ -108,96 +98,50 @@ yourself before touching code in that area.
   `internal/logger` (a `forbidigo` lint rule enforces this for credential and
   token field names).
 - **Document all exported symbols.**
-- **Branch from an up-to-date `main`**:
-  `git switch main && git pull origin main && git switch -c <branch>`, and
-  check open PRs first so you do not duplicate or conflict with work in flight.
+- **Respect the working branch.** Continue ongoing work on its current branch.
+  For new independent work, branch from this fork's current main when practical.
+  Do not merge upstream changes unless requested.
 - **Format the Markdown you change with Prettier**: from `frontend/`, run
   `npx prettier --write ../<path to each changed .md file>`. Skip files under
   `.agents/skills/`, which are not Prettier-formatted. Do not run
   `task format-md` in a feature PR: it reformats every Markdown file in the
   repository.
 
-## PR Scope Rule
+## Changes and Verification
 
-Each pull request must contain exactly ONE of:
+Keep changes focused on the user's request and preserve unrelated work. Use
+Conventional Commit messages. A push to this fork does not require upstream
+feature approval, a mandatory multi-agent review, or a preflight certification.
+Do not create a PR or merge a branch unless requested.
 
-- One feature
-- One bug fix
-- One refactor
+Run checks appropriate to the files changed:
 
-PRs that batch multiple features or multiple fixes WILL NOT be merged. If your
-task involves multiple independent changes, split them into separate branches
-and separate PRs. If you are unsure whether changes are one concern or several,
-ask before proceeding.
+- Go changes: run `task lint` and `task test`.
+- Frontend changes: run `npm run check:all` and relevant tests from `frontend/`.
+- Documentation changes: format the changed Markdown and check local links.
+- Workflow changes: validate the changed YAML and referenced scripts.
 
-Why: batched PRs cannot be properly reviewed, cannot be safely reverted if one
-change causes a regression, and create merge conflicts for other contributors.
+Keep the normal commit hooks enabled. Report missing tools, failed checks, or
+checks that were not run; never claim an unobserved pass. If the user explicitly
+authorizes a push with incomplete checks, report the limitation and proceed.
+Documentation-only changes do not require running the application test suites.
 
-## Mandatory: Pre-Push Quality Gate
+Run `task setup-dev` before Go checks: it installs the TensorFlow Lite headers
+and C library. Task supplies the build tags and CGO flags. Use `task --dry lint`
+or `task --dry test` to inspect the commands rather than copying stale flags.
 
-Before pushing code or creating a pull request, you MUST run the preflight
-quality gate defined in `.agents/skills/preflight/SKILL.md`. Read that file and
-follow its complete process (all phases). Do not push without running it.
+Default checks cover only the current OS and build tags. For tagged code, use
+`task lint BASE_BUILD_TAGS=<tags>`; for OpenVINO, first run
+`task check-openvino OPENVINO=true`. Use CI for other platforms and report
+platforms that were not verified. Treat cross-platform build failures as real
+failures.
 
-If your tool supports native skill invocation, use that: in Claude Code, run
-`/preflight` (`.claude/skills/preflight` is a symlink to
-`.agents/skills/preflight`).
-Otherwise read the SKILL.md file and execute the process manually.
+## Pull Requests
 
-The minimum verification, always run and observed before claiming success:
-
-```bash
-task lint                     # Go: golangci-lint over the whole module, zero issues
-task test                     # Go tests with -race
-cd frontend && npm run check:all && npm test   # frontend
-```
-
-Run `task setup-dev` once first: it installs the TensorFlow Lite headers and
-C library that every Go build, lint and test needs (the models are committed).
-`task lint` and `task test` add the build tags and CGO flags for you. To run a
-step by hand instead, print what Task would run with `task --dry lint` or
-`task --dry test` instead of copying a command from a document. Task prints
-the commands on stderr, each prefixed with `task: [lint]` or `task: [test]`;
-copy them without that prefix and run them in `sh` or `bash`.
-
-These checks cover only the default build tags and your own OS:
-
-- For files behind other build tags, add them with
-  `task lint BASE_BUILD_TAGS=<tags>` (CI's lint tag set is in
-  `.github/workflows/golangci-lint.yml`; for `openvino`, run
-  `task check-openvino OPENVINO=true` first, since without `OPENVINO=true`
-  the task reports itself up to date and installs nothing).
-- Other operating systems cannot be checked locally without a cross toolchain.
-  On a pull request, the `cross-platform-build` workflow compiles and vets
-  windows/amd64 and linux/arm64, and builds and vets the `openvino` tag on
-  linux/amd64 and linux/arm64, whenever Go files change; it is not advisory,
-  so treat a failure there as a real break. The native Windows and
-  macOS test jobs run only when a maintainer adds the `full-ci` label, and they
-  are advisory with known failures, so a green check there proves nothing
-  unless you read the job output. When you change OS-specific files
-  (`_windows.go`, `_darwin.go`), say so in the PR and ask for `full-ci`.
-
-## PR Creation Rules
-
-When creating a pull request, you MUST:
-
-1. Verify the PR addresses exactly ONE feature, fix, or refactor
-2. Write the description from `.github/pull_request_template.md`: keep every
-   section, fill each one in, and do not substitute your own format. Add a
-   single `- [x] Preflight passed` checkbox under Checklist. Do not add a
-   preflight report: no findings, no fix list, no review details. Leave the
-   checkboxes that are the human author's own declarations for them to tick
-3. Verify all linters pass (`task lint`, `npm run check:all`)
-4. Verify all tests pass (`task test`, `npm test`)
-5. Confirm the diff contains ONLY changes relevant to the stated goal
-6. Confirm scope is complete (no TODO/FIXME left for core functionality)
-7. Confirm no secrets, credentials, or PII are in the diff
-8. Document any breaking changes to API, config, or behavior
-
-Actually execute the verification commands and observe passing output before
-claiming they pass. Do not tick boxes from assumption or prior knowledge. PRs
-that skip preflight take multiple review rounds; the gate catches the same
-issues reviewers find.
+When requested, describe the concrete change, validation results, and any
+breaking behavior using the short template in `.github/pull_request_template.md`.
+Keep human declarations for the author to complete. Upstream's contribution
+process applies only when the user explicitly requests an upstream PR.
 
 ## Interpreting CI Failures
 
@@ -263,29 +207,12 @@ See `frontend/doc/AST-GREP-SETUP.md` for the frontend ast-grep rules.
 
 ## Handling Review Feedback
 
-Automated review (CodeRabbit plus the repository's configured checks) runs on
-every PR. When addressing review comments:
-
-- Verify each suggestion technically before implementing it; reviewers,
-  human or bot, can be wrong.
-- Push back with a reason when a suggestion is incorrect or out of scope.
-- Ask for clarification before partially implementing an unclear item.
-- After pushing fixes, a fresh CodeRabbit pass can be requested with a PR
-  comment: `@coderabbitai review`.
+Verify review suggestions before implementing them. Explain incorrect or
+out-of-scope suggestions, and clarify ambiguous behavior changes with the user.
 
 ## About These Instruction Files
 
-- Keep guidance in `AGENTS.md` files: this root file for cross-cutting rules and
-  one per module for area-specific rules. Keep each file focused and current;
-  delete rules that no longer match the code instead of letting them rot.
-- Do NOT add `CLAUDE.md`, `CLAUDE.local.md`, or `GEMINI.md` files. Claude Code
-  (2.1.277 and later) reads `AGENTS.md` in a project that has no `CLAUDE.md`
-  (the "Project instructions" setting in `/config` controls this). Tested with
-  Claude Code 2.1.281: a root `CLAUDE.md` or `CLAUDE.local.md` turns that off
-  for the root and the nested `AGENTS.md` files alike.
-- Tool caveats: Claude Code's native `AGENTS.md` support is not yet available on
-  Bedrock, Vertex, or Foundry, and older versions ignore it. Gemini CLI reads
-  `GEMINI.md` by default until its context file setting points at `AGENTS.md`.
-  With those tools, read this file and the matching module guide yourself.
-- For personal, machine-local instructions with Claude Code, use a gitignored
-  file under `.claude/rules/` named `*.local.md`.
+Keep cross-cutting guidance in this file and area-specific guidance in the
+matching module's `AGENTS.md`. Keep instructions focused and remove stale
+rules. Do not add parallel `CLAUDE.md`, `CLAUDE.local.md`, or `GEMINI.md`
+files. Store personal machine-specific instructions in gitignored local files.

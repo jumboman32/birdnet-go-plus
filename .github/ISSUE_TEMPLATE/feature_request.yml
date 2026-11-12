@@ -1,12 +1,12 @@
 name: Feature Request
-description: Suggest an idea or enhancement for BirdNET-Go
+description: Suggest an idea or enhancement for BirdNET-Go+
 title: "feat: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for sharing an idea for BirdNET-Go.
+        Describe an improvement for this fork.
 
         Please search existing open and closed issues before filing — if the idea already exists, add a reaction or comment on the existing issue instead of opening a new one.
 

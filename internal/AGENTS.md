@@ -214,10 +214,8 @@ Config: `.golangci.yaml` (golangci-lint v2 format).
 - Always lint the **whole module** (`task lint`; see the root `AGENTS.md` for
   running a step by hand), never single files or packages; partial runs miss
   cross-package issues. The run type-checks the module, so it doubles as
-  compilation validation, but only for the build tags and OS it runs with. No
-  automated step in the preflight gate covers other tags or platforms; its
-  certification checklist asks you to handle them, as described in the root
-  `AGENTS.md` ("Mandatory: Pre-Push Quality Gate").
+  compilation validation, but only for the build tags and OS it runs with. Check other tags and platforms separately, as described in the root
+  `AGENTS.md` ("Changes and Verification").
 - A `//nolint` directive needs a specific linter name and a justification
   comment.
 - `rules/*.go` holds the project's custom
