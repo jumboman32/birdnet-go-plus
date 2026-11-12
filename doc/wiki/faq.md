@@ -48,7 +48,7 @@ No. DietPi packaging is maintained by the DietPi project, not here.
 
 ### Should my Docker Compose, Portainer or Unraid install use host or bridge networking?
 
-For a new Linux install that does not use `install.sh`, use host networking (`Docker/docker-compose.host.yml`, the Portainer host network template, the Unraid host template (best effort, untested on real Unraid), or `docker run --network host`): multicast reaches the app directly, with no host socket mounts needed. Bridge networking remains supported, and existing installs are never switched automatically. `install.sh` keeps using bridge networking. Details, caveats and an optional migration checklist are in the [Docker Compose Guide](docker_compose_guide.md#choosing-a-network-mode).
+For a new Linux install that does not use `install.sh`, use host networking (`deployment/docker/docker-compose.host.yml`, the Portainer host network template, the Unraid host template (best effort, untested on real Unraid), or `docker run --network host`): multicast reaches the app directly, with no host socket mounts needed. Bridge networking remains supported, and existing installs are never switched automatically. `install.sh` keeps using bridge networking. Details, caveats and an optional migration checklist are in the [Docker Compose Guide](docker_compose_guide.md#choosing-a-network-mode).
 
 ### Why are my times shown in UTC (or the wrong timezone)?
 

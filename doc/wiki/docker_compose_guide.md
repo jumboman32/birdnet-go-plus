@@ -163,7 +163,7 @@ With the bridge file, you can change the port by:
 You do not need to switch. Bridge networking keeps working. If you want host networking for an existing Compose or Portainer stack:
 
 1. If Prometheus telemetry is enabled, set its listen address to `127.0.0.1:8090` or a LAN IP first (see above).
-2. In the same directory, replace `docker-compose.yml` with `docker-compose.host.yml` (or point Portainer at `Docker/docker-compose.host.yml`). Keep your `.env`, `config` and `data`.
+2. In the same directory, replace `docker-compose.yml` with `docker-compose.host.yml` (or point Portainer at `deployment/docker/docker-compose.host.yml`). Keep your `.env`, `config` and `data`.
 3. Run `docker compose up -d`. Compose recreates the one service and keeps your data.
 4. Open `WEB_PORT` in the host firewall.
 5. If you copied a `/run/dbus` line into your own file, remove it. Host networking does not use it.

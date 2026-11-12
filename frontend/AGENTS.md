@@ -2,7 +2,7 @@
 
 Applies to everything under `frontend/`. Run commands from `frontend/` unless
 noted. Frontend test rules are in the Testing section below (the root
-`TESTING.md` covers Go tests only).
+`doc/TESTING.md` covers Go tests only).
 
 ## Tech Stack
 

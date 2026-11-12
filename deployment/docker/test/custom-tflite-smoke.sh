@@ -19,7 +19,7 @@
 # custom model would be: customBirdNETV24ModelInfo marks it IsStock=false, sets
 # Backend=TFLite from the extension, and initializeTFLiteModel loads it from the path.
 #
-# Usage: Docker/test/custom-tflite-smoke.sh <image-ref> [model-path]
+# Usage: deployment/docker/test/custom-tflite-smoke.sh <image-ref> [model-path]
 #   [model-path] should be an absolute path inside the image; the default is
 #   /models/BirdNET_GLOBAL_6K_V2.4_Model_FP32.tflite.
 #

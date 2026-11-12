@@ -11,7 +11,7 @@
 #   3. The FFmpeg path: ffprobe reaches the connect stage instead of failing DNS.
 #   4. Without the mount a .local lookup fails fast.
 #
-# Usage: Docker/test/mdns-nss-smoke.sh <image-ref>
+# Usage: deployment/docker/test/mdns-nss-smoke.sh <image-ref>
 #
 # The fake Avahi server runs on the host (needs python3); the app is never started
 # (--entrypoint overrides), so no config or data volumes are needed.

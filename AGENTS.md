@@ -2,7 +2,7 @@
 
 This repository is an independent fork of BirdNET-Go. Follow the user's goals
 for this fork; do not assume changes are intended for the upstream project.
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for the fork's development workflow.
+Read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the fork's development workflow.
 These instructions and the module guides below apply to coding agents and
 contributors.
 
@@ -12,21 +12,21 @@ Guidance is split by area. Tools that support nested `AGENTS.md` files load the
 matching file when you work in that directory; if yours does not, read it
 yourself before touching code in that area.
 
-| Working on                                       | Read first                                                                                   |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| Any Go code, including `cmd/` and `main.go`      | `internal/AGENTS.md` (nested loading does not reach it from `cmd/` or the root)              |
-| API v2 endpoints (`internal/api/v2/`)            | `internal/api/v2/AGENTS.md`, which sends you to its `README.md` endpoint catalog             |
-| Error handling (`internal/errors/`)              | `internal/errors/AGENTS.md`                                                                  |
-| Database and persistence (`internal/datastore/`) | `internal/datastore/AGENTS.md` (the legacy database is deprecated, never expand it)          |
-| Frontend (Svelte 5, TypeScript)                  | `frontend/AGENTS.md`                                                                         |
-| Desktop UI (tablet and desktop only)             | `frontend/src/lib/desktop/AGENTS.md`                                                         |
-| Desktop UI components                            | `frontend/src/lib/desktop/components/AGENTS.md`                                              |
-| Generic UI primitives                            | `frontend/src/lib/desktop/components/ui/AGENTS.md`                                           |
-| Settings pages                                   | `frontend/src/lib/desktop/features/settings/AGENTS.md`                                       |
-| Translations (`frontend/static/messages/`)       | `frontend/static/messages/AGENTS.md`                                                         |
-| Screenshot tooling                               | `frontend/tools/AGENTS.md`                                                                   |
-| Writing or changing Go tests                     | `TESTING.md` and the Testing section of `internal/AGENTS.md` (all Go tests MUST use testify) |
-| Writing or changing frontend tests               | the Testing section of `frontend/AGENTS.md`                                                  |
+| Working on                                       | Read first                                                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| Any Go code, including `cmd/` and `main.go`      | `internal/AGENTS.md` (nested loading does not reach it from `cmd/` or the root)                  |
+| API v2 endpoints (`internal/api/v2/`)            | `internal/api/v2/AGENTS.md`, which sends you to its `README.md` endpoint catalog                 |
+| Error handling (`internal/errors/`)              | `internal/errors/AGENTS.md`                                                                      |
+| Database and persistence (`internal/datastore/`) | `internal/datastore/AGENTS.md` (the legacy database is deprecated, never expand it)              |
+| Frontend (Svelte 5, TypeScript)                  | `frontend/AGENTS.md`                                                                             |
+| Desktop UI (tablet and desktop only)             | `frontend/src/lib/desktop/AGENTS.md`                                                             |
+| Desktop UI components                            | `frontend/src/lib/desktop/components/AGENTS.md`                                                  |
+| Generic UI primitives                            | `frontend/src/lib/desktop/components/ui/AGENTS.md`                                               |
+| Settings pages                                   | `frontend/src/lib/desktop/features/settings/AGENTS.md`                                           |
+| Translations (`frontend/static/messages/`)       | `frontend/static/messages/AGENTS.md`                                                             |
+| Screenshot tooling                               | `frontend/tools/AGENTS.md`                                                                       |
+| Writing or changing Go tests                     | `doc/TESTING.md` and the Testing section of `internal/AGENTS.md` (all Go tests MUST use testify) |
+| Writing or changing frontend tests               | the Testing section of `frontend/AGENTS.md`                                                      |
 
 ## Project Context
 

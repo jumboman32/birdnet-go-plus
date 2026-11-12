@@ -10,7 +10,7 @@
 #   2. Config resolution falling back to HOME=/ → `mkdir /.config: permission
 #      denied` → "Cannot load settings" → startup abort.
 #
-# Usage: Docker/test/arbitrary-uid-smoke.sh <image-ref>
+# Usage: deployment/docker/test/arbitrary-uid-smoke.sh <image-ref>
 #
 # Notes on the environment (this is the part that matters):
 #   --user 568:568   arbitrary UID/GID with no passwd entry (do NOT pass

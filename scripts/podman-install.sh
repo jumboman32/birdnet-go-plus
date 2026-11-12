@@ -1766,8 +1766,8 @@ create_quadlet_service() {
     fi
     
     # Copy network configuration
-    if [ -f "Podman/quadlet/birdnet-go.network" ]; then
-        cp "Podman/quadlet/birdnet-go.network" "$network_target"
+    if [ -f "deployment/podman/quadlet/birdnet-go.network" ]; then
+        cp "deployment/podman/quadlet/birdnet-go.network" "$network_target"
         log_message "INFO" "Copied Quadlet network configuration"
     else
         # Create network configuration if source doesn't exist
@@ -1800,13 +1800,13 @@ EOF
     
     # Choose the appropriate Quadlet template
     if [ "$use_autotls" = true ]; then
-        if [ -f "Podman/quadlet/birdnet-go-autotls.container" ]; then
-            quadlet_source="Podman/quadlet/birdnet-go-autotls.container"
+        if [ -f "deployment/podman/quadlet/birdnet-go-autotls.container" ]; then
+            quadlet_source="deployment/podman/quadlet/birdnet-go-autotls.container"
             log_message "INFO" "Using AutoTLS Quadlet configuration"
         fi
     else
-        if [ -f "Podman/quadlet/birdnet-go.container" ]; then
-            quadlet_source="Podman/quadlet/birdnet-go.container"
+        if [ -f "deployment/podman/quadlet/birdnet-go.container" ]; then
+            quadlet_source="deployment/podman/quadlet/birdnet-go.container"
             log_message "INFO" "Using standard Quadlet configuration"
         fi
     fi
@@ -1895,11 +1895,11 @@ EOF
                 print_message "🔊 Rootless audio enabled (keep-id + keep-groups + crun): sound card works out of the box" "$GREEN"
             else
                 log_message "WARN" "Kept rootless audio (keep-id) enabled but crun is missing; audio needs crun"
-                print_message "⚠️  Rootless audio (keep-id) kept enabled, but crun is missing so the sound card will not work until you install it (see Podman/README.md)" "$YELLOW"
+                print_message "⚠️  Rootless audio (keep-id) kept enabled, but crun is missing so the sound card will not work until you install it (see deployment/podman/README.md)" "$YELLOW"
             fi
         else
-            log_message "WARN" "crun unavailable; left rootless audio disabled (see Podman/README.md)"
-            print_message "⚠️  crun is unavailable, so rootless audio was not enabled (see Podman/README.md)" "$YELLOW"
+            log_message "WARN" "crun unavailable; left rootless audio disabled (see deployment/podman/README.md)"
+            print_message "⚠️  crun is unavailable, so rootless audio was not enabled (see deployment/podman/README.md)" "$YELLOW"
         fi
     fi
     

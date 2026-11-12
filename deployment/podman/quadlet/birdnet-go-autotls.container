@@ -20,7 +20,7 @@ Volume=./certs:/certs
 # AutoTLS binds the ACME HTTP-01 + HTTP->HTTPS redirect listener on 8080 and
 # HTTPS on 8443 inside the container, so map the privileged host ports to those
 # non-privileged container ports (no NET_BIND_SERVICE needed). Mirrors
-# Podman/podman-compose.autotls.yml.
+# deployment/podman/podman-compose.autotls.yml.
 PublishPort=80:8080
 PublishPort=443:8443
 Environment=TZ=UTC
@@ -33,7 +33,7 @@ AddDevice=-/dev/snd:/dev/snd
 # under rootless Podman. It runs the app as your host UID, so an EXISTING install
 # must re-own its volumes first, and it needs the crun OCI runtime (install crun;
 # Podman then uses it). A fresh install via podman-install.sh does both for you.
-# See Podman/README.md (Rootless Audio Access).
+# See deployment/podman/README.md (Rootless Audio Access).
 #UserNS=keep-id
 #GroupAdd=keep-groups
 Network=bridge

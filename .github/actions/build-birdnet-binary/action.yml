@@ -155,11 +155,11 @@ runs:
 
         # Platform-specific README
         if [ "$GOOS" = "linux" ]; then
-          cp dist/README-linux.md artifacts/README.md
+          cp deployment/release/README-linux.md artifacts/README.md
         elif [ "$GOOS" = "windows" ]; then
-          cp dist/README-windows.md artifacts/README.md
+          cp deployment/release/README-windows.md artifacts/README.md
         elif [ "$GOOS" = "darwin" ]; then
-          cp dist/README-darwin.md artifacts/README.md
+          cp deployment/release/README-darwin.md artifacts/README.md
         fi
 
         # Tarball (suffix is empty when unset, -<version> for releases)

@@ -53,8 +53,8 @@ If you're using Docker Compose with BirdNET-Go, setting up Cloudflare Tunnel is 
        depends_on:
          - birdnet-go
      ```
-   - With the host networking file ([docker-compose.host.yml](../../Docker/docker-compose.host.yml), recommended for new installs), add `network_mode: host` to the cloudflared service and use `http://localhost:<WEB_PORT>` as the service URL in step 5. A container on a bridge network cannot reach a host-network service by name. The host file already includes a cloudflared service set up this way (commented out).
-   - With the bridge file ([docker-compose.yml](../../Docker/docker-compose.yml)), the snippet above works as is, and the file already includes it (commented out)
+   - With the host networking file ([docker-compose.host.yml](../../deployment/docker/docker-compose.host.yml), recommended for new installs), add `network_mode: host` to the cloudflared service and use `http://localhost:<WEB_PORT>` as the service URL in step 5. A container on a bridge network cannot reach a host-network service by name. The host file already includes a cloudflared service set up this way (commented out).
+   - With the bridge file ([docker-compose.yml](../../deployment/docker/docker-compose.yml)), the snippet above works as is, and the file already includes it (commented out)
 
 4. **Start the Services**:
 

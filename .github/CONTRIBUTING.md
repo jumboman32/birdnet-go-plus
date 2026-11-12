@@ -5,12 +5,12 @@ Changes here do not require upstream feature approval or an upstream pull reques
 
 ## Development
 
-Follow [README.md](README.md) for setup and installation. Read [AGENTS.md](AGENTS.md)
+Follow [README.md](../README.md) for setup and installation. Read [AGENTS.md](../AGENTS.md)
 and the relevant module guide before changing code.
 
 - Go: run `task setup-dev` once, then use `task lint` and `task test`.
 - Frontend: from `frontend/`, use `npm run check:all` and the relevant `npm test` suites.
-- Windows frontend development: use the [separate test backend](scripts/development/README.md).
+- Windows frontend development: use the [separate test backend](../scripts/development/README.md).
 - Documentation: format changed Markdown with Prettier from `frontend/`.
 
 Keep normal commit hooks enabled. Report unavailable tools and incomplete checks;
@@ -35,5 +35,5 @@ separately.
 
 ## License and Attribution
 
-See [LICENSE](LICENSE) for the project license. Preserve existing copyright,
-license notices, [AUTHORS](AUTHORS), and [third-party attribution](LICENSES.md).
+See [LICENSE](../LICENSE) for the project license. Preserve existing copyright,
+license notices, [AUTHORS](../AUTHORS), and [third-party attribution](../LICENSES.md).

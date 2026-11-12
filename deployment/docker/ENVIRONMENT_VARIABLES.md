@@ -142,7 +142,7 @@ environment:
 
 **Description:**
 
-- Used by `Docker/docker-compose.host.yml` (host networking), where there is no port mapping and the app listens on this port directly. The Compose file sets it from `WEB_PORT`
+- Used by `deployment/docker/docker-compose.host.yml` (host networking), where there is no port mapping and the app listens on this port directly. The Compose file sets it from `WEB_PORT`
 - Use 1024 or higher: the app runs as a non-root user
 - Takes precedence over `webserver.port` in `config.yaml`
 - The value is written to `config.yaml` when settings are saved in the web interface. Going back to a bridge networking file with a custom port therefore needs `webserver.port: 8080` restored in `config.yaml`
@@ -262,7 +262,7 @@ The health check probes the port in `BIRDNET_WEBSERVER_PORT` (8080 when it is un
 
 ### `.local` hostnames do not resolve
 
-The bridge compose files mount the host's `/run/avahi-daemon` (name resolution) and `/run/dbus` (DNS-SD service discovery) read-only. The host networking file (`docker-compose.host.yml`) mounts only `/run/avahi-daemon`. Without them the container resolves `.local` names only through unicast DNS (a router that serves them). Check with `docker exec birdnet-go getent hosts cam.local`. Rootless Docker without avahi or D-Bus on the host must remove the matching volume line. If the app runs as uid 0 (`BIRDNET_UID=0`), remove the `/run/dbus` line: uid 0 on the system bus is host root. Never add `:z` or `:Z`. Details, the D-Bus security trade-off and how to opt out: [RTSP troubleshooting](../doc/wiki/rtsp-troubleshooting.md#using-local-mdns-hostnames-in-containers).
+The bridge compose files mount the host's `/run/avahi-daemon` (name resolution) and `/run/dbus` (DNS-SD service discovery) read-only. The host networking file (`docker-compose.host.yml`) mounts only `/run/avahi-daemon`. Without them the container resolves `.local` names only through unicast DNS (a router that serves them). Check with `docker exec birdnet-go getent hosts cam.local`. Rootless Docker without avahi or D-Bus on the host must remove the matching volume line. If the app runs as uid 0 (`BIRDNET_UID=0`), remove the `/run/dbus` line: uid 0 on the system bus is host root. Never add `:z` or `:Z`. Details, the D-Bus security trade-off and how to opt out: [RTSP troubleshooting](../../doc/wiki/rtsp-troubleshooting.md#using-local-mdns-hostnames-in-containers).
 
 ### Subnet bypass does not skip login for LAN clients
 
@@ -315,13 +315,13 @@ services:
       - /dev/snd:/dev/snd # Audio device access
 ```
 
-This example uses bridge networking. For new Linux installs, host networking is recommended: start from [`docker-compose.host.yml`](docker-compose.host.yml), or in this example replace the `ports:` section with `network_mode: host`, set `BIRDNET_WEBSERVER_PORT` for the port (1024 or higher), and remove the `/run/dbus` line. Keep `extra_hosts: host.docker.internal:host-gateway` in either mode (see [Subnet bypass does not skip login for LAN clients](#subnet-bypass-does-not-skip-login-for-lan-clients)). See [Choosing a Network Mode](../doc/wiki/docker_compose_guide.md#choosing-a-network-mode).
+This example uses bridge networking. For new Linux installs, host networking is recommended: start from [`docker-compose.host.yml`](docker-compose.host.yml), or in this example replace the `ports:` section with `network_mode: host`, set `BIRDNET_WEBSERVER_PORT` for the port (1024 or higher), and remove the `/run/dbus` line. Keep `extra_hosts: host.docker.internal:host-gateway` in either mode (see [Subnet bypass does not skip login for LAN clients](#subnet-bypass-does-not-skip-login-for-lan-clients)). See [Choosing a Network Mode](../../doc/wiki/docker_compose_guide.md#choosing-a-network-mode).
 
 ---
 
 ## See Also
 
-- [Docker Compose Guide](../doc/wiki/docker_compose_guide.md)
-- [Dockerfile](../Dockerfile) - Container build configuration
+- [Docker Compose Guide](../../doc/wiki/docker_compose_guide.md)
+- [Dockerfile](../../Dockerfile) - Container build configuration
 - [entrypoint.sh](entrypoint.sh) - Container initialization script
 - [startup-wrapper.sh](startup-wrapper.sh) - Application wrapper script

@@ -2,7 +2,7 @@
 
 Applies to all Go code in the repository (`internal/`, `cmd/`, `main.go`, and the
 ruleguard rules in `rules/`). Read
-`TESTING.md` before writing tests and `internal/errors/AGENTS.md` before adding
+`doc/TESTING.md` before writing tests and `internal/errors/AGENTS.md` before adding
 error handling.
 
 ## Quick Reference
@@ -189,7 +189,7 @@ touching anything under `internal/datastore/` or adding a database write.
 
 ## Testing
 
-`TESTING.md` is the full reference for Go tests: testify usage, table-driven
+`doc/TESTING.md` is the full reference for Go tests: testify usage, table-driven
 tests, `testing/synctest`, goroutine-leak checks, mocks (mockery and `.Maybe()`),
 cleanup and parallelism. Read it before writing or changing a test. The rules
 most often missed:
@@ -198,7 +198,7 @@ most often missed:
 - `testing/synctest` (`synctest.Test`) instead of `time.Sleep()` for timing and
   concurrency; there is no `synctest.Run` in Go 1.27
 - Isolation, temporary directories and `t.Parallel()` rules are in
-  `TESTING.md` ("Isolation and Parallelism"); the one most often broken: never
+  `doc/TESTING.md` ("Isolation and Parallelism"); the one most often broken: never
   `t.Parallel()` a test that mutates global state such as
   `conftest.SetTestSettings()`
 - Generated mocks only (`.mockery.yaml` plus `go generate ./internal/datastore`);

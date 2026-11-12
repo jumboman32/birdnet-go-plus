@@ -8,7 +8,7 @@
 #   1. The ENTRYPOINT losing its `tini -s --` prefix (PID 1 becomes the shell).
 #   2. The image dropping the tini package.
 #
-# Usage: Docker/test/tini-pid1-smoke.sh <image-ref>
+# Usage: deployment/docker/test/tini-pid1-smoke.sh <image-ref>
 #
 # Parsing (awk/grep) runs on the host, not in the container, so the image only
 # needs cat/ps/bash/sleep (all present); the runner supplies awk.

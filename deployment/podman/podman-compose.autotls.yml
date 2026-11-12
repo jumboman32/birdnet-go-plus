@@ -41,7 +41,7 @@ services:
     #   x-podman:
     #     in_pod: false
     # keep-id runs the app as your host UID, so an EXISTING install must re-own
-    # its volumes first (see Podman/README.md). It needs the crun OCI runtime
+    # its volumes first (see deployment/podman/README.md). It needs the crun OCI runtime
     # (install crun; Podman then uses it) and a recent podman-compose.
     #userns_mode: keep-id
     #group_add:

@@ -2,7 +2,7 @@
 
 > Container examples inherited from upstream use upstream images, which do not
 > include this fork's features. Build your own image from this repository, or
-> use the [fork installation instructions](../README.md).
+> use the [fork installation instructions](../../README.md).
 
 This directory contains Podman-specific configuration files for running BirdNET-Go with the Podman container runtime.
 
@@ -37,7 +37,7 @@ Copy the appropriate example file to `.env` and customize for your setup.
 
 ## Entrypoint Script
 
-The published container images use the shared entrypoint baked in from `Docker/entrypoint.sh`, which handles both rootful and rootless execution under Docker and Podman (user/group setup, device permissions, timezone, and pre-flight checks for disk space and config writability).
+The published container images use the shared entrypoint baked in from `deployment/docker/entrypoint.sh`, which handles both rootful and rootless execution under Docker and Podman (user/group setup, device permissions, timezone, and pre-flight checks for disk space and config writability).
 
 ## Installation
 
@@ -80,7 +80,7 @@ Set `SKIP_DEVICE_PERMS=true` to make the entrypoint skip all `/dev/snd` and `/de
 
 `podman-install.sh` enables this automatically on a fresh install: it installs `crun` if it is missing and uncomments `UserNS=keep-id` and `GroupAdd=keep-groups` in the generated Quadlet unit. It deliberately does NOT touch an existing install, because switching an already-running deployment to `keep-id` changes the app from a subuid to your host UID and would strand the `/config` and `/data` files it wrote earlier.
 
-The static `Podman/quadlet/*.container` and `Podman/podman-compose*.yml` files ship with the same options commented out. Uncomment them to enable audio for a manual deployment, and make sure `crun` is installed (the compose files also need `x-podman: { in_pod: false }` at the top level, because podman-compose otherwise puts services in a pod, which conflicts with a per-container user namespace).
+The static `deployment/podman/quadlet/*.container` and `deployment/podman/podman-compose*.yml` files ship with the same options commented out. Uncomment them to enable audio for a manual deployment, and make sure `crun` is installed (the compose files also need `x-podman: { in_pod: false }` at the top level, because podman-compose otherwise puts services in a pod, which conflicts with a per-container user namespace).
 
 If you enable `keep-id` on an EXISTING install whose volumes were written under the old mapping, re-own them once so the host-UID process can read them. From the directory holding `config/` and `data/`:
 
@@ -92,7 +92,7 @@ podman unshare chown -R 0:0 ./config ./data
 
 The two quadlet files mount the host's Avahi directory (`.local` name resolution) by default. Podman refuses to start a container whose bind source is missing, so the mount source is a per-unit path, `%t/%N-mdns/avahi-daemon`, and an `ExecStartPre` makes it a symlink to `/run/avahi-daemon` when `/run/avahi-daemon/socket` exists, or an empty directory when it does not. The unit therefore always starts, also after avahi is removed from the host. The socket is checked at each start of the unit, so if you install avahi later, or the unit starts before avahi has created its socket at boot, restart the unit (for the unit `podman-install.sh` installs: `systemctl --user restart birdnet-go`). Restarting only the container does not rerun the check. The `/run/dbus` mount (DNS-SD service discovery) is shipped commented out in the quadlet files; `podman-install.sh` enables it when `/run/dbus/system_bus_socket` exists, the unit has `UserNS=keep-id` and the installing user is not root (`enable_mdns_mounts` enforces both conditions), and re-detects on every run. The static compose files have no pre-start hook, so both mounts are commented out there.
 
-For a manual quadlet deployment, uncomment the D-Bus line yourself when `/run/dbus/system_bus_socket` exists; in the compose files, uncomment each line only when its host socket exists. D-Bus authenticates by uid, so under rootless Podman it needs `UserNS=keep-id` (`userns_mode: keep-id` in compose), which is also opt-in in the shipped files, and a non-root uid, because uid 0 on the system bus is host root. Never add `:z` or `:Z`. Purpose, security trade-off, SELinux notes and opt-out: [RTSP troubleshooting](../doc/wiki/rtsp-troubleshooting.md#using-local-mdns-hostnames-in-containers).
+For a manual quadlet deployment, uncomment the D-Bus line yourself when `/run/dbus/system_bus_socket` exists; in the compose files, uncomment each line only when its host socket exists. D-Bus authenticates by uid, so under rootless Podman it needs `UserNS=keep-id` (`userns_mode: keep-id` in compose), which is also opt-in in the shipped files, and a non-root uid, because uid 0 on the system bus is host root. Never add `:z` or `:Z`. Purpose, security trade-off, SELinux notes and opt-out: [RTSP troubleshooting](../../doc/wiki/rtsp-troubleshooting.md#using-local-mdns-hostnames-in-containers).
 
 ## Compatibility
 

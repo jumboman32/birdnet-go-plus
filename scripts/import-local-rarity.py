@@ -2,7 +2,7 @@
 """Prepare a local rarity import from authorized eBird EBD and sampling TSVs.
 
 Uses only Python's standard library. Never downloads data, handles credentials,
-or connects to BirdNET-Go. See docs/local-rarity.md for data access and caveats.
+or connects to BirdNET-Go. See doc/local-rarity.md for data access and caveats.
 """
 
 import argparse

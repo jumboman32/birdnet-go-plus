@@ -2,7 +2,7 @@
 
 This document is a map of how BirdNET-Go is put together: the major subsystems, how audio becomes a detection, and where each concern lives in the tree. It deliberately stays at the package level. File lists, struct definitions and tuning numbers change too often to be copied here, so each section points at the package or guide that owns the detail.
 
-For coding rules read [`AGENTS.md`](AGENTS.md) and [`internal/AGENTS.md`](internal/AGENTS.md). For contributing see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+For coding rules read [`AGENTS.md`](../AGENTS.md) and [`internal/AGENTS.md`](../internal/AGENTS.md). For contributing see [`CONTRIBUTING.md`](../.github/CONTRIBUTING.md).
 
 ## Table of Contents
 
@@ -34,7 +34,7 @@ Design principles:
 - **Hot reload.** Settings changed in the UI take effect without a restart; code reads settings per request or per operation, never once at startup.
 - **Hobbyist audience.** Defaults favour a working setup over tuning knobs.
 
-Standing constraints that shape the code (see [`AGENTS.md`](AGENTS.md)):
+Standing constraints that shape the code (see [`AGENTS.md`](../AGENTS.md)):
 
 - API v1 is gone and frozen. All endpoints are in `internal/api/v2/`.
 - The legacy database is deprecated and will be removed. New persistence targets the v2 schema only.
@@ -179,7 +179,7 @@ Note that `internal/privacy` is unrelated to the voice filter: it scrubs telemet
 
 **Actions** (`processor/actions_*.go`): log, database save, clip export, BirdWeather upload, MQTT publish, SSE broadcast, range filter update, external command, and `CompositeAction`, which runs several actions in sequence with a per-step timeout. When the database is enabled, the save and the SSE broadcast run in one composite so that SSE sees the database id assigned by the save. A step in between enqueues the MQTT publish as its own job after the save, so the payload carries the database id and the MQTT retry settings apply; the composite is retried (for about five minutes) only while the save has provably stored nothing, such as an unreachable database, and MQTT and SSE then run once after the save that lands. A save that finishes only after the last attempt has ended keeps its row, but MQTT and SSE do not run for it. A failure whose commit outcome is unknown is not retried, since a retry could save the detection twice. Without a database, SSE and MQTT are queued as independent actions.
 
-**Job queue** (`internal/analysis/jobqueue`). Actions run asynchronously off the audio path in a bounded queue with per-job state, optional retry with exponential backoff, and per-action statistics. Retry configuration is chosen in the processor's job queue adapter and currently applies to BirdWeather uploads, the MQTT publish job, deferred clip saves under extended capture, and the database save composite. A retry configuration may carry a `Retryable` check that ends the job early for an error that must not be repeated. A retry configuration with `Enabled` false means a single attempt. A job never has two attempts running at once: an attempt that overruns its timeout is waited for before the next one starts. See [`internal/analysis/jobqueue/README.md`](internal/analysis/jobqueue/README.md).
+**Job queue** (`internal/analysis/jobqueue`). Actions run asynchronously off the audio path in a bounded queue with per-job state, optional retry with exponential backoff, and per-action statistics. Retry configuration is chosen in the processor's job queue adapter and currently applies to BirdWeather uploads, the MQTT publish job, deferred clip saves under extended capture, and the database save composite. A retry configuration may carry a `Retryable` check that ends the job early for an error that must not be repeated. A retry configuration with `Enabled` false means a single attempt. A job never has two attempts running at once: an attempt that overruns its timeout is waited for before the next one starts. See [`internal/analysis/jobqueue/README.md`](../internal/analysis/jobqueue/README.md).
 
 **Event bus** (`internal/events`). After a database save, the detection is published as an event. Consumers include the notification service (new species and detection notifications), the alerting bridge (rules on detection events) and the telemetry worker. Errors flow through the same bus: `internal/errors` builds structured errors, which reach notifications and telemetry asynchronously without blocking the caller.
 
@@ -189,7 +189,7 @@ Note that `internal/privacy` is unrelated to the voice filter: it scrubs telemet
 
 ## Datastore
 
-The datastore is in the middle of a long migration. Read [`internal/datastore/AGENTS.md`](internal/datastore/AGENTS.md) before touching it.
+The datastore is in the middle of a long migration. Read [`internal/datastore/AGENTS.md`](../internal/datastore/AGENTS.md) before touching it.
 
 - **v2 schema** is the present and the future. Entities are in `datastore/v2/entities` (detections with predictions, model contributions, reviews, comments and locks; labels and taxonomic classes; AI models; audio sources; weather; dynamic thresholds; alert rules and history; notification history; app events and metadata; migration state). Persistence goes through repositories: `datastore.DetectionRepository` and the rest in `datastore/v2/repository`.
 - **Legacy schema** (the `notes` table, the `Note` model, `DataStore`, `SQLiteStore`, `MySQLStore` and the large `datastore.Interface`) is frozen and will be removed. `datastore/v2only` adapts a v2 database to the old `Interface` so existing callers keep working until they move to repositories.
@@ -207,17 +207,17 @@ Related storage: `internal/diskmanager` enforces clip retention (age, usage and 
 
 **Frontend serving.** The SPA shell and assets are served from the embedded `frontend.DistFS`, or from `./frontend/dist` on disk when it exists, which is how development works. `/ui/*` serves the same HTML shell and the client router takes over. HTML and text assets are rewritten for sub-path proxies.
 
-**API v2** (`internal/api/v2`). A thin facade plus one subpackage per domain (analytics, detections, species, media, settings, system, weather, notifications, alerts, models, imports, support, and others) on shared `apicore` and `dto` packages. Each domain exposes a `Handler` with `RegisterRoutes`. The dependency direction is one-way: domains import `apicore`, `apicore` imports no domain, and a test enforces it. The endpoint catalog is [`internal/api/v2/README.md`](internal/api/v2/README.md); the recipe for adding endpoints is [`internal/api/v2/AGENTS.md`](internal/api/v2/AGENTS.md). Group-level middleware adds panic recovery, tunnel detection, a body limit, logging and private-mode gating.
+**API v2** (`internal/api/v2`). A thin facade plus one subpackage per domain (analytics, detections, species, media, settings, system, weather, notifications, alerts, models, imports, support, and others) on shared `apicore` and `dto` packages. Each domain exposes a `Handler` with `RegisterRoutes`. The dependency direction is one-way: domains import `apicore`, `apicore` imports no domain, and a test enforces it. The endpoint catalog is [`internal/api/v2/README.md`](../internal/api/v2/README.md); the recipe for adding endpoints is [`internal/api/v2/AGENTS.md`](../internal/api/v2/AGENTS.md). Group-level middleware adds panic recovery, tunnel detection, a body limit, logging and private-mode gating.
 
 **Real time.** Server-Sent Events carry detections, sound levels, notifications, audio levels, stream health, system metrics and long-running job progress (imports, model installs). Live listening is HLS (`go-hls`) with tokenized playlists. The only WebSocket is the optional browser terminal, off unless `webserver.enableterminal` is set.
 
-**Other endpoints on the server:** `/health`, pprof (off unless profiling is enabled, see [`doc/PROFILING.md`](doc/PROFILING.md)), the PWA manifest and service worker, and the OAuth routes. A separate Prometheus listener is optional (`realtime.telemetry`).
+**Other endpoints on the server:** `/health`, pprof (off unless profiling is enabled, see [`doc/PROFILING.md`](PROFILING.md)), the PWA manifest and service worker, and the OAuth routes. A separate Prometheus listener is optional (`realtime.telemetry`).
 
 ---
 
 ## Security
 
-Detail for the authentication package is in [`internal/security/README.md`](internal/security/README.md) and the user-facing [`doc/wiki/security.md`](doc/wiki/security.md).
+Detail for the authentication package is in [`internal/security/README.md`](../internal/security/README.md) and the user-facing [`doc/wiki/security.md`](wiki/security.md).
 
 **Model.** Authentication is binary: a request is authenticated or it is not. There are no roles. When no provider is configured the instance is open.
 
@@ -264,7 +264,7 @@ Each package has its own README where one exists; prefer those for behaviour and
 
 ## Frontend
 
-The UI is a Svelte 5 single-page app (not SvelteKit) with TypeScript, Tailwind CSS v4, Vite and Vitest, in `frontend/`. Component and style rules are in [`frontend/AGENTS.md`](frontend/AGENTS.md) and the nested guides it links.
+The UI is a Svelte 5 single-page app (not SvelteKit) with TypeScript, Tailwind CSS v4, Vite and Vitest, in `frontend/`. Component and style rules are in [`frontend/AGENTS.md`](../frontend/AGENTS.md) and the nested guides it links.
 
 ```
 frontend/src/
@@ -285,7 +285,7 @@ frontend/src/
 - **State.** Rune-based stores for cross-component state, `$state`, `$derived` and `$effect` inside components.
 - **Routing.** `App.svelte` maps `/ui/...` paths to route configs and loads views with dynamic `import()`. The Go server returns the same HTML shell for every UI route.
 - **Real time.** `ReconnectingEventSource` consumers for the SSE streams described above.
-- **i18n.** 16 locales in `frontend/static/messages`, validated with `npm run i18n:validate`; see [`frontend/static/messages/AGENTS.md`](frontend/static/messages/AGENTS.md).
+- **i18n.** 16 locales in `frontend/static/messages`, validated with `npm run i18n:validate`; see [`frontend/static/messages/AGENTS.md`](../frontend/static/messages/AGENTS.md).
 - **Scope.** Desktop and tablet. Phone viewports are out of scope.
 - **Tests.** Vitest unit and component tests, integration and reverse-proxy suites, browser-mode tests, and Playwright end-to-end tests in `frontend/tests/e2e`.
 
@@ -317,19 +317,19 @@ CGO is required for TensorFlow Lite. The frontend is embedded with `//go:embed a
 
 ## Testing and Development Tools
 
-- **Go tests** use testify and run through `task test` with the race detector. Read [`TESTING.md`](TESTING.md) before writing or changing tests, in particular the rules for asynchronous mock expectations.
-- **Mocks** are generated with mockery; see `.mockery.yaml` and [`internal/datastore/mocks/README.md`](internal/datastore/mocks/README.md).
+- **Go tests** use testify and run through `task test` with the race detector. Read [`doc/TESTING.md`](TESTING.md) before writing or changing tests, in particular the rules for asynchronous mock expectations.
+- **Mocks** are generated with mockery; see `.mockery.yaml` and [`internal/datastore/mocks/README.md`](../internal/datastore/mocks/README.md).
 - **Lint.** `task lint` (golangci-lint with custom ruleguard rules in `rules/`), `cd frontend && npm run check:all` for the frontend. A Husky pre-commit hook formats and lints staged files.
 - **CI.** Go tests run through gotestsum with one automatic rerun, and the `test-report` job classifies results as regression, pass with flakes, or pass. A cross-platform build workflow compiles and vets Windows and arm64 targets and the `openvino` tag.
-- **Profiling and debugging.** [`doc/PROFILING.md`](doc/PROFILING.md), [`doc/DEBUG-COLLECTION.md`](doc/DEBUG-COLLECTION.md).
+- **Profiling and debugging.** [`doc/PROFILING.md`](PROFILING.md), [`doc/DEBUG-COLLECTION.md`](DEBUG-COLLECTION.md).
 
 ---
 
 ## Further Reading
 
-- [`doc/wiki/`](doc/wiki/): user-facing documentation, including `detection-pipeline.md`, `configuration-reference.md`, `security.md` and `building.md`.
-- [`internal/api/v2/README.md`](internal/api/v2/README.md): API endpoint catalog.
-- [`internal/datastore/AGENTS.md`](internal/datastore/AGENTS.md): datastore rules and the migration direction.
-- [`internal/classifier/README.md`](internal/classifier/README.md): the orchestrator, model manager and how to add a model.
-- [`internal/analysis/jobqueue/README.md`](internal/analysis/jobqueue/README.md), [`internal/analysis/species/README.md`](internal/analysis/species/README.md), [`internal/notification/README.md`](internal/notification/README.md), [`internal/mqtt/README.md`](internal/mqtt/README.md), [`internal/birdweather/README.md`](internal/birdweather/README.md), [`internal/backup/README.md`](internal/backup/README.md): per-package behaviour.
-- [`internal/events/ARCHITECTURE.md`](internal/events/ARCHITECTURE.md): the async event system in depth.
+- [`doc/wiki/`](wiki): user-facing documentation, including `detection-pipeline.md`, `configuration-reference.md`, `security.md` and `building.md`.
+- [`internal/api/v2/README.md`](../internal/api/v2/README.md): API endpoint catalog.
+- [`internal/datastore/AGENTS.md`](../internal/datastore/AGENTS.md): datastore rules and the migration direction.
+- [`internal/classifier/README.md`](../internal/classifier/README.md): the orchestrator, model manager and how to add a model.
+- [`internal/analysis/jobqueue/README.md`](../internal/analysis/jobqueue/README.md), [`internal/analysis/species/README.md`](../internal/analysis/species/README.md), [`internal/notification/README.md`](../internal/notification/README.md), [`internal/mqtt/README.md`](../internal/mqtt/README.md), [`internal/birdweather/README.md`](../internal/birdweather/README.md), [`internal/backup/README.md`](../internal/backup/README.md): per-package behaviour.
+- [`internal/events/ARCHITECTURE.md`](../internal/events/ARCHITECTURE.md): the async event system in depth.

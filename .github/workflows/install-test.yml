@@ -4,19 +4,19 @@ on:
   push:
     branches: [main]
     paths:
-      - 'install.sh'
-      - 'podman-install.sh'
-      - 'Podman/quadlet/birdnet-go.container'
-      - 'Podman/quadlet/birdnet-go-autotls.container'
+      - 'scripts/install.sh'
+      - 'scripts/podman-install.sh'
+      - 'deployment/podman/quadlet/birdnet-go.container'
+      - 'deployment/podman/quadlet/birdnet-go-autotls.container'
       - 'scripts/install_test.sh'
       - 'internal/conf/config.yaml'
       - '.github/workflows/install-test.yml'
   pull_request:
     paths:
-      - 'install.sh'
-      - 'podman-install.sh'
-      - 'Podman/quadlet/birdnet-go.container'
-      - 'Podman/quadlet/birdnet-go-autotls.container'
+      - 'scripts/install.sh'
+      - 'scripts/podman-install.sh'
+      - 'deployment/podman/quadlet/birdnet-go.container'
+      - 'deployment/podman/quadlet/birdnet-go-autotls.container'
       - 'scripts/install_test.sh'
       - 'internal/conf/config.yaml'
       - '.github/workflows/install-test.yml'
@@ -46,7 +46,7 @@ jobs:
         # SC2155 style warnings in install.sh are tracked separately and not part of this PR.
         run: |
           shellcheck --version
-          shellcheck -S error install.sh podman-install.sh
+          shellcheck -S error scripts/install.sh scripts/podman-install.sh
           shellcheck -S warning scripts/install_test.sh
 
       - name: Run installer helper unit tests

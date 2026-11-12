@@ -201,7 +201,7 @@ it is not supported either. This is a standing maintainer decision.
    still read it, and say so in a comment.
 4. Write tests against the real v2 repository (SQLite in a temp directory); MySQL
    behavior goes through the existing testcontainer suites. Use testify and read
-   `TESTING.md`.
+   `doc/TESTING.md`.
 5. If an interface changed, regenerate the mocks with `go generate
 ./internal/datastore`. Never edit generated mocks by hand.
 

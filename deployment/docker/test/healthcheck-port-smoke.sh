@@ -2,7 +2,7 @@
 #
 # Smoke test: the image HEALTHCHECK must follow BIRDNET_WEBSERVER_PORT.
 #
-# Host-networking deployments (Docker/docker-compose.host.yml, the Unraid host
+# Host-networking deployments (deployment/docker/docker-compose.host.yml, the Unraid host
 # template) set the web port through BIRDNET_WEBSERVER_PORT instead of a port
 # mapping. The health check must then probe that port (and the app's HTTPS
 # port), and must not fall back to 8080 or 443, where under host networking
@@ -13,7 +13,7 @@
 # through docker exec, so it checks exactly what Docker runs, without waiting
 # for the 30 s health interval.
 #
-# Usage: Docker/test/healthcheck-port-smoke.sh <image-ref>
+# Usage: deployment/docker/test/healthcheck-port-smoke.sh <image-ref>
 #
 # Environment notes: same as arbitrary-uid-smoke.sh (arbitrary UID, tmpfs
 # /config and /data, /data >= 1 GB for the entrypoint preflight).
