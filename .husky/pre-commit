@@ -16,7 +16,7 @@ GO_FILES=$(git diff --cached --name-only --diff-filter=ACMR | \
 if [ -n "$GO_FILES" ]; then
   echo "📝 Go files detected in commit, running golangci-lint..."
   
-  # The golangci-lint version .golangci.yaml is written for; keep in sync with
+  # The golangci-lint version .config/golangci.yaml is written for; keep in sync with
   # GOLANGCI_LINT_VERSION in Taskfile.yml, which lists every copy.
   GOLANGCI_LINT_VERSION="2.15.0"
   GOLANGCI_LINT_INSTALL="curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b \$(go env GOPATH)/bin v$GOLANGCI_LINT_VERSION"
@@ -76,8 +76,8 @@ if [ -n "$GO_FILES" ]; then
   export CGO_LDFLAGS="-L$LIB_DIR -ltensorflowlite_c"
   echo "   Linting Go files..."
   # GOROOT lets revive's type-aware rules find the standard library (see the
-  # revive settings in .golangci.yaml). It is scoped to this command only.
-  if ! GOROOT="$(go env GOROOT)" golangci-lint run -v --build-tags=noembed,skipfrontend; then
+  # revive settings in .config/golangci.yaml). It is scoped to this command only.
+  if ! GOROOT="$(go env GOROOT)" golangci-lint run --config .config/golangci.yaml -v --build-tags=noembed,skipfrontend; then
     echo "❌ golangci-lint found issues in Go files"
     if [ "$LOCAL_LINT_VERSION" != "$GOLANGCI_LINT_VERSION" ]; then
       echo "⚠️  This may be the golangci-lint version mismatch (${LOCAL_LINT_VERSION:-unknown version} installed, $GOLANGCI_LINT_VERSION expected), not your code"

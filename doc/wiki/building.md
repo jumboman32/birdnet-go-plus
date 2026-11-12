@@ -20,7 +20,7 @@ For development work within VSCode, using the provided [devcontainer](https://co
 
 - All Go, CGO, TensorFlow, ONNX Runtime, and FFmpeg dependencies are pre-installed.
 - Your source code is mounted into the container.
-- An `air` development server ([`.air.toml`](../../.air.toml)) is automatically started. It watches for code changes (`.go`, `.html`, `.css`, `.js`, etc.) and triggers:
+- An `air` development server ([`.config/air.toml`](../../.config/air.toml)) is automatically started. It watches for code changes (`.go`, `.html`, `.css`, `.js`, etc.) and triggers:
   - Tailwind CSS recompilation.
   - Go application rebuild.
   - Live reload of the running application.
@@ -134,9 +134,9 @@ If you prefer local development with automatic rebuilding and restarting on chan
 3.  Prepare dependencies (TensorFlow headers/library) by running a build task once (e.g., `task build`).
 4.  Start the `air` server:
     ```bash
-    air
+    air -c .config/air.toml realtime
     ```
-    `air` will use the configuration in [`.air.toml`](../../.air.toml) to watch files, recompile Tailwind CSS, rebuild the Go binary, and restart the server on changes.
+    `air` will use the configuration in [`.config/air.toml`](../../.config/air.toml) to watch files, recompile Tailwind CSS, rebuild the Go binary, and restart the server on changes.
 
 ### 6. Regenerating Generated Documentation
 

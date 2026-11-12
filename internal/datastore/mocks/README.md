@@ -198,7 +198,7 @@ These mocks are for non-datastore interfaces and remain unchanged:
 Mock generation is configured in:
 
 - **Go generate directive**: `internal/datastore/interfaces.go:4`
-- **Global config**: `.mockery.yaml`
+- **Global config**: `.config/mockery.yaml`
 
 ## 📖 Resources
 

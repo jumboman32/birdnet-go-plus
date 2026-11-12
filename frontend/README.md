@@ -8,13 +8,13 @@ The UI targets desktop and tablet only. Phone layouts are out of scope and are n
 
 Run the commands from the repository root with [Task](https://taskfile.dev). Task installs the npm dependencies on demand (`task frontend-install`).
 
-| Command               | Purpose                                                                                |
-| --------------------- | -------------------------------------------------------------------------------------- |
-| `task frontend-watch` | Rebuild `frontend/dist` on every change (`vite build --watch`)                         |
-| `task dev_server`     | Run the Go backend with hot reload through `air` (see `.air.toml`), with Go files only |
-| `task frontend-dev`   | Start the Vite dev server with HMR on port 5173                                        |
-| `task frontend-build` | Type-check and build the production bundle                                             |
-| `task dev`            | Print the development workflow options                                                 |
+| Command               | Purpose                                                                                       |
+| --------------------- | --------------------------------------------------------------------------------------------- |
+| `task frontend-watch` | Rebuild `frontend/dist` on every change (`vite build --watch`)                                |
+| `task dev_server`     | Run the Go backend with hot reload through `air` (see `.config/air.toml`), with Go files only |
+| `task frontend-dev`   | Start the Vite dev server with HMR on port 5173                                               |
+| `task frontend-build` | Type-check and build the production bundle                                                    |
+| `task dev`            | Print the development workflow options                                                        |
 
 There are two ways to work on the UI:
 

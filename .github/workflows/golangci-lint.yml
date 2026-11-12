@@ -62,7 +62,7 @@ jobs:
           # `task lint` in the Taskfile uses only noembed,skipfrontend, so this lane
           # compiles more files than a plain local lint. To reproduce it locally, run
           # `task lint BASE_BUILD_TAGS=integration,pebble_e2e`.
-          args: --build-tags=integration,pebble_e2e,noembed,skipfrontend --output.checkstyle.path=golangci-lint-report.xml
+          args: --config .config/golangci.yaml --build-tags=integration,pebble_e2e,noembed,skipfrontend --output.checkstyle.path=golangci-lint-report.xml
 
       - name: Generate lint summary
         if: always()

@@ -20,3 +20,9 @@
 - [Release manifest](release-manifest.md)
 
 README screenshots are stored in [`images/`](images/).
+
+## Credits and licenses
+
+- [Contributors and model credits](AUTHORS)
+- [Project license](../LICENSE)
+- [Third-party licenses](../frontend/static/LICENSES.md)

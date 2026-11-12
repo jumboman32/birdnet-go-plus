@@ -195,7 +195,7 @@ Use the following conventions when writing or changing Go tests:
   concurrency; there is no `synctest.Run` in Go 1.27
 - Never use `t.Parallel()` in a test that mutates global state such as
   `conftest.SetTestSettings()`
-- Generated mocks only (`.mockery.yaml` plus `go generate ./internal/datastore`);
+- Generated mocks only (`.config/mockery.yaml` plus `go generate ./internal/datastore`);
   `.Maybe()` only for incidental calls, never for the behaviour under test
 - Test-only helpers go in `*_test.go` files; helpers shared across packages go in
   a test-support package (`internal/conf/conftest`, `internal/api/v2/apitest`,
@@ -203,7 +203,7 @@ Use the following conventions when writing or changing Go tests:
 
 ## Linting
 
-Config: `.golangci.yaml` (golangci-lint v2 format).
+Config: `.config/golangci.yaml` (golangci-lint v2 format).
 
 - Always lint the **whole module** (`task lint`; see the root `AGENTS.md` for
   running a step by hand), never single files or packages; partial runs miss

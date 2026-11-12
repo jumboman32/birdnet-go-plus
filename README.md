@@ -33,6 +33,10 @@ The calendar uses a private local eBird import and refreshes automatically when 
 
 ## Repository layout
 
+- [Tool configuration](.config/README.md): development server, linting, mocks, and changelog settings.
+
+- [Tool configuration](.config/README.md): development server, linting, mocks, and changelog settings.
+
 - `frontend/`: Svelte web interface.
 - `internal/` and `cmd/`: Go backend and command-line code.
 - [deployment/](deployment/README.md): Docker, Podman, and release-package instructions.
