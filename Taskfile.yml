@@ -5,7 +5,7 @@ vars:
   BINARY_NAME: birdnet-go
   TFLITE_VERSION: v2.17.1
   ONNXRUNTIME_VERSION: '1.31.1'
-  # golangci-lint version .golangci.yaml is written for; keep in sync with
+  # golangci-lint version .config/golangci.yaml is written for; keep in sync with
   # .github/workflows/golangci-lint.yml, .husky/pre-commit and
   # .devcontainer/postCreateCommand.sh;
   # .github/workflows/golangci-lint-version.yml fails when they differ.
@@ -173,9 +173,9 @@ tasks:
         fi
         # Use noembed,skipfrontend tags to skip model and frontend embedding for faster linting.
         # GOROOT lets revive's type-aware rules find the standard library (see
-        # the revive settings in .golangci.yaml).
+        # the revive settings in .config/golangci.yaml).
         {{.CGO_FLAGS}} CGO_LDFLAGS="-L${LIB_DIR} -ltensorflowlite_c" GOROOT="$(go env GOROOT)" \
-        golangci-lint run --build-tags=noembed,skipfrontend{{if .BASE_BUILD_TAGS}},{{.BASE_BUILD_TAGS}}{{end}} {{.CLI_ARGS}}
+        golangci-lint run --config .config/golangci.yaml --build-tags=noembed,skipfrontend{{if .BASE_BUILD_TAGS}},{{.BASE_BUILD_TAGS}}{{end}} {{.CLI_ARGS}}
     vars:
       CLI_ARGS: '{{default "-v" .CLI_ARGS}}'
 
@@ -372,7 +372,7 @@ tasks:
         echo "⚠️  If Go was just installed, run: source ~/.profile"
         echo ""
         echo "Start developing:"
-        echo "  air realtime       # Hot reload dev server (or: task dev_server)"
+        echo "  air -c .config/air.toml realtime       # Hot reload dev server (or: task dev_server)"
         echo ""
 
   detect-and-install-deps:
@@ -980,7 +980,7 @@ tasks:
 
   dev_server:
     cmds:
-      - air realtime
+      - air -c .config/air.toml realtime
 
   # Frontend build tasks
   frontend-install:
@@ -1076,7 +1076,7 @@ tasks:
         echo "Option 1: Watch Mode (recommended for most development)"
         echo "==========================================================="
         echo "Terminal 1: task frontend-watch    # Auto-rebuilds on file changes"
-        echo "Terminal 2: ./bin/birdnet-go realtime  # Or: air realtime (for Go changes)"
+        echo "Terminal 2: ./bin/birdnet-go realtime  # Or: air -c .config/air.toml realtime (for Go changes)"
         echo "Access: http://localhost:8080"
         echo ""
         echo "Option 2: Vite Dev Server (for HMR - instant updates)"
@@ -1088,12 +1088,12 @@ tasks:
         echo "Option 3: Backend-only development (Go changes)"
         echo "==========================================================="
         echo "Terminal 1: task frontend-watch    # Keep frontend fresh"
-        echo "Terminal 2: air realtime           # Auto-rebuilds Go on changes"
+        echo "Terminal 2: air -c .config/air.toml realtime           # Auto-rebuilds Go on changes"
         echo "Access: http://localhost:8080"
         echo ""
         echo "Quick Start:"
         echo "  task frontend-watch  # In one terminal"
-        echo "  air realtime         # In another terminal"
+        echo "  air -c .config/air.toml realtime         # In another terminal"
         echo ""
 
   frontend-lint:
@@ -1130,7 +1130,7 @@ tasks:
   integration-backend:
     desc: Start backend for integration testing (air with hot reload)
     cmds:
-      - air realtime
+      - air -c .config/air.toml realtime
 
   integration-test:
     desc: Run frontend integration tests (backend must be running)

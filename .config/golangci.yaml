@@ -1,5 +1,6 @@
 version: "2"
 run:
+  relative-path-mode: gomod
   # Let several golangci-lint runs (task lint, the pre-commit hook, editor
   # integrations) work at the same time instead of failing with "parallel
   # golangci-lint is running".
@@ -125,7 +126,7 @@ linters:
         - performance
       settings:
         ruleguard:
-          rules: "rules/*.go"
+          rules: "${base-path}/rules/*.go"
     revive:
       # An explicit rules list replaces revive's defaults, so every rule that
       # should run is listed here. This is revive's default set minus the rules
@@ -138,7 +139,7 @@ linters:
       # is built with -trimpath, so the type-aware rules (time-naming and parts
       # of errorf, var-declaration and context-keys-type) only report when
       # GOROOT is set. `task lint`, the pre-commit hook and CI all set it; a
-      # bare `golangci-lint run` should be prefixed with GOROOT="$(go env GOROOT)".
+      # direct `golangci-lint run --config .config/golangci.yaml` should be prefixed with GOROOT="$(go env GOROOT)".
       # The result cache ignores GOROOT, so after a run without it, run
       # `golangci-lint cache clean` before trusting a clean result.
       rules:

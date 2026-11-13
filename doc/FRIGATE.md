@@ -199,23 +199,9 @@ Implementation files:
   the new table entries in [Database Doctor](wiki/database-doctor.md),
   [API catalog](../internal/api/v2/README.md), and this guide.
 
-Validation in this workspace (November 13, 2026): `task lint` completed with zero
-issues; `task test` completed successfully with race detection on Linux/amd64
-under WSL and the default build tags. Focused mock-Frigate and real SQLite
-correlation tests passed. Frontend `npm run check:all` passed (28 existing ESLint
-warnings), both targeted settings suites passed all 13 tests, and both translation
-validation commands passed. Changed Markdown was formatted and local links checked.
-
-`task setup-dev` was attempted but stopped at unavailable sudo authentication;
-the existing Go 1.27.2 toolchain and native libraries supported the checks.
-Two existing hash/golden fixtures were restored locally from CRLF to their exact
-committed LF bytes for verification, leaving no fixture content changes. A native
-Windows build was deployed locally and connected to Frigate's loopback API.
-MySQL/MariaDB container suites, macOS, and optional build tags were not verified.
-
 ## Live cameras
 
-Open **Live cameras** in the desktop sidebar (`/ui/cameras`) to watch a selected
+When the integration is enabled, open **Live Cameras** in the desktop sidebar (`/ui/cameras`) to watch a selected
 Frigate camera with detection boxes. This view is video only; BirdNET-Go+ continues
 to analyze audio separately. Pause releases the video connection. Hidden tabs stop
 streaming and status polling; visible tabs reconnect automatically.

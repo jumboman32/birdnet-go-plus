@@ -109,8 +109,6 @@ jobs:
             echo "" >> frontend/static/LICENSES.md
           done
 
-          # Create a symbolic link in root directory
-          ln -sf frontend/static/LICENSES.md LICENSES.md
 
       - name: Format LICENSES.md
         working-directory: frontend
@@ -124,7 +122,7 @@ jobs:
           commit-message: 'docs: update dependency licenses'
           title: 'Update dependency licenses'
           body: |
-            Automatically updated LICENSES.md with current dependency licenses.
+            Automatically updated frontend/static/LICENSES.md with current dependency licenses.
 
             This PR was created automatically by the update-licenses workflow.
 

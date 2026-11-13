@@ -1,14 +1,14 @@
 // interfaces.go: this code defines the interface for the database operations
 package datastore
 
-//go:generate mockery
+//go:generate mockery --config ../../.config/mockery.yaml
 
 // IMPORTANT: When the Interface definition in this file changes:
 // 1. DO NOT manually edit mock files
 // 2. Run: go generate ./internal/datastore
 // 3. The mockery tool will automatically regenerate all mocks
 // 4. Generated mocks are in: internal/datastore/mocks/
-// 5. Configuration is in: .mockery.yaml at project root
+// 5. Configuration is in: .config/mockery.yaml
 //
 // This saves significant manual work and ensures mocks stay in sync with interfaces.
 

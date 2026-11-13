@@ -12,7 +12,7 @@ on:
   pull_request:
     paths:
       - 'Taskfile.yml'
-      - '.air.toml'
+      - '.config/air.toml'
       - 'Dockerfile'
       - '.github/workflows/**'
       - '.github/actions/**'
@@ -22,7 +22,7 @@ on:
       - main
     paths:
       - 'Taskfile.yml'
-      - '.air.toml'
+      - '.config/air.toml'
       - 'Dockerfile'
       - '.github/workflows/**'
       - '.github/actions/**'

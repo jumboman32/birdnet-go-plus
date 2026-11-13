@@ -39,8 +39,8 @@ When the `Interface` changes, regenerate mocks:
 go generate ./internal/datastore
 ```
 
-Use the mockery version named in `doc/TESTING.md` ("Mock Generation with mockery");
-older versions fail on the current Go release.
+Use the mockery version recorded in the generated file headers;
+older versions may not support the current Go release.
 
 **IMPORTANT**: Never manually edit files in this directory. They are auto-generated.
 
@@ -198,7 +198,7 @@ These mocks are for non-datastore interfaces and remain unchanged:
 Mock generation is configured in:
 
 - **Go generate directive**: `internal/datastore/interfaces.go:4`
-- **Global config**: `.mockery.yaml`
+- **Global config**: `.config/mockery.yaml`
 
 ## 📖 Resources
 
@@ -207,4 +207,4 @@ Mock generation is configured in:
 
 ---
 
-**Mockery Version**: named in each generated file's header; see `doc/TESTING.md` for the version to regenerate with
+**Mockery Version**: named in each generated file's header; use the package's `go:generate` directive to regenerate

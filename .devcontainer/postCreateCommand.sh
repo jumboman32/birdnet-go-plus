@@ -105,7 +105,7 @@ go install github.com/air-verse/air@latest
 # Pin to the v2 module path and the same version CI uses (.github/workflows/golangci-lint.yml,
 # GOLANGCI_LINT_VERSION in Taskfile.yml, .husky/pre-commit).
 # The legacy v1 path (github.com/golangci/golangci-lint/cmd/golangci-lint) installs golangci-lint v1,
-# which cannot read this project's v2 .golangci.yaml config.
+# which cannot read this project's v2 .config/golangci.yaml config.
 go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0
 go install golang.org/x/tools/gopls@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
@@ -152,13 +152,13 @@ echo "ast-grep available via 'npx ast-grep' or 'npm run ast:*' commands"
 
 # Verify Go linter configuration
 echo "Verifying Go linting setup..."
-if [ -f .golangci.yaml ]; then
+if [ -f .config/golangci.yaml ]; then
     echo "✓ golangci-lint configuration found"
     golangci-lint --version
     # Test configuration (but don't fail on lint errors)
-    golangci-lint config path || echo "Warning: golangci-lint config validation failed"
+    golangci-lint config verify --config .config/golangci.yaml || echo "Warning: golangci-lint config validation failed"
 else
-    echo "Warning: No .golangci.yaml found"
+    echo "Warning: No .config/golangci.yaml found"
 fi
 
 # Verify frontend linting setup
@@ -240,8 +240,8 @@ echo "  - task frontend-quality    (before frontend commits)"
 echo ""
 echo "=== Available Development Commands ==="
 echo "Development servers:"
-echo "  - air realtime             (start Go server - frontend already built!)"
-echo "  - task dev_server          (same as 'air realtime')"
+echo "  - air -c .config/air.toml realtime             (start Go server - frontend already built!)"
+echo "  - task dev_server          (same as 'air -c .config/air.toml realtime')"
 echo ""
 echo "Frontend development (optional):"
 echo "  - task frontend-watch      (watch mode: auto-rebuilds frontend on changes)"
@@ -269,7 +269,7 @@ echo "✅ Development environment setup complete!"
 echo ""
 echo "Quick Start:"
 echo "   1. Open a terminal: Ctrl+Shift+\` or Terminal → New Terminal"
-echo "   2. Start server: air realtime  (or: task dev_server)"
+echo "   2. Start server: air -c .config/air.toml realtime  (or: task dev_server)"
 echo "   3. Open browser: http://localhost:8080"
 echo ""
 echo "For active frontend development, use 'task frontend-watch' in a separate terminal"

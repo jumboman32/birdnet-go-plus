@@ -1,9 +1,8 @@
 # Go Coding Standards
 
 Applies to all Go code in the repository (`internal/`, `cmd/`, `main.go`, and the
-ruleguard rules in `rules/`). Read
-`doc/TESTING.md` before writing tests and `internal/errors/AGENTS.md` before adding
-error handling.
+ruleguard rules in `rules/`). Read the Testing section below before writing
+tests and `internal/errors/AGENTS.md` before adding error handling.
 
 ## Quick Reference
 
@@ -189,19 +188,14 @@ touching anything under `internal/datastore/` or adding a database write.
 
 ## Testing
 
-`doc/TESTING.md` is the full reference for Go tests: testify usage, table-driven
-tests, `testing/synctest`, goroutine-leak checks, mocks (mockery and `.Maybe()`),
-cleanup and parallelism. Read it before writing or changing a test. The rules
-most often missed:
+Use the following conventions when writing or changing Go tests:
 
 - testify `assert`/`require` for all assertions (`testifylint` enforces idioms)
 - `testing/synctest` (`synctest.Test`) instead of `time.Sleep()` for timing and
   concurrency; there is no `synctest.Run` in Go 1.27
-- Isolation, temporary directories and `t.Parallel()` rules are in
-  `doc/TESTING.md` ("Isolation and Parallelism"); the one most often broken: never
-  `t.Parallel()` a test that mutates global state such as
+- Never use `t.Parallel()` in a test that mutates global state such as
   `conftest.SetTestSettings()`
-- Generated mocks only (`.mockery.yaml` plus `go generate ./internal/datastore`);
+- Generated mocks only (`.config/mockery.yaml` plus `go generate ./internal/datastore`);
   `.Maybe()` only for incidental calls, never for the behaviour under test
 - Test-only helpers go in `*_test.go` files; helpers shared across packages go in
   a test-support package (`internal/conf/conftest`, `internal/api/v2/apitest`,
@@ -209,7 +203,7 @@ most often missed:
 
 ## Linting
 
-Config: `.golangci.yaml` (golangci-lint v2 format).
+Config: `.config/golangci.yaml` (golangci-lint v2 format).
 
 - Always lint the **whole module** (`task lint`; see the root `AGENTS.md` for
   running a step by hand), never single files or packages; partial runs miss

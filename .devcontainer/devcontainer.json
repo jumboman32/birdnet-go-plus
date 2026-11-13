@@ -63,12 +63,12 @@
 				"ms-vscode.vscode-github-copilot-extension-pack"
 			],
 			"settings": {
-				// Go settings aligned with .golangci.yaml
+				// Go settings aligned with .config/golangci.yaml
 				"go.toolsManagement.checkForUpdates": "local",
 				"go.useLanguageServer": true,
 				"go.formatTool": "goimports",
 				"go.lintTool": "golangci-lint",
-				"go.lintFlags": ["-v", "--config", ".golangci.yaml"],
+				"go.lintFlags": ["-v", "--config", ".config/golangci.yaml"],
 				"go.vetFlags": ["-all"],
 				"go.buildTags": "",
 				"go.testFlags": ["-race"],
@@ -133,7 +133,7 @@
 				// File associations and validation
 				"files.associations": {
 					"*.svelte": "svelte",
-					".golangci.yaml": "yaml",
+					".config/golangci.yaml": "yaml",
 					".golangci.yml": "yaml"
 				},
 				
