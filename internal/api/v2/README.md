@@ -62,6 +62,17 @@ routeInitializers := []struct {
 
 ## Complete API Endpoints
 
+### Frigate visual observations
+
+The authenticated Frigate integration adds `GET /integrations/frigate/status`,
+`POST /integrations/frigate/test`, `GET /integrations/frigate/cameras`,
+`GET /integrations/frigate/cameras/:camera/live`, `GET /visual-detections`,
+`GET /visual-detections/summary`, `GET /visual-detections/:id`,
+`GET /visual-detections/:id/snapshot`, and `GET /visual-detections/:id/correlations`.
+All paths use the `/api/v2` prefix. Visual storage requires v2 repositories.
+See the [Frigate guide](../../../doc/FRIGATE.md#api-v2) for request parameters,
+response shapes, authentication, configuration, and media/correlation semantics.
+
 ### Core API (`api.go`)
 
 | Method | Route     | Handler       | Auth | Description                    |

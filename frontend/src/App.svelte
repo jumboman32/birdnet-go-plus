@@ -73,6 +73,7 @@
   let ErrorPage = $state<Component | null>(null);
   let ServerErrorPage = $state<Component | null>(null);
   let LiveStream = $state<Component | null>(null);
+  let CameraLive = $state<Component | null>(null);
   let GenericErrorPage = $state<typeof GenericErrorPageComponent | null>(null);
 
   let currentRoute = $state<string>('');
@@ -146,6 +147,7 @@
   }
 
   const routeConfigs: RouteConfig[] = [
+    { route: 'cameras', page: 'cameras', titleKey: 'cameraLive.title', component: 'cameras' },
     { route: 'login', page: 'login', titleKey: 'auth.loginTitle', component: '' },
     { route: 'dashboard', page: 'dashboard', titleKey: 'navigation.dashboard', component: '' },
     { route: 'calendar', page: 'calendar', titleKey: 'calendar.title', component: 'calendar' },
@@ -267,6 +269,13 @@
 
     try {
       switch (route) {
+        case 'cameras':
+          if (!CameraLive) {
+            const module =
+              await import('./lib/desktop/features/live-stream/pages/CameraLivePage.svelte');
+            CameraLive = module.default;
+          }
+          break;
         case 'live-stream':
           if (!LiveStream) {
             const module =
@@ -461,6 +470,7 @@
     [uiPath('calendar')]: findRouteConfig('calendar'),
     [uiPath('login')]: findRouteConfig('login'),
     [uiPath('live-stream')]: findRouteConfig('live-stream'),
+    [uiPath('cameras')]: findRouteConfig('cameras'),
     [uiPath('notifications')]: findRouteConfig('notifications'),
     // Fallbacks if handleRouting's redirect does not fire (e.g. an aggressive
     // sub_filter proxy rewrite that corrupts the literal path before handleRouting
@@ -828,6 +838,8 @@
   >
     {#if currentRoute === 'dashboard'}
       <DashboardPage />
+    {:else if currentRoute === 'cameras'}
+      {@render renderRoute(CameraLive)}
     {:else if currentRoute === 'live-stream'}
       {@render renderRoute(LiveStream)}
     {:else if currentRoute === 'notifications'}

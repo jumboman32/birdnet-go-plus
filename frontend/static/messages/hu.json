@@ -3553,6 +3553,23 @@
           "inProgress": "Teszt folyamatban...",
           "description": "eBird API kapcsolat és hitelesítés tesztelése"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigate-cím",
+        "cameras": "Kamerák (vesszővel elválasztva)",
+        "pollInterval": "Lekérdezési időköz (másodperc)",
+        "requestTimeout": "Kérés időkorlátja (másodperc)",
+        "maxAttempts": "Próbálkozások maximális száma",
+        "initialHistoryHours": "Kezdeti előzmények (óra)",
+        "overlapSeconds": "Frissítési átfedés (másodperc)",
+        "classificationThreshold": "Minimális osztályozási bizonyosság",
+        "correlationWindow": "Hangkorreláció időablaka (másodperc)",
+        "snapshotRetentionHours": "Pillanatképek megőrzése (óra)",
+        "snapshotImport": "Pillanatképek importálása igény szerint",
+        "test": "Kapcsolat tesztelése",
+        "connected": "Sikeres kapcsolódás a Frigate-hez",
+        "savedTest": "A teszt előtt mentse a beállításokat. A teszt a mentett kapcsolatot használja.",
+        "help": "Vizuális madármegfigyeléseket importál a v2 adatbázisba. A hitelesítési adatokat a kiszolgáló YAML-fájljában állítsa be; ezek nem jutnak el a böngészőhöz."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Minden faj",
     "caveat": "Az észlelés hiánya nem bizonyítja a távollétet. Az észlelési napok nem mérik a hallgatási időt. A naptár dátumozott pillanatkép.",
     "snapshot": "Pillanatkép: {date}"
+  },
+  "cameraLive": {
+    "title": "Élő kamerák",
+    "description": "Élő videó a Frigate-ből észlelési keretekkel.",
+    "camera": "Kamera",
+    "live": "Élő",
+    "connecting": "Kapcsolódás a kamerához...",
+    "offline": "A kamera nem érhető el",
+    "offlineHelp": "Indítsa el a kamera adatfolyamát a Frigate-ben az élő videóhoz.",
+    "disabled": "Engedélyezze és állítsa be a Frigate-et a kamerák megtekintéséhez.",
+    "empty": "Válasszon legalább egy kamerát a Frigate beállításaiban.",
+    "settings": "Frigate-beállítások",
+    "unavailable": "Az élő adatfolyam megszakadt. Automatikus újrapróbálkozás.",
+    "paused": "Élő nézet szüneteltetve",
+    "pause": "Élő nézet szüneteltetése",
+    "resume": "Élő nézet folytatása",
+    "videoOnly": "Csak videó",
+    "recentObservations": "Legutóbbi kamerás megfigyelések",
+    "noObservations": "Még nincs importált kamerás megfigyelés.",
+    "observedAt": "Megfigyelés ideje",
+    "species": "Faj",
+    "objectConfidence": "Madárfelismerés bizonyossága",
+    "speciesConfidence": "Fajfelismerés bizonyossága",
+    "snapshot": "Pillanatkép",
+    "connectionError": "A Frigate nem érhető el. Ellenőrizze az API URL-jét és a HTTP/HTTPS protokollt a Frigate beállításaiban.",
+    "observationsError": "A mentett kamerás megfigyelések nem tölthetők be. Automatikus újrapróbálkozás.",
+    "sourceType": "Észlelés forrása",
+    "allSources": "Minden forrás",
+    "audioSource": "Hang"
   }
 }

@@ -3553,6 +3553,23 @@
           "inProgress": "Test w toku...",
           "description": "Testuj łączność i uwierzytelnianie API eBird"
         }
+      },
+      "frigate": {
+        "baseURL": "Adres Frigate",
+        "cameras": "Kamery (rozdzielone przecinkami)",
+        "pollInterval": "Odstęp odpytywania (sekundy)",
+        "requestTimeout": "Limit czasu żądania (sekundy)",
+        "maxAttempts": "Maksymalna liczba prób",
+        "initialHistoryHours": "Początkowa historia (godziny)",
+        "overlapSeconds": "Nakładanie aktualizacji (sekundy)",
+        "classificationThreshold": "Minimalna pewność klasyfikacji",
+        "correlationWindow": "Okno korelacji dźwięku (sekundy)",
+        "snapshotRetentionHours": "Przechowywanie migawek (godziny)",
+        "snapshotImport": "Importuj migawki na żądanie",
+        "test": "Testuj połączenie",
+        "connected": "Połączenie z Frigate powiodło się",
+        "savedTest": "Zapisz ustawienia przed testem. Test używa zapisanego połączenia.",
+        "help": "Importuje wizualne obserwacje ptaków do bazy v2. Dane uwierzytelniające skonfiguruj w pliku YAML serwera; nigdy nie są wysyłane do przeglądarki."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Wszystkie gatunki",
     "caveat": "Brak wykrycia nie dowodzi nieobecności. Dni z wykryciami nie mierzą czasu nasłuchu. Kalendarz jest datowanym obrazem danych.",
     "snapshot": "Stan danych: {date}"
+  },
+  "cameraLive": {
+    "title": "Kamery na żywo",
+    "description": "Obraz na żywo z Frigate z ramkami wykrywania.",
+    "camera": "Kamera",
+    "live": "Na żywo",
+    "connecting": "Łączenie z kamerą...",
+    "offline": "Kamera jest offline",
+    "offlineHelp": "Uruchom strumień kamery w Frigate, aby zobaczyć obraz na żywo.",
+    "disabled": "Włącz i skonfiguruj Frigate, aby wyświetlić kamery.",
+    "empty": "Wybierz co najmniej jedną kamerę w ustawieniach Frigate.",
+    "settings": "Ustawienia Frigate",
+    "unavailable": "Strumień na żywo został rozłączony. Automatyczna ponowna próba.",
+    "paused": "Podgląd na żywo wstrzymany",
+    "pause": "Wstrzymaj podgląd na żywo",
+    "resume": "Wznów podgląd na żywo",
+    "videoOnly": "Tylko wideo",
+    "recentObservations": "Ostatnie obserwacje z kamery",
+    "noObservations": "Nie zaimportowano jeszcze obserwacji z kamery.",
+    "observedAt": "Czas obserwacji",
+    "species": "Gatunek",
+    "objectConfidence": "Pewność wykrycia ptaka",
+    "speciesConfidence": "Pewność rozpoznania gatunku",
+    "snapshot": "Migawka",
+    "connectionError": "Nie można połączyć się z Frigate. Sprawdź adres API i protokół HTTP/HTTPS w ustawieniach Frigate.",
+    "observationsError": "Nie można wczytać zapisanych obserwacji. Próba zostanie ponowiona automatycznie.",
+    "sourceType": "Źródło wykrycia",
+    "allSources": "Wszystkie źródła",
+    "audioSource": "Dźwięk"
   }
 }

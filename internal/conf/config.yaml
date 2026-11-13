@@ -306,6 +306,24 @@ realtime:
       apikey: ""        # Pirate Weather API key
       endpoint: "https://api.pirateweather.net/forecast" # Pirate Weather API endpoint
 
+  # Frigate camera observations are separate from audio detections (v2 database only).
+  frigate:
+    enabled: false
+    baseurl: ""            # Example: http://frigate:5000 (reachable from BirdNET)
+    username: ""           # Native Frigate login; server-only
+    password: ""           # Server-only, never returned through the API
+    token: ""              # Optional existing frigate_token instead of login
+    cameras: [feeder]
+    pollinterval: 20       # Seconds
+    snapshotimport: false  # Download/cache images only when requested
+    initialhistoryhours: 24
+    requesttimeout: 10     # Seconds per request
+    maxattempts: 3
+    classificationthreshold: 0
+    correlationwindow: 30  # Seconds either side of a visual event start
+    overlapseconds: 3600
+    snapshotretentionhours: 168
+
   mqtt:
     enabled: false        # true to enable MQTT
     debug: false          # true to enable MQTT debug

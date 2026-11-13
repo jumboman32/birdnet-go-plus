@@ -10,6 +10,8 @@ A custom fork of BirdNET-Go with additional tools for exploring local bird and w
 - Weekly bird calendar comparing local eBird history with microphone detections.
 - Regional species checklist tracking lifetime detections against county and state eBird species lists.
 - Recent eBird observations and BirdCast migration context.
+- Native Frigate integration with live cameras, snapshot cards in Recent Detections,
+  and camera observations in Search Detections alongside audio results.
 - eBird and Cornell Compare Calls links in Detection Details.
 - Separate Windows development launcher for testing.
 
@@ -54,7 +56,7 @@ If setup installed Go, reload your shell profile (`source ~/.profile`) before bu
 
 ```bash
 task
-./bin/birdnet-go realtime
+./bin/birdnet-go serve
 ```
 
 Open <http://localhost:8080/ui/dashboard> and configure your location, audio source, and acoustic model in Settings. Keep the working directory for configuration, recordings, and database files.
@@ -62,6 +64,22 @@ Open <http://localhost:8080/ui/dashboard> and configure your location, audio sou
 For a packaged Windows development build, extract the complete package into a separate directory and run `Start-Development.cmd`. Node.js is required. Open <http://localhost:8081/ui/dashboard>; see the [Windows launcher guide](scripts/development/README.md) for details.
 
 The calendar's local eBird dataset is a separate import; see the [eBird profile guide](tools/ebird-profile/README.md). Standard upstream Docker images do not include this fork's changes.
+
+## Frigate cameras
+
+Enable Frigate under **Settings > Integrations > Frigate**, enter the API URL
+reachable from the BirdNET-Go+ server, select cameras, and save. **Live Cameras**
+appears in the sidebar only while the integration is enabled. For a local Frigate
+instance, its trusted internal API commonly uses `http://127.0.0.1:5000`; the scheme
+must match the port. Keep that unauthenticated API restricted to a trusted network.
+
+Bird observations appear in dashboard Recent Detections with their actual snapshots,
+cropped to the same image frame as audio cards. Search Detections defaults to **All
+sources** and also offers **Audio** and **Frigate** filters. Object detection and
+species classification retain separate confidence scores; an unidentified bird stays
+unidentified. Camera observations use the v2 database and do not count as audio
+detections. See the [Frigate guide](doc/FRIGATE.md) for authentication, polling,
+snapshot retention, and configuration details.
 
 Built on the work of the BirdNET-Go contributors.
 

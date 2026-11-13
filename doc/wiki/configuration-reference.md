@@ -1,3 +1,5 @@
+<!-- prettier-ignore-start -->
+
 # Configuration Reference
 
 > Auto-generated from source. Do not edit manually.
@@ -177,6 +179,21 @@ RealtimeSettings contains all settings related to realtime processing.
 
 | Setting | Type | Description |
 |---------|------|-------------|
+| `realtime.frigate.enabled` | boolean |  |
+| `realtime.frigate.baseurl` | string |  |
+| `realtime.frigate.username` | string |  |
+| `realtime.frigate.password` | string |  |
+| `realtime.frigate.token` | string |  |
+| `realtime.frigate.cameras` | string[] |  |
+| `realtime.frigate.pollinterval` | integer |  |
+| `realtime.frigate.snapshotimport` | boolean |  |
+| `realtime.frigate.initialhistoryhours` | integer |  |
+| `realtime.frigate.requesttimeout` | integer |  |
+| `realtime.frigate.maxattempts` | integer |  |
+| `realtime.frigate.classificationthreshold` | number |  |
+| `realtime.frigate.correlationwindow` | integer |  |
+| `realtime.frigate.overlapseconds` | integer |  |
+| `realtime.frigate.snapshotretentionhours` | integer |  |
 | `realtime.interval` | integer | minimum interval between log messages in seconds |
 | `realtime.processingtime` | boolean | true to report processing time for each prediction |
 | `realtime.audio.sources` | audio-source-config[] | Audio capture devices |
@@ -520,3 +537,4 @@ AlertSettings configures the alerting rules engine.
 |---------|------|-------------|
 | `alerting.history_retention_days` | integer | Days to retain alert history (0 = unlimited) |
 
+<!-- prettier-ignore-end -->

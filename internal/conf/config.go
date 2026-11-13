@@ -916,6 +916,7 @@ func (e *ExtendedCaptureSettings) Validate(preCapture int) error {
 
 // RealtimeSettings contains all settings related to realtime processing.
 type RealtimeSettings struct {
+	Frigate             FrigateSettings             `yaml:"frigate" json:"frigate"`                         // Optional visual observations
 	Interval            int                         `yaml:"interval" json:"interval"`                       // minimum interval between log messages in seconds
 	ProcessingTime      bool                        `yaml:"processingtime" json:"processingTime"`           // true to report processing time for each prediction
 	Audio               AudioSettings               `yaml:"audio" json:"audio"`                             // Audio processing settings

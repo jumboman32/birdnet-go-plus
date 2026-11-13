@@ -35,6 +35,7 @@ import (
 	"github.com/tphakala/birdnet-go/internal/api/v2/support"
 	"github.com/tphakala/birdnet-go/internal/api/v2/system"
 	tlsapi "github.com/tphakala/birdnet-go/internal/api/v2/tls"
+	"github.com/tphakala/birdnet-go/internal/api/v2/visual"
 	"github.com/tphakala/birdnet-go/internal/api/v2/weather"
 	"github.com/tphakala/birdnet-go/internal/audiocore"
 	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
@@ -88,6 +89,7 @@ type Controller struct {
 	// settings; the remaining deps (Metrics, Processor, settings accessors, and the
 	// error/log helpers) all promote from the shared *apicore.Core.
 	integrations *integrations.Handler
+	visual       *visual.Handler
 
 	// detections serves the /api/v2/detections/* CRUD/review/lock/ignore/batch
 	// endpoints and POST /api/v2/search. Besides the shared *apicore.Core it holds
@@ -481,6 +483,7 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 	// service during the functional-options loop below (the accessors read c.names
 	// at call time, so the late swap is observed).
 	c.names = speciesindex.New(nil)
+	c.visual = visual.New(c.Core, c.loadNameMaps)
 	c.ownsNames = true
 
 	// Construct domain handlers around the shared core. They hold the same
@@ -736,6 +739,7 @@ func (c *Controller) initRoutes() {
 		{"audio level routes", func() { c.audio.RegisterAudioLevelRoutes(c.Group) }},
 		{"hls streaming routes", func() { c.audio.RegisterHLSRoutes(c.Group) }},
 		{"integration routes", func() { c.integrations.RegisterRoutes(c.Group) }},
+		{"visual observation routes", func() { c.visual.RegisterRoutes(c.Group) }},
 		{"control routes", func() { c.control.RegisterRoutes(c.Group) }},
 		{"auth routes", func() { c.authHandler.RegisterRoutes(c.Group) }},
 		{"media routes", func() { c.media.RegisterRoutes(c.Group) }},

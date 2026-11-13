@@ -3553,6 +3553,23 @@
           "inProgress": "Test wordt uitgevoerd...",
           "description": "Test eBird API-connectiviteit en authenticatie"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigate-adres",
+        "cameras": "Camera’s (door komma’s gescheiden)",
+        "pollInterval": "Opvraaginterval (seconden)",
+        "requestTimeout": "Time-out voor verzoek (seconden)",
+        "maxAttempts": "Maximumaantal pogingen",
+        "initialHistoryHours": "Eerste geschiedenis (uren)",
+        "overlapSeconds": "Overlap voor updates (seconden)",
+        "classificationThreshold": "Minimale classificatiezekerheid",
+        "correlationWindow": "Venster voor audiocorrelatie (seconden)",
+        "snapshotRetentionHours": "Bewaartijd van momentopnamen (uren)",
+        "snapshotImport": "Momentopnamen op verzoek importeren",
+        "test": "Verbinding testen",
+        "connected": "Verbinding met Frigate geslaagd",
+        "savedTest": "Sla de instellingen op voordat u test. De test gebruikt de opgeslagen verbinding.",
+        "help": "Importeert visuele vogelwaarnemingen in de v2-database. Stel de inloggegevens in via de YAML van de server; ze worden nooit naar de browser verzonden."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Alle soorten",
     "caveat": "Een ontbrekende detectie bewijst geen afwezigheid. Detectiedagen meten geen luistertijd. De kalender is een gedateerde momentopname.",
     "snapshot": "Momentopname: {date}"
+  },
+  "cameraLive": {
+    "title": "Livecamera’s",
+    "description": "Livevideo van Frigate met detectiekaders.",
+    "camera": "Kies een camera",
+    "live": "Rechtstreeks",
+    "connecting": "Verbinden met camera...",
+    "offline": "Camera niet verbonden",
+    "offlineHelp": "Start de camerastream in Frigate om livevideo te zien.",
+    "disabled": "Schakel Frigate in en configureer het om uw camera’s te bekijken.",
+    "empty": "Selecteer minstens één camera in de Frigate-instellingen.",
+    "settings": "Frigate-instellingen",
+    "unavailable": "Livestream verbroken. Er wordt automatisch opnieuw geprobeerd.",
+    "paused": "Livebeeld gepauzeerd",
+    "pause": "Livebeeld pauzeren",
+    "resume": "Livebeeld hervatten",
+    "videoOnly": "Alleen video",
+    "recentObservations": "Recente camerawaarnemingen",
+    "noObservations": "Er zijn nog geen camerawaarnemingen geïmporteerd.",
+    "observedAt": "Waargenomen op",
+    "species": "Soort",
+    "objectConfidence": "Zekerheid vogeldetectie",
+    "speciesConfidence": "Zekerheid soortherkenning",
+    "snapshot": "Momentopname",
+    "connectionError": "Frigate is niet bereikbaar. Controleer de API-URL en het HTTP/HTTPS-protocol in de Frigate-instellingen.",
+    "observationsError": "Opgeslagen camerawaarnemingen kunnen niet worden geladen. Automatische nieuwe poging.",
+    "sourceType": "Detectiebron",
+    "allSources": "Alle bronnen",
+    "audioSource": "Geluid"
   }
 }

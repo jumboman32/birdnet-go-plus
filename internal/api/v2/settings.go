@@ -981,6 +981,8 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 		return &settings.Realtime.MQTT, nil
 	case "birdweather":
 		return &settings.Realtime.Birdweather, nil
+	case "frigate":
+		return &settings.Realtime.Frigate, nil
 	case SettingsSectionSpecies:
 		return &settings.Realtime.Species, nil
 	case "rtsp":
@@ -1670,6 +1672,8 @@ func getSettingsSection(settings *conf.Settings, section string) (any, error) {
 		return settings.Realtime.MQTT, nil
 	case "birdweather":
 		return settings.Realtime.Birdweather, nil
+	case "frigate":
+		return settings.Realtime.Frigate, nil
 	case SettingsSectionSpecies:
 		return settings.Realtime.Species, nil
 	default:
@@ -1810,6 +1814,10 @@ func sanitizeNotificationSecrets(s *conf.Settings) {
 // In that case the offending field is cleared to the empty string and an
 // error is returned listing all affected fields.
 func restoreRedactedSecrets(current, incoming *conf.Settings) error {
+	// Frigate credentials are server-only; JSON round trips must preserve them.
+	incoming.Realtime.Frigate.Username = current.Realtime.Frigate.Username
+	incoming.Realtime.Frigate.Password = current.Realtime.Frigate.Password
+	incoming.Realtime.Frigate.Token = current.Realtime.Frigate.Token
 	restore := func(cur, inc *string) {
 		apicore.RestoreRedactedSecret(*cur, inc)
 	}

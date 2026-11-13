@@ -7,6 +7,8 @@ import {
 } from '../../../test/render-helpers';
 import DesktopSidebar from './DesktopSidebar.svelte';
 import { sidebar } from '$lib/stores/sidebar';
+import { settingsStore, DEFAULT_FRIGATE } from '$lib/stores/settings';
+import { get } from 'svelte/store';
 import { analyticsControls } from '$lib/desktop/features/analytics/registry/analyticsControls.svelte';
 import { SETTINGS_BASE_PATH, SETTINGS_DEFAULT_PATH } from '$lib/utils/settingsAlias';
 
@@ -15,6 +17,63 @@ vi.mock('$lib/i18n', () => ({
   t: vi.fn((key: string) => key),
   getLocale: vi.fn(() => 'en'),
 }));
+
+describe('DesktopSidebar - Frigate visibility', () => {
+  const sidebarTest = createComponentTestFactory(DesktopSidebar);
+  let restoreSettings = () => {};
+  beforeEach(() => {
+    const previous = get(settingsStore);
+    restoreSettings = () => settingsStore.set(previous);
+    settingsStore.update(state => ({
+      ...state,
+      originalData: {
+        ...state.originalData,
+        realtime: {
+          ...state.originalData.realtime,
+          frigate: { ...DEFAULT_FRIGATE, enabled: false },
+        },
+      },
+    }));
+  });
+  afterEach(() => {
+    restoreSettings();
+  });
+
+  it('hot-reloads the navigation item only from saved enabled settings', async () => {
+    sidebarTest.render({ securityEnabled: false });
+    expect(screen.queryByText('cameraLive.title')).not.toBeInTheDocument();
+    settingsStore.update(state => ({
+      ...state,
+      formData: {
+        ...state.formData,
+        realtime: { ...state.formData.realtime, frigate: { ...DEFAULT_FRIGATE, enabled: true } },
+      },
+    }));
+    expect(screen.queryByText('cameraLive.title')).not.toBeInTheDocument();
+    settingsStore.update(state => ({
+      ...state,
+      originalData: {
+        ...state.originalData,
+        realtime: {
+          ...state.originalData.realtime,
+          frigate: { ...DEFAULT_FRIGATE, enabled: true },
+        },
+      },
+    }));
+    expect(await screen.findByText('cameraLive.title')).toBeInTheDocument();
+    settingsStore.update(state => ({
+      ...state,
+      originalData: {
+        ...state.originalData,
+        realtime: {
+          ...state.originalData.realtime,
+          frigate: { ...DEFAULT_FRIGATE, enabled: false },
+        },
+      },
+    }));
+    await waitFor(() => expect(screen.queryByText('cameraLive.title')).not.toBeInTheDocument());
+  });
+});
 
 describe('DesktopSidebar - post-login redirect wiring (#3306)', () => {
   const sidebarTest = createComponentTestFactory(DesktopSidebar);

@@ -3553,6 +3553,23 @@
           "inProgress": "Test in progress...",
           "description": "Test eBird API connectivity and authentication"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigate URL",
+        "cameras": "Cameras (comma separated)",
+        "pollInterval": "Polling interval (seconds)",
+        "requestTimeout": "Request timeout (seconds)",
+        "maxAttempts": "Maximum attempts",
+        "initialHistoryHours": "Initial history (hours)",
+        "overlapSeconds": "Update overlap (seconds)",
+        "classificationThreshold": "Minimum classification confidence",
+        "correlationWindow": "Audio correlation window (seconds)",
+        "snapshotRetentionHours": "Snapshot retention (hours)",
+        "snapshotImport": "Import snapshots on demand",
+        "test": "Test connection",
+        "connected": "Frigate connection successful",
+        "savedTest": "Save your settings before testing. The test uses the saved connection.",
+        "help": "Imports visual bird observations into the v2 database. Configure authentication credentials in the server YAML; credentials are never sent to the browser."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "All species",
     "caveat": "A missing detection does not establish absence. Saved detection days are not listening uptime. The calendar is a dated snapshot.",
     "snapshot": "Snapshot: {date}"
+  },
+  "cameraLive": {
+    "title": "Live Cameras",
+    "description": "Live video from Frigate with detection boxes.",
+    "camera": "Camera",
+    "live": "Live",
+    "connecting": "Connecting to camera...",
+    "offline": "Camera offline",
+    "offlineHelp": "Start the camera stream in Frigate to see live video.",
+    "disabled": "Enable and configure Frigate to view your cameras.",
+    "empty": "Select at least one camera in Frigate settings.",
+    "settings": "Frigate settings",
+    "unavailable": "Live stream disconnected. Retrying automatically.",
+    "paused": "Live view paused",
+    "pause": "Pause live view",
+    "resume": "Resume live view",
+    "videoOnly": "Video only",
+    "recentObservations": "Recent camera observations",
+    "noObservations": "No camera observations imported yet.",
+    "observedAt": "Observed at",
+    "species": "Species",
+    "objectConfidence": "Bird object confidence",
+    "speciesConfidence": "Species confidence",
+    "snapshot": "Snapshot",
+    "connectionError": "Cannot reach Frigate. Check the API URL and HTTP/HTTPS protocol in Frigate settings.",
+    "observationsError": "Cannot load saved camera observations. Retrying automatically.",
+    "sourceType": "Detection source",
+    "allSources": "All sources",
+    "audioSource": "Audio"
   }
 }

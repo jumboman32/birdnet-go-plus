@@ -637,7 +637,38 @@ export interface SupportSettings {
 }
 
 // Realtime settings matching backend structure
+export interface FrigateSettings {
+  enabled: boolean;
+  baseURL: string;
+  cameras: string[];
+  pollInterval: number;
+  snapshotImport: boolean;
+  initialHistoryHours: number;
+  requestTimeout: number;
+  maxAttempts: number;
+  classificationThreshold: number;
+  correlationWindow: number;
+  overlapSeconds: number;
+  snapshotRetentionHours: number;
+}
+
+export const DEFAULT_FRIGATE: FrigateSettings = {
+  enabled: false,
+  baseURL: '',
+  cameras: ['feeder'],
+  pollInterval: 20,
+  snapshotImport: false,
+  initialHistoryHours: 24,
+  requestTimeout: 10,
+  maxAttempts: 3,
+  classificationThreshold: 0,
+  correlationWindow: 30,
+  overlapSeconds: 3600,
+  snapshotRetentionHours: 168,
+};
+
 export interface RealtimeSettings {
+  frigate?: FrigateSettings;
   interval?: number;
   processingTime?: boolean;
   audio?: AudioSettings;
@@ -1106,6 +1137,7 @@ function createEmptySettings(): SettingsFormData & { security: SecuritySettings 
         threshold: 0.7,
         debug: false,
       },
+      frigate: { ...DEFAULT_FRIGATE, cameras: [...DEFAULT_FRIGATE.cameras] },
       mqtt: {
         enabled: false,
         broker: '',

@@ -45,6 +45,8 @@ Performance Optimizations:
   import NewSpeciesHighlightsCard from '$lib/desktop/features/dashboard/components/NewSpeciesHighlightsCard.svelte';
   import { MAX_DETECTION_CARDS, normalizeDetectionCardLimit } from '../utils/detectionCardLayout';
   import DetectionCardGrid from '$lib/desktop/features/dashboard/components/DetectionCardGrid.svelte';
+  import type { VisualObservation } from '$lib/desktop/features/live-stream/components/CameraObservationResults.svelte';
+  import ErrorAlert from '$lib/desktop/components/ui/ErrorAlert.svelte';
   import { t } from '$lib/i18n';
   import type { DailySpeciesSummary, Detection } from '$lib/types/detection.types';
   import type { PendingDetection } from '$lib/types/pending.types';
@@ -159,6 +161,10 @@ Performance Optimizations:
   // State management
   let dailySummary = $state<DailySpeciesSummary[]>([]);
   let recentDetections = $state<Detection[]>([]);
+  let recentCameraDetections = $state<VisualObservation[]>([]);
+  let cameraDetectionsError = $state('');
+  let requestCameraRefresh: () => void = () => {};
+  const CAMERA_REFRESH_INTERVAL = 20_000;
   let selectedDate = $state(getInitialDate());
   let isLoadingSummary = $state(true);
   let isLoadingDetections = $state(true);
@@ -525,6 +531,7 @@ Performance Optimizations:
 
     // Just fetch recent detections - don't touch daily summary
     fetchRecentDetections();
+    requestCameraRefresh();
   }
 
   // Animation cleanup timers and RAF manager - use $state.raw() for performance
@@ -764,6 +771,63 @@ Performance Optimizations:
       logger.error('Error processing detection data:', error);
     }
   }
+
+  $effect(() => {
+    const enabled = $settingsStore.formData.realtime?.frigate?.enabled && !isGuestMode();
+    if (!enabled) {
+      recentCameraDetections = [];
+      cameraDetectionsError = '';
+      return;
+    }
+    let disposed = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let request: AbortController | undefined;
+    let generation = 0;
+    async function load() {
+      clearTimeout(timer);
+      if (document.hidden || freezeCount > 0 || !connectionState.isOnline) {
+        timer = setTimeout(load, CAMERA_REFRESH_INTERVAL);
+        return;
+      }
+      const current = ++generation;
+      request?.abort();
+      request = new AbortController();
+      try {
+        const response = await api.get<{ data: VisualObservation[] }>(
+          `/api/v2/visual-detections?limit=${MAX_DETECTION_CARDS}`,
+          { signal: request.signal }
+        );
+        if (disposed || current !== generation) return;
+        recentCameraDetections = response.data;
+        cameraDetectionsError = '';
+      } catch {
+        if (!disposed && current === generation)
+          cameraDetectionsError = t('cameraLive.observationsError');
+      } finally {
+        if (!disposed && current === generation) timer = setTimeout(load, CAMERA_REFRESH_INTERVAL);
+      }
+    }
+    function visibilityChanged() {
+      generation++;
+      request?.abort();
+      clearTimeout(timer);
+      if (!document.hidden) void load();
+    }
+    requestCameraRefresh = () => {
+      void load();
+    };
+    untrack(() => {
+      void load();
+    });
+    document.addEventListener('visibilitychange', visibilityChanged);
+    return () => {
+      disposed = true;
+      request?.abort();
+      clearTimeout(timer);
+      requestCameraRefresh = () => {};
+      document.removeEventListener('visibilitychange', visibilityChanged);
+    };
+  });
 
   onMount(() => {
     // Persist the initial date to URL only if out of sync
@@ -1566,6 +1630,7 @@ Performance Optimizations:
       {:else if element.type === 'detections-grid'}
         <DetectionCardGrid
           data={recentDetections}
+          cameraData={recentCameraDetections}
           loading={isLoadingDetections}
           error={detectionsError}
           limit={detectionLimit}
@@ -1576,6 +1641,7 @@ Performance Optimizations:
           onFreezeEnd={handleFreezeEnd}
           updatesAreFrozen={freezeCount > 0}
         />
+        {#if cameraDetectionsError}<ErrorAlert message={cameraDetectionsError} />{/if}
       {:else if element.type === 'video-embed'}
         <VideoEmbedCard
           config={element.video ?? { url: '', title: '' }}

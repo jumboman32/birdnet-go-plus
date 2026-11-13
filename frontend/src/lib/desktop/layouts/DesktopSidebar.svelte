@@ -42,11 +42,13 @@ Performance Optimizations:
   import { cn } from '$lib/utils/cn';
   import { auth as authStore } from '$lib/stores/auth';
   import { sidebar } from '$lib/stores/sidebar';
+  import { settingsStore } from '$lib/stores/settings';
   import { navigation } from '$lib/stores/navigation.svelte';
   import type { AuthConfig } from '../../../app.d';
   import {
     LayoutDashboard,
     CalendarDays,
+    Camera,
     Radio,
     BarChart3,
     Search,
@@ -179,6 +181,7 @@ Performance Optimizations:
     dashboard: actualRoute === '/ui/dashboard' || actualRoute === '/ui/',
     calendar: actualRoute === '/ui/calendar',
     liveStream: actualRoute.startsWith('/ui/live-stream'),
+    cameras: actualRoute === '/ui/cameras',
     analytics: actualRoute.startsWith('/ui/analytics'),
     analyticsSummary: actualRoute === '/ui/analytics/summary',
     analyticsActivity: actualRoute === '/ui/analytics/activity',
@@ -229,6 +232,7 @@ Performance Optimizations:
     dashboard: onNavigate ? '/' : '/ui/dashboard',
     calendar: onNavigate ? '/calendar' : '/ui/calendar',
     liveStream: onNavigate ? '/live-stream' : '/ui/live-stream',
+    cameras: onNavigate ? '/cameras' : '/ui/cameras',
     analyticsSummary: onNavigate ? '/analytics/summary' : '/ui/analytics/summary',
     analyticsActivity: onNavigate ? '/analytics/activity' : '/ui/analytics/activity',
     analyticsTrends: onNavigate ? '/analytics/trends' : '/ui/analytics/trends',
@@ -584,6 +588,19 @@ Performance Optimizations:
           {showTooltip}
           {hideTooltip}
         />
+
+        {#if $settingsStore.originalData.realtime?.frigate?.enabled && (!securityEnabled || accessAllowed)}
+          <NavFlatItem
+            icon={Camera}
+            label={t('cameraLive.title')}
+            url={navigationUrls.cameras}
+            active={routeCache.cameras}
+            {isCollapsed}
+            onNavigate={navigate}
+            {showTooltip}
+            {hideTooltip}
+          />
+        {/if}
 
         <!-- Live Audio -->
         {#if hasLiveAudioAccess()}

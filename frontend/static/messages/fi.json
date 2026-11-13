@@ -3553,6 +3553,23 @@
           "inProgress": "Testi käynnissä...",
           "description": "Testaa eBird API:n yhteyttä ja tunnistautumista"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigaten osoite",
+        "cameras": "Kamerat (pilkuilla erotettuina)",
+        "pollInterval": "Kyselyväli (sekuntia)",
+        "requestTimeout": "Pyynnön aikakatkaisu (sekuntia)",
+        "maxAttempts": "Yritysten enimmäismäärä",
+        "initialHistoryHours": "Alkuhistorian pituus (tuntia)",
+        "overlapSeconds": "Päivitysten päällekkäisyys (sekuntia)",
+        "classificationThreshold": "Luokittelun vähimmäisvarmuus",
+        "correlationWindow": "Äänihavaintojen korrelaatioikkuna (sekuntia)",
+        "snapshotRetentionHours": "Tilannekuvien säilytys (tuntia)",
+        "snapshotImport": "Tuo tilannekuvat pyynnöstä",
+        "test": "Testaa yhteys",
+        "connected": "Yhteys Frigateen onnistui",
+        "savedTest": "Tallenna asetukset ennen testiä. Testi käyttää tallennettua yhteyttä.",
+        "help": "Tuo lintujen näköhavainnot v2-tietokantaan. Määritä tunnistetiedot palvelimen YAML-tiedostossa; niitä ei lähetetä selaimeen."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Kaikki lajit",
     "caveat": "Havainnon puuttuminen ei todista poissaoloa. Havaintopäivät eivät mittaa kuunteluaikaa. Kalenteri on päivätty tilannekuva.",
     "snapshot": "Tilannekuva: {date}"
+  },
+  "cameraLive": {
+    "title": "Suorat kamerakuvat",
+    "description": "Frigaten suora videokuva tunnistuskehyksineen.",
+    "camera": "Kamera",
+    "live": "Suora",
+    "connecting": "Yhdistetään kameraan...",
+    "offline": "Kamera ei ole verkossa",
+    "offlineHelp": "Käynnistä kameran lähetys Frigatessa nähdäksesi suoraa videokuvaa.",
+    "disabled": "Ota Frigate käyttöön ja määritä se nähdäksesi kamerasi.",
+    "empty": "Valitse vähintään yksi kamera Frigaten asetuksissa.",
+    "settings": "Frigaten asetukset",
+    "unavailable": "Suora lähetys katkesi. Yritetään uudelleen automaattisesti.",
+    "paused": "Suora näkymä keskeytetty",
+    "pause": "Keskeytä suora näkymä",
+    "resume": "Jatka suoraa näkymää",
+    "videoOnly": "Vain video",
+    "recentObservations": "Viimeisimmät kamerahavainnot",
+    "noObservations": "Kamerahavaintoja ei ole vielä tuotu.",
+    "observedAt": "Havaintoaika",
+    "species": "Laji",
+    "objectConfidence": "Lintukohteen varmuus",
+    "speciesConfidence": "Lajitunnistuksen varmuus",
+    "snapshot": "Tilannekuva",
+    "connectionError": "Frigatea ei tavoiteta. Tarkista API-osoite ja HTTP/HTTPS-protokolla Frigaten asetuksista.",
+    "observationsError": "Tallennettuja kamerahavaintoja ei voida ladata. Yritetään automaattisesti uudelleen.",
+    "sourceType": "Havainnon lähde",
+    "allSources": "Kaikki lähteet",
+    "audioSource": "Ääni"
   }
 }

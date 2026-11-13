@@ -1081,6 +1081,61 @@
       "type": "object",
       "description": "FileOutput represents file logging configuration."
     },
+    "FrigateSettings": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "baseurl": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "cameras": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "pollinterval": {
+          "type": "integer"
+        },
+        "snapshotimport": {
+          "type": "boolean"
+        },
+        "initialhistoryhours": {
+          "type": "integer"
+        },
+        "requesttimeout": {
+          "type": "integer"
+        },
+        "maxattempts": {
+          "type": "integer"
+        },
+        "classificationthreshold": {
+          "type": "number"
+        },
+        "correlationwindow": {
+          "type": "integer"
+        },
+        "overlapseconds": {
+          "type": "integer"
+        },
+        "snapshotretentionhours": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "FrigateSettings configures the optional visual observation importer."
+    },
     "HealthCheckConfig": {
       "properties": {
         "enabled": {
@@ -1966,6 +2021,10 @@
     },
     "RealtimeSettings": {
       "properties": {
+        "frigate": {
+          "$ref": "#/$defs/FrigateSettings",
+          "description": "Optional visual observations"
+        },
         "interval": {
           "type": "integer",
           "description": "minimum interval between log messages in seconds"

@@ -3553,6 +3553,23 @@
           "inProgress": "Teste em curso...",
           "description": "Testar conectividade e autenticação da API eBird"
         }
+      },
+      "frigate": {
+        "baseURL": "Endereço do Frigate",
+        "cameras": "Câmaras (separadas por vírgulas)",
+        "pollInterval": "Intervalo de consulta (segundos)",
+        "requestTimeout": "Tempo limite do pedido (segundos)",
+        "maxAttempts": "Número máximo de tentativas",
+        "initialHistoryHours": "Histórico inicial (horas)",
+        "overlapSeconds": "Sobreposição de atualizações (segundos)",
+        "classificationThreshold": "Confiança mínima de classificação",
+        "correlationWindow": "Janela de correlação de áudio (segundos)",
+        "snapshotRetentionHours": "Retenção de instantâneos (horas)",
+        "snapshotImport": "Importar instantâneos a pedido",
+        "test": "Testar ligação",
+        "connected": "Ligação ao Frigate bem-sucedida",
+        "savedTest": "Guarde as definições antes do teste. O teste utiliza a ligação guardada.",
+        "help": "Importa observações visuais de aves para a base de dados v2. Configure as credenciais no YAML do servidor; nunca são enviadas ao navegador."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Todas as espécies",
     "caveat": "Uma deteção em falta não comprova ausência. Os dias com deteções não medem o tempo de escuta. O calendário é um retrato datado.",
     "snapshot": "Retrato: {date}"
+  },
+  "cameraLive": {
+    "title": "Câmaras em direto",
+    "description": "Vídeo em direto do Frigate com caixas de deteção.",
+    "camera": "Câmara",
+    "live": "Em direto",
+    "connecting": "A ligar à câmara...",
+    "offline": "Câmara desligada",
+    "offlineHelp": "Inicie a transmissão da câmara no Frigate para ver vídeo em direto.",
+    "disabled": "Ative e configure o Frigate para ver as suas câmaras.",
+    "empty": "Selecione pelo menos uma câmara nas definições do Frigate.",
+    "settings": "Definições do Frigate",
+    "unavailable": "Transmissão desligada. Nova tentativa automática.",
+    "paused": "Vista em direto em pausa",
+    "pause": "Pausar vista em direto",
+    "resume": "Retomar vista em direto",
+    "videoOnly": "Apenas vídeo",
+    "recentObservations": "Observações recentes da câmara",
+    "noObservations": "Ainda não foram importadas observações da câmara.",
+    "observedAt": "Data da observação",
+    "species": "Espécie",
+    "objectConfidence": "Confiança na deteção de ave",
+    "speciesConfidence": "Confiança na espécie",
+    "snapshot": "Captura",
+    "connectionError": "Não foi possível contactar o Frigate. Verifique o URL da API e o protocolo HTTP/HTTPS nas definições do Frigate.",
+    "observationsError": "Não foi possível carregar as observações guardadas. Nova tentativa automática.",
+    "sourceType": "Origem da deteção",
+    "allSources": "Todas as origens",
+    "audioSource": "Som"
   }
 }

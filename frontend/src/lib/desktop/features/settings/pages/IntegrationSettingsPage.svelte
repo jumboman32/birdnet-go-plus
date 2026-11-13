@@ -24,6 +24,7 @@
   @component
 -->
 <script lang="ts">
+  import FrigateSettings from '../components/FrigateSettings.svelte';
   import Checkbox from '$lib/desktop/components/forms/Checkbox.svelte';
   import NumberField from '$lib/desktop/components/forms/NumberField.svelte';
   import PasswordField from '$lib/desktop/components/forms/PasswordField.svelte';
@@ -316,6 +317,16 @@
 
   // Tab definitions
   let tabs = $derived<TabDefinition[]>([
+    {
+      id: 'frigate',
+      label: 'Frigate',
+      icon: Bird,
+      content: frigateTabContent,
+      hasChanges: hasSettingsChanged(
+        store.originalData.realtime?.frigate,
+        store.formData.realtime?.frigate
+      ),
+    },
     {
       id: 'birdweather',
       label: t('settings.integration.birdweather.title'),
@@ -1148,6 +1159,10 @@
     }
   }
 </script>
+
+{#snippet frigateTabContent()}
+  <FrigateSettings />
+{/snippet}
 
 {#snippet birdweatherTabContent()}
   <div class="space-y-6">

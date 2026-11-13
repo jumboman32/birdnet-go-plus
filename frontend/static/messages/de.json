@@ -3553,6 +3553,23 @@
           "inProgress": "Test läuft...",
           "description": "eBird-API-Konnektivität und Authentifizierung testen"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigate-Adresse",
+        "cameras": "Kameras (durch Kommas getrennt)",
+        "pollInterval": "Abfrageintervall (Sekunden)",
+        "requestTimeout": "Zeitlimit für Anfragen (Sekunden)",
+        "maxAttempts": "Maximale Versuche",
+        "initialHistoryHours": "Anfänglicher Verlauf (Stunden)",
+        "overlapSeconds": "Überlappung für Aktualisierungen (Sekunden)",
+        "classificationThreshold": "Minimale Klassifikationssicherheit",
+        "correlationWindow": "Zeitfenster für Audiokorrelation (Sekunden)",
+        "snapshotRetentionHours": "Aufbewahrung von Schnappschüssen (Stunden)",
+        "snapshotImport": "Schnappschüsse bei Bedarf importieren",
+        "test": "Verbindung testen",
+        "connected": "Verbindung zu Frigate erfolgreich",
+        "savedTest": "Speichern Sie die Einstellungen vor dem Test. Der Test verwendet die gespeicherte Verbindung.",
+        "help": "Importiert visuelle Vogelbeobachtungen in die v2-Datenbank. Zugangsdaten werden in der Server-YAML konfiguriert und niemals an den Browser gesendet."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Alle Arten",
     "caveat": "Eine fehlende Erkennung beweist keine Abwesenheit. Erkennungstage sind keine Aufzeichnungslaufzeit. Der Kalender ist eine datierte Momentaufnahme.",
     "snapshot": "Momentaufnahme: {date}"
+  },
+  "cameraLive": {
+    "title": "Livekameras",
+    "description": "Livevideo von Frigate mit Erkennungsrahmen.",
+    "camera": "Kamera",
+    "live": "Liveübertragung",
+    "connecting": "Verbindung zur Kamera wird hergestellt...",
+    "offline": "Kamera offline",
+    "offlineHelp": "Starten Sie den Kamerastream in Frigate, um Livevideo zu sehen.",
+    "disabled": "Aktivieren und konfigurieren Sie Frigate, um Ihre Kameras anzuzeigen.",
+    "empty": "Wählen Sie mindestens eine Kamera in den Frigate-Einstellungen aus.",
+    "settings": "Frigate-Einstellungen",
+    "unavailable": "Livestream unterbrochen. Verbindung wird automatisch wiederhergestellt.",
+    "paused": "Liveansicht pausiert",
+    "pause": "Liveansicht pausieren",
+    "resume": "Liveansicht fortsetzen",
+    "videoOnly": "Nur Video",
+    "recentObservations": "Letzte Kamerabeobachtungen",
+    "noObservations": "Noch keine Kamerabeobachtungen importiert.",
+    "observedAt": "Beobachtet am",
+    "species": "Art",
+    "objectConfidence": "Sicherheit der Vogelerkennung",
+    "speciesConfidence": "Sicherheit der Artbestimmung",
+    "snapshot": "Schnappschuss",
+    "connectionError": "Frigate ist nicht erreichbar. Prüfen Sie die API-Adresse und das HTTP/HTTPS-Protokoll in den Frigate-Einstellungen.",
+    "observationsError": "Gespeicherte Kamerabeobachtungen können nicht geladen werden. Automatischer Neuversuch.",
+    "sourceType": "Erkennungsquelle",
+    "allSources": "Alle Quellen",
+    "audioSource": "Ton"
   }
 }

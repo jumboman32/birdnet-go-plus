@@ -55,6 +55,67 @@ const ratedRow = {
   clipSampleRate: ROW_RATE,
 };
 
+describe('Camera observations in Search Detections', () => {
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+  });
+  it(
+    'searches saved camera species and displays their real snapshots',
+    async () => {
+      const calls: string[] = [];
+      vi.stubGlobal(
+        'fetch',
+        vi.fn((input: RequestInfo | URL) => {
+          const url = String(input);
+          calls.push(url);
+          if (url.includes('/api/v2/visual-detections?'))
+            return Promise.resolve(
+              jsonResponse({
+                data: [
+                  {
+                    id: 8,
+                    camera: 'feeder',
+                    commonName: 'Blue Jay',
+                    scientificName: 'Cyanocitta cristata',
+                    startTime: '2026-11-13T22:45:30Z',
+                    snapshotStatus: 'available',
+                  },
+                ],
+                total: 1,
+              })
+            );
+          if (url.includes(SEARCH_ENDPOINT))
+            return Promise.resolve(jsonResponse({ results: [], total: 0, pages: 1 }));
+          return Promise.resolve(jsonResponse({ data: [] }));
+        })
+      );
+      const { container } = render(Search);
+      await fireEvent.input(screen.getByPlaceholderText('search.fields.speciesPlaceholder'), {
+        target: { value: 'Blue Jay' },
+      });
+      await fireEvent.change(screen.getByLabelText('cameraLive.sourceType'), {
+        target: { value: 'frigate' },
+      });
+      await submitSearch(container);
+      expect(await screen.findByText('Blue Jay')).toBeInTheDocument();
+      expect(screen.getByRole('img', { name: 'Blue Jay' })).toHaveAttribute(
+        'src',
+        '/api/v2/visual-detections/8/snapshot'
+      );
+      expect(
+        calls.some(
+          url =>
+            url.includes('/api/v2/visual-detections?') &&
+            new URL(url, 'http://localhost').searchParams.get('q') === 'Blue Jay'
+        )
+      ).toBe(true);
+      expect(calls.some(url => url.includes(SEARCH_ENDPOINT))).toBe(false);
+    },
+    TEST_TIMEOUT_MS
+  );
+});
+
 /** Stubs fetch: the search answers with `rows`, the detail endpoint with RESOLVED_RATE. */
 function stubFetch(rows: unknown[]) {
   const fetchMock = vi.fn((input: RequestInfo | URL) => {

@@ -3553,6 +3553,23 @@
           "inProgress": "Pārbaude noris...",
           "description": "Pārbaudīt eBird API savienojamību un autentifikāciju"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigate adrese",
+        "cameras": "Kameras (atdalītas ar komatiem)",
+        "pollInterval": "Aptaujas intervāls (sekundes)",
+        "requestTimeout": "Pieprasījuma noildze (sekundes)",
+        "maxAttempts": "Maksimālais mēģinājumu skaits",
+        "initialHistoryHours": "Sākotnējā vēsture (stundas)",
+        "overlapSeconds": "Atjauninājumu pārklājums (sekundes)",
+        "classificationThreshold": "Minimālā klasifikācijas ticamība",
+        "correlationWindow": "Audio korelācijas logs (sekundes)",
+        "snapshotRetentionHours": "Momentuzņēmumu glabāšana (stundas)",
+        "snapshotImport": "Importēt momentuzņēmumus pēc pieprasījuma",
+        "test": "Pārbaudīt savienojumu",
+        "connected": "Savienojums ar Frigate veiksmīgs",
+        "savedTest": "Pirms pārbaudes saglabājiet iestatījumus. Pārbaude izmanto saglabāto savienojumu.",
+        "help": "Importē putnu vizuālos novērojumus v2 datubāzē. Autentifikācijas datus konfigurējiet servera YAML failā; tie nekad netiek sūtīti pārlūkam."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Visas sugas",
     "caveat": "Neatklāšana nepierāda neesamību. Novērojumu dienas nav klausīšanās ilgums. Kalendārs ir datēts momentuzņēmums.",
     "snapshot": "Momentuzņēmums: {date}"
+  },
+  "cameraLive": {
+    "title": "Tiešraides kameras",
+    "description": "Tiešraides video no Frigate ar noteikšanas rāmjiem.",
+    "camera": "Kamera",
+    "live": "Tiešraide",
+    "connecting": "Savienojas ar kameru...",
+    "offline": "Kamera nav tiešsaistē",
+    "offlineHelp": "Sāciet kameras straumi Frigate, lai redzētu tiešraides video.",
+    "disabled": "Iespējojiet un konfigurējiet Frigate, lai skatītu kameras.",
+    "empty": "Frigate iestatījumos atlasiet vismaz vienu kameru.",
+    "settings": "Frigate iestatījumi",
+    "unavailable": "Tiešraide atvienota. Automātiski mēģina vēlreiz.",
+    "paused": "Tiešraides skats apturēts",
+    "pause": "Apturēt tiešraides skatu",
+    "resume": "Atsākt tiešraides skatu",
+    "videoOnly": "Tikai video",
+    "recentObservations": "Jaunākie kameras novērojumi",
+    "noObservations": "Kameras novērojumi vēl nav importēti.",
+    "observedAt": "Novērošanas laiks",
+    "species": "Suga",
+    "objectConfidence": "Putna noteikšanas ticamība",
+    "speciesConfidence": "Sugas noteikšanas ticamība",
+    "snapshot": "Momentuzņēmums",
+    "connectionError": "Frigate nav sasniedzams. Pārbaudiet API adresi un HTTP/HTTPS protokolu Frigate iestatījumos.",
+    "observationsError": "Saglabātos kameras novērojumus nevar ielādēt. Automātisks atkārtots mēģinājums.",
+    "sourceType": "Noteikšanas avots",
+    "allSources": "Visi avoti",
+    "audioSource": "Skaņa"
   }
 }

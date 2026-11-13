@@ -253,6 +253,9 @@ func ValidateSettings(settings *Settings) error {
 	}
 
 	// Validate Birdweather settings
+	if err := settings.Realtime.Frigate.Validate(); err != nil {
+		ve.Errors = append(ve.Errors, err.Error())
+	}
 	if err := validateBirdweatherSettings(&settings.Realtime.Birdweather); err != nil {
 		ve.Errors = append(ve.Errors, err.Error())
 	}

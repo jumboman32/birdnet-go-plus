@@ -3553,6 +3553,23 @@
           "inProgress": "Test en cours...",
           "description": "Tester la connectivité et l'authentification de l'API eBird"
         }
+      },
+      "frigate": {
+        "baseURL": "Adresse de Frigate",
+        "cameras": "Caméras (séparées par des virgules)",
+        "pollInterval": "Intervalle de consultation (secondes)",
+        "requestTimeout": "Délai de requête (secondes)",
+        "maxAttempts": "Nombre maximal de tentatives",
+        "initialHistoryHours": "Historique initial (heures)",
+        "overlapSeconds": "Chevauchement des mises à jour (secondes)",
+        "classificationThreshold": "Confiance minimale de classification",
+        "correlationWindow": "Fenêtre de corrélation audio (secondes)",
+        "snapshotRetentionHours": "Conservation des instantanés (heures)",
+        "snapshotImport": "Importer les instantanés à la demande",
+        "test": "Tester la connexion",
+        "connected": "Connexion à Frigate réussie",
+        "savedTest": "Enregistrez les paramètres avant le test. Le test utilise la connexion enregistrée.",
+        "help": "Importe les observations visuelles des oiseaux dans la base v2. Configurez les identifiants dans le YAML du serveur ; ils ne sont jamais envoyés au navigateur."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Toutes les espèces",
     "caveat": "Une détection manquante ne prouve pas une absence. Les jours de détection ne mesurent pas la durée d’écoute. Le calendrier est un instantané daté.",
     "snapshot": "Instantané : {date}"
+  },
+  "cameraLive": {
+    "title": "Caméras en direct",
+    "description": "Vidéo en direct de Frigate avec les cadres de détection.",
+    "camera": "Caméra",
+    "live": "En direct",
+    "connecting": "Connexion à la caméra...",
+    "offline": "Caméra hors ligne",
+    "offlineHelp": "Démarrez le flux de la caméra dans Frigate pour voir la vidéo en direct.",
+    "disabled": "Activez et configurez Frigate pour afficher vos caméras.",
+    "empty": "Sélectionnez au moins une caméra dans les paramètres de Frigate.",
+    "settings": "Paramètres de Frigate",
+    "unavailable": "Flux en direct déconnecté. Nouvelle tentative automatique.",
+    "paused": "Vue en direct en pause",
+    "pause": "Mettre le direct en pause",
+    "resume": "Reprendre le direct",
+    "videoOnly": "Vidéo uniquement",
+    "recentObservations": "Observations récentes de la caméra",
+    "noObservations": "Aucune observation de caméra importée pour le moment.",
+    "observedAt": "Date de l’observation",
+    "species": "Espèce",
+    "objectConfidence": "Confiance de détection d’oiseau",
+    "speciesConfidence": "Confiance de l’espèce",
+    "snapshot": "Capture",
+    "connectionError": "Frigate est inaccessible. Vérifiez l’URL de l’API et le protocole HTTP/HTTPS dans les paramètres Frigate.",
+    "observationsError": "Impossible de charger les observations enregistrées. Nouvelle tentative automatique.",
+    "sourceType": "Source de détection",
+    "allSources": "Toutes les sources",
+    "audioSource": "Son"
   }
 }

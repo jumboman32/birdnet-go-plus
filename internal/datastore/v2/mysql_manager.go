@@ -371,6 +371,8 @@ func (m *MySQLManager) Delete() error {
 		// Application metadata and event log (no dependencies)
 		prefix + "app_events",
 		prefix + "app_metadata",
+		prefix + "visual_detections",
+		prefix + "visual_sync_states",
 		// Migration tracking
 		prefix + "migration_states",
 		prefix + "migration_dirty_ids",

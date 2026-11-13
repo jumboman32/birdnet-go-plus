@@ -3553,6 +3553,23 @@
           "inProgress": "Test prebieha...",
           "description": "Otestovať pripojenie a overenie API eBird"
         }
+      },
+      "frigate": {
+        "baseURL": "Adresa Frigate",
+        "cameras": "Kamery (oddelené čiarkami)",
+        "pollInterval": "Interval dopytovania (sekundy)",
+        "requestTimeout": "Časový limit požiadavky (sekundy)",
+        "maxAttempts": "Maximálny počet pokusov",
+        "initialHistoryHours": "Počiatočná história (hodiny)",
+        "overlapSeconds": "Prekrytie aktualizácií (sekundy)",
+        "classificationThreshold": "Minimálna istota klasifikácie",
+        "correlationWindow": "Okno zvukovej korelácie (sekundy)",
+        "snapshotRetentionHours": "Uchovávanie snímok (hodiny)",
+        "snapshotImport": "Importovať snímky na požiadanie",
+        "test": "Otestovať pripojenie",
+        "connected": "Pripojenie k Frigate bolo úspešné",
+        "savedTest": "Pred testom uložte nastavenia. Test používa uložené pripojenie.",
+        "help": "Importuje vizuálne pozorovania vtákov do databázy v2. Prihlasovacie údaje nastavte v YAML servera; do prehliadača sa nikdy neposielajú."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Všetky druhy",
     "caveat": "Chýbajúca detekcia nedokazuje neprítomnosť. Dni s detekciami nie sú časom počúvania. Kalendár je datovaná snímka.",
     "snapshot": "Snímka: {date}"
+  },
+  "cameraLive": {
+    "title": "Živé kamery",
+    "description": "Živé video z Frigate s rámčekmi detekcie.",
+    "camera": "Kamera",
+    "live": "Naživo",
+    "connecting": "Pripájanie ku kamere...",
+    "offline": "Kamera je offline",
+    "offlineHelp": "Spustite stream kamery vo Frigate pre zobrazenie živého videa.",
+    "disabled": "Ak chcete zobraziť kamery, povoľte a nastavte Frigate.",
+    "empty": "V nastaveniach Frigate vyberte aspoň jednu kameru.",
+    "settings": "Nastavenia Frigate",
+    "unavailable": "Živý stream bol odpojený. Pripojenie sa automaticky obnovuje.",
+    "paused": "Živý náhľad pozastavený",
+    "pause": "Pozastaviť živý náhľad",
+    "resume": "Obnoviť živý náhľad",
+    "videoOnly": "Iba video",
+    "recentObservations": "Nedávne pozorovania kamerou",
+    "noObservations": "Zatiaľ neboli importované žiadne pozorovania kamerou.",
+    "observedAt": "Čas pozorovania",
+    "species": "Druh",
+    "objectConfidence": "Istota detekcie vtáka",
+    "speciesConfidence": "Istota určenia druhu",
+    "snapshot": "Snímka",
+    "connectionError": "Frigate nie je dostupný. Skontrolujte URL API a protokol HTTP/HTTPS v nastaveniach Frigate.",
+    "observationsError": "Uložené pozorovania sa nedajú načítať. Pokus sa automaticky zopakuje.",
+    "sourceType": "Zdroj detekcie",
+    "allSources": "Všetky zdroje",
+    "audioSource": "Zvuk"
   }
 }

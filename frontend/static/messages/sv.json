@@ -3553,6 +3553,23 @@
           "inProgress": "Test pågår...",
           "description": "Testa eBird API-anslutning och autentisering"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigate-adress",
+        "cameras": "Kameror (kommaseparerade)",
+        "pollInterval": "Frågeintervall (sekunder)",
+        "requestTimeout": "Tidsgräns för begäran (sekunder)",
+        "maxAttempts": "Högsta antal försök",
+        "initialHistoryHours": "Inledande historik (timmar)",
+        "overlapSeconds": "Överlappning för uppdateringar (sekunder)",
+        "classificationThreshold": "Lägsta klassificeringssäkerhet",
+        "correlationWindow": "Fönster för ljudkorrelation (sekunder)",
+        "snapshotRetentionHours": "Lagring av ögonblicksbilder (timmar)",
+        "snapshotImport": "Importera ögonblicksbilder på begäran",
+        "test": "Testa anslutning",
+        "connected": "Anslutningen till Frigate lyckades",
+        "savedTest": "Spara inställningarna före testet. Testet använder den sparade anslutningen.",
+        "help": "Importerar visuella fågelobservationer till v2-databasen. Ange inloggningsuppgifter i serverns YAML; de skickas aldrig till webbläsaren."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Alla arter",
     "caveat": "En utebliven detektion bevisar inte frånvaro. Registreringsdagar mäter inte lyssningstid. Kalendern är en daterad ögonblicksbild.",
     "snapshot": "Ögonblicksbild: {date}"
+  },
+  "cameraLive": {
+    "title": "Direktkameror",
+    "description": "Direktvideo från Frigate med detekteringsramar.",
+    "camera": "Kamera",
+    "live": "Direkt",
+    "connecting": "Ansluter till kamera...",
+    "offline": "Kameran är offline",
+    "offlineHelp": "Starta kameraströmmen i Frigate för att se direktvideo.",
+    "disabled": "Aktivera och konfigurera Frigate för att visa dina kameror.",
+    "empty": "Välj minst en kamera i Frigate-inställningarna.",
+    "settings": "Frigate-inställningar",
+    "unavailable": "Direktströmmen kopplades från. Försöker automatiskt igen.",
+    "paused": "Direktvisning pausad",
+    "pause": "Pausa direktvisning",
+    "resume": "Återuppta direktvisning",
+    "videoOnly": "Endast video",
+    "recentObservations": "Senaste kameraobservationer",
+    "noObservations": "Inga kameraobservationer har importerats ännu.",
+    "observedAt": "Observerad",
+    "species": "Art",
+    "objectConfidence": "Säkerhet för fågelobjekt",
+    "speciesConfidence": "Artsäkerhet",
+    "snapshot": "Ögonblicksbild",
+    "connectionError": "Kan inte nå Frigate. Kontrollera API-adressen och HTTP/HTTPS-protokollet i Frigate-inställningarna.",
+    "observationsError": "Kan inte läsa sparade kameraobservationer. Försöker automatiskt igen.",
+    "sourceType": "Detektionskälla",
+    "allSources": "Alla källor",
+    "audioSource": "Ljud"
   }
 }

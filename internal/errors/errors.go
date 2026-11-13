@@ -443,6 +443,7 @@ func init() {
 	RegisterComponent("audiocore/schedule", "audiocore.schedule")
 	RegisterComponent("audiocore/equalizer", "audiocore.equalizer")
 	RegisterComponent("audiocore/transcode", "audiocore.transcode")
+	RegisterComponent("frigate", "integrations.frigate")
 }
 
 // Helper functions for auto-detection and categorization

@@ -1443,6 +1443,8 @@ func orphanedBareV2Tables() []string {
 		// Application metadata and event log (no FK dependencies)
 		"app_events",
 		"app_metadata",
+		"visual_detections",
+		"visual_sync_states",
 		// Migration tracking
 		"migration_dirty_ids",
 		"migration_state",

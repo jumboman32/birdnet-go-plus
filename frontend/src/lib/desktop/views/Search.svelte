@@ -1,5 +1,8 @@
 <script lang="ts">
   import WeatherInfo from '$lib/desktop/components/data/WeatherInfo.svelte';
+  import CameraObservationResults, {
+    type VisualObservation,
+  } from '$lib/desktop/features/live-stream/components/CameraObservationResults.svelte';
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import AudioPlayer from '$lib/desktop/components/media/AudioPlayer.svelte';
   import SpectrogramImage from '$lib/desktop/components/media/SpectrogramImage.svelte';
@@ -169,6 +172,10 @@
 
   // Component state
   let speciesSearchTerm = $state('');
+  let detectionSource = $state('all');
+  let cameraResults = $state<VisualObservation[]>([]);
+  let cameraError = $state('');
+  const CAMERA_PAGE_SIZE = 20;
   let dateRange = $state<DateRange>({ start: '', end: '' });
   let confidenceRange = $state<ConfidenceRange>({ min: 0, max: 100 });
   let verifiedStatus = $state<VerifiedStatus>('any');
@@ -323,11 +330,45 @@
         pages: number;
       }
 
-      const data = await api.post<SearchResponse>('/api/v2/search', requestBody);
-
-      results = data.results ?? [];
-      totalResults = data.total ?? 0;
-      totalPages = data.pages ?? 1;
+      const cameraQuery = new URLSearchParams({
+        q: speciesSearchTerm,
+        limit: String(CAMERA_PAGE_SIZE),
+        offset: String((currentPage - 1) * CAMERA_PAGE_SIZE),
+      });
+      if (dateRange.start) {
+        const start = parseLocalDateString(dateRange.start);
+        if (start) cameraQuery.set('start', start.toJSON());
+      }
+      if (dateRange.end) {
+        const end = parseLocalDateString(dateRange.end);
+        if (end) {
+          end.setDate(end.getDate() + 1);
+          cameraQuery.set('end', end.toJSON());
+        }
+      }
+      const [audio, camera] = await Promise.allSettled([
+        detectionSource === 'frigate'
+          ? Promise.resolve(null)
+          : api.post<SearchResponse>('/api/v2/search', requestBody),
+        detectionSource === 'audio'
+          ? Promise.resolve(null)
+          : api.get<{ data: VisualObservation[]; total: number }>(
+              `/api/v2/visual-detections?${cameraQuery}`
+            ),
+      ]);
+      results = audio.status === 'fulfilled' ? (audio.value?.results ?? []) : [];
+      totalResults = audio.status === 'fulfilled' ? (audio.value?.total ?? 0) : 0;
+      totalResults += camera.status === 'fulfilled' ? (camera.value?.total ?? 0) : 0;
+      cameraResults = camera.status === 'fulfilled' ? (camera.value?.data ?? []) : [];
+      cameraError = camera.status === 'rejected' ? t('cameraLive.observationsError') : '';
+      if (audio.status === 'rejected')
+        errorMessage = t('search.errors.searchFailed', {
+          error: audio.reason instanceof Error ? audio.reason.message : t('common.error'),
+        });
+      totalPages = Math.max(
+        audio.status === 'fulfilled' ? (audio.value?.pages ?? 1) : 1,
+        camera.status === 'fulfilled' ? Math.ceil((camera.value?.total ?? 0) / CAMERA_PAGE_SIZE) : 1
+      );
       formSubmitted = true;
     } catch (error: unknown) {
       // Handle search error silently
@@ -343,6 +384,9 @@
   // Reset form
   function resetForm() {
     speciesSearchTerm = '';
+    detectionSource = 'all';
+    cameraResults = [];
+    cameraError = '';
     dateRange.start = '';
     dateRange.end = '';
     confidenceRange.min = 0;
@@ -482,6 +526,24 @@
         }}
         aria-labelledby="search-filters-heading"
       >
+        <div class="form-control">
+          <label class="label" for="detection-source"
+            ><span class="label-text">{t('cameraLive.sourceType')}</span></label
+          >
+          <select
+            id="detection-source"
+            class="select w-full"
+            bind:value={detectionSource}
+            disabled={isLoading}
+            onchange={() => {
+              formSubmitted = false;
+            }}
+          >
+            <option value="all">{t('cameraLive.allSources')}</option>
+            <option value="audio">{t('cameraLive.audioSource')}</option>
+            <option value="frigate">Frigate</option>
+          </select>
+        </div>
         <!-- Basic Search Fields -->
         <div class="gap-4 search-form-grid">
           <!-- Species -->
@@ -559,31 +621,33 @@
         </div>
 
         <!-- Advanced Filters Toggle -->
-        <div class="flex items-center justify-between">
-          <button
-            type="button"
-            class="btn btn-sm btn-ghost"
-            onclick={() => (advancedFilters = !advancedFilters)}
-            aria-expanded={advancedFilters}
-            aria-controls="advancedFiltersSection"
-          >
-            <span
-              >{advancedFilters
-                ? t('search.hideAdvancedFilters')
-                : t('search.showAdvancedFilters')}</span
+        {#if detectionSource !== 'frigate'}
+          <div class="flex items-center justify-between">
+            <button
+              type="button"
+              class="btn btn-sm btn-ghost"
+              onclick={() => (advancedFilters = !advancedFilters)}
+              aria-expanded={advancedFilters}
+              aria-controls="advancedFiltersSection"
             >
-            <span
-              class="transition-transform duration-200"
-              class:rotate-180={advancedFilters}
-              aria-hidden="true"
-            >
-              <ChevronDown class="size-5" />
-            </span>
-          </button>
-        </div>
+              <span
+                >{t('cameraLive.audioSource')}: {advancedFilters
+                  ? t('search.hideAdvancedFilters')
+                  : t('search.showAdvancedFilters')}</span
+              >
+              <span
+                class="transition-transform duration-200"
+                class:rotate-180={advancedFilters}
+                aria-hidden="true"
+              >
+                <ChevronDown class="size-5" />
+              </span>
+            </button>
+          </div>
+        {/if}
 
         <!-- Advanced Filters Section -->
-        {#if advancedFilters}
+        {#if advancedFilters && detectionSource !== 'frigate'}
           <div class="space-y-2 pt-2" id="advancedFiltersSection">
             <!-- Confidence Range -->
             <div class="form-control">
@@ -732,6 +796,9 @@
   </div>
 
   <!-- Results Area -->
+  {#if formSubmitted && detectionSource !== 'audio'}
+    <CameraObservationResults data={cameraResults} loading={isLoading} error={cameraError} />
+  {/if}
   <div class="card bg-[var(--color-base-100)] shadow-xs">
     <div class="card-body card-padding">
       <div class="flex items-center justify-between">
@@ -743,63 +810,65 @@
             <span class="text-sm text-[var(--color-base-content)] opacity-70" aria-live="polite"
               >{formatResultsCount(totalResults)}</span
             >
-            <div class="dropdown dropdown-end">
-              <div
-                tabindex={isLoading ? -1 : 0}
-                role="button"
-                class="btn btn-sm btn-outline"
-                class:opacity-50={isLoading}
-                class:pointer-events-none={isLoading}
-                aria-haspopup="true"
-                aria-expanded="false"
-                aria-disabled={isLoading}
-                aria-label={t('common.sort')}
-              >
-                <ArrowDownUp class="size-5" />
-                {t('common.sort')}
-              </div>
-              <ul
-                tabindex="0"
-                class="dropdown-content z-1 menu p-2 shadow-xs bg-[var(--color-base-100)] rounded-box w-52"
-                role="menu"
-              >
-                <li role="menuitem">
-                  <button
-                    type="button"
-                    class="btn btn-ghost btn-sm justify-start w-full"
-                    disabled={isLoading}
-                    onclick={() => changeSort('date_desc')}
-                    >{t('search.sortOptions.dateDesc')}</button
-                  >
-                </li>
-                <li role="menuitem">
-                  <button
-                    type="button"
-                    class="btn btn-ghost btn-sm justify-start w-full"
-                    disabled={isLoading}
-                    onclick={() => changeSort('date_asc')}>{t('search.sortOptions.dateAsc')}</button
-                  >
-                </li>
-                <li role="menuitem">
-                  <button
-                    type="button"
-                    class="btn btn-ghost btn-sm justify-start w-full"
-                    disabled={isLoading}
-                    onclick={() => changeSort('species_asc')}
-                    >{t('search.sortOptions.speciesAsc')}</button
-                  >
-                </li>
-                <li role="menuitem">
-                  <button
-                    type="button"
-                    class="btn btn-ghost btn-sm justify-start w-full"
-                    disabled={isLoading}
-                    onclick={() => changeSort('confidence_desc')}
-                    >{t('search.sortOptions.confidenceDesc')}</button
-                  >
-                </li>
-              </ul>
-            </div>
+            {#if detectionSource !== 'frigate'}<div class="dropdown dropdown-end">
+                <div
+                  tabindex={isLoading ? -1 : 0}
+                  role="button"
+                  class="btn btn-sm btn-outline"
+                  class:opacity-50={isLoading}
+                  class:pointer-events-none={isLoading}
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  aria-disabled={isLoading}
+                  aria-label={t('common.sort')}
+                >
+                  <ArrowDownUp class="size-5" />
+                  {t('cameraLive.audioSource')}
+                  {t('common.sort')}
+                </div>
+                <ul
+                  tabindex="0"
+                  class="dropdown-content z-1 menu p-2 shadow-xs bg-[var(--color-base-100)] rounded-box w-52"
+                  role="menu"
+                >
+                  <li role="menuitem">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-sm justify-start w-full"
+                      disabled={isLoading}
+                      onclick={() => changeSort('date_desc')}
+                      >{t('search.sortOptions.dateDesc')}</button
+                    >
+                  </li>
+                  <li role="menuitem">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-sm justify-start w-full"
+                      disabled={isLoading}
+                      onclick={() => changeSort('date_asc')}
+                      >{t('search.sortOptions.dateAsc')}</button
+                    >
+                  </li>
+                  <li role="menuitem">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-sm justify-start w-full"
+                      disabled={isLoading}
+                      onclick={() => changeSort('species_asc')}
+                      >{t('search.sortOptions.speciesAsc')}</button
+                    >
+                  </li>
+                  <li role="menuitem">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-sm justify-start w-full"
+                      disabled={isLoading}
+                      onclick={() => changeSort('confidence_desc')}
+                      >{t('search.sortOptions.confidenceDesc')}</button
+                    >
+                  </li>
+                </ul>
+              </div>{/if}
           </div>
         {/if}
       </div>
@@ -1349,7 +1418,7 @@
       {/if}
 
       <!-- Empty state - when search returns no results -->
-      {#if formSubmitted && !isLoading && results.length === 0 && !errorMessage}
+      {#if formSubmitted && !isLoading && results.length === 0 && cameraResults.length === 0 && !errorMessage && !cameraError}
         <div
           class="mt-6 bg-[var(--color-base-200)] rounded-lg p-4 flex flex-col items-center justify-center min-h-[200px]"
         >

@@ -7,7 +7,11 @@ import (
 	"github.com/invopop/jsonschema"
 )
 
-const markdownHeader = `# Configuration Reference
+// The reference is generator-owned. Preserve its deterministic table layout when
+// contributors run the repository's required Markdown formatter.
+const markdownHeader = `<!-- prettier-ignore-start -->
+
+# Configuration Reference
 
 > Auto-generated from source. Do not edit manually.
 >
@@ -19,6 +23,8 @@ const markdownHeader = `# Configuration Reference
 
 `
 
+const markdownFooter = "<!-- prettier-ignore-end -->\n"
+
 // renderMarkdown walks the schema and produces a flat markdown reference
 // grouped by top-level config section.
 func renderMarkdown(schema *jsonschema.Schema) string {
@@ -27,6 +33,7 @@ func renderMarkdown(schema *jsonschema.Schema) string {
 
 	settingsDef := resolveRefWithDesc(schema, schema)
 	if settingsDef == nil || settingsDef.Properties == nil {
+		b.WriteString(markdownFooter)
 		return b.String()
 	}
 
@@ -56,6 +63,7 @@ func renderMarkdown(schema *jsonschema.Schema) string {
 		b.WriteByte('\n')
 	}
 
+	b.WriteString(markdownFooter)
 	return b.String()
 }
 

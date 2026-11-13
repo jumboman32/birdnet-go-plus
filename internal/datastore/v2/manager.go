@@ -309,6 +309,8 @@ func v2Entities() []any {
 		&entities.AlertHistory{},
 		// Application metadata
 		&entities.AppMetadata{},
+		&entities.VisualDetection{},
+		&entities.VisualSyncState{},
 		// Application event log
 		&entities.AppEvent{},
 		// Privacy filter activity

@@ -202,6 +202,9 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 
 	// -- eBird --
 	"Realtime.EBird": {categories: []hotReloadCategory{hotReloadFresh}, action: "reconfigure_ebird"},
+	// The Frigate worker compares live snapshots and cancels/restarts polls on
+	// changes; media and correlation handlers read settings per request.
+	"Realtime.Frigate": {categories: []hotReloadCategory{hotReloadFresh}},
 
 	// -- OpenWeather (runtime, yaml:"-") --
 	"Realtime.OpenWeather": {categories: []hotReloadCategory{hotReloadRuntime}},

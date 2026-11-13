@@ -31,6 +31,7 @@ func CloneSettings(src *Settings) *Settings {
 	// Shallow copy handles every value-type field (strings, ints, bools,
 	// nested structs whose fields are all value types).
 	dst := *src
+	dst.Realtime.Frigate.Cameras = slices.Clone(src.Realtime.Frigate.Cameras)
 
 	// Root-level slices and maps.
 	dst.ValidationWarnings = slices.Clone(src.ValidationWarnings)

@@ -295,6 +295,15 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.rtsp.ffmpegparameters", []string{})
 
 	// MQTT configuration
+	viper.SetDefault("realtime.frigate.enabled", false)
+	viper.SetDefault("realtime.frigate.cameras", []string{"feeder"})
+	viper.SetDefault("realtime.frigate.pollinterval", 20)
+	viper.SetDefault("realtime.frigate.requesttimeout", 10)
+	viper.SetDefault("realtime.frigate.maxattempts", 3)
+	viper.SetDefault("realtime.frigate.initialhistoryhours", 24)
+	viper.SetDefault("realtime.frigate.overlapseconds", 3600)
+	viper.SetDefault("realtime.frigate.correlationwindow", 30)
+	viper.SetDefault("realtime.frigate.snapshotretentionhours", 168)
 	viper.SetDefault("realtime.mqtt.enabled", false)
 	viper.SetDefault("realtime.mqtt.debug", false)
 	viper.SetDefault("realtime.mqtt.broker", "tcp://localhost:1883")

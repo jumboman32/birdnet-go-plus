@@ -79,7 +79,7 @@
     renderLoading,
     renderError,
     ...rest
-  }: Props<T> = $props() as Props<T>;
+  }: Props<T> = $props();
 
   function handleSort(column: Column<T>) {
     if (!column.sortable || !onSort) return;

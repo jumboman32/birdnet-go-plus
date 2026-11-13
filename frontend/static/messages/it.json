@@ -3553,6 +3553,23 @@
           "inProgress": "Test in corso...",
           "description": "Testa la connettività e l'autenticazione dell'API eBird"
         }
+      },
+      "frigate": {
+        "baseURL": "Indirizzo di Frigate",
+        "cameras": "Telecamere (separate da virgole)",
+        "pollInterval": "Intervallo di interrogazione (secondi)",
+        "requestTimeout": "Timeout richiesta (secondi)",
+        "maxAttempts": "Numero massimo di tentativi",
+        "initialHistoryHours": "Cronologia iniziale (ore)",
+        "overlapSeconds": "Sovrapposizione aggiornamenti (secondi)",
+        "classificationThreshold": "Affidabilità minima della classificazione",
+        "correlationWindow": "Finestra di correlazione audio (secondi)",
+        "snapshotRetentionHours": "Conservazione istantanee (ore)",
+        "snapshotImport": "Importa istantanee su richiesta",
+        "test": "Verifica connessione",
+        "connected": "Connessione a Frigate riuscita",
+        "savedTest": "Salvare le impostazioni prima del test. Il test utilizza la connessione salvata.",
+        "help": "Importa le osservazioni visive degli uccelli nel database v2. Configurare le credenziali nel file YAML del server; non vengono mai inviate al browser."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Tutte le specie",
     "caveat": "Un rilevamento mancante non dimostra assenza. I giorni di rilevamento non misurano il tempo di ascolto. Il calendario è un’istantanea datata.",
     "snapshot": "Istantanea: {date}"
+  },
+  "cameraLive": {
+    "title": "Telecamere in diretta",
+    "description": "Video in diretta da Frigate con riquadri di rilevamento.",
+    "camera": "Telecamera",
+    "live": "In diretta",
+    "connecting": "Connessione alla telecamera...",
+    "offline": "Telecamera non in linea",
+    "offlineHelp": "Avviare il flusso della telecamera in Frigate per vedere il video in diretta.",
+    "disabled": "Attivare e configurare Frigate per visualizzare le telecamere.",
+    "empty": "Selezionare almeno una telecamera nelle impostazioni di Frigate.",
+    "settings": "Impostazioni di Frigate",
+    "unavailable": "Flusso in diretta disconnesso. Nuovo tentativo automatico.",
+    "paused": "Vista in diretta in pausa",
+    "pause": "Metti in pausa la diretta",
+    "resume": "Riprendi la diretta",
+    "videoOnly": "Solo video",
+    "recentObservations": "Osservazioni recenti della telecamera",
+    "noObservations": "Nessuna osservazione della telecamera ancora importata.",
+    "observedAt": "Data di osservazione",
+    "species": "Specie",
+    "objectConfidence": "Confidenza rilevamento uccello",
+    "speciesConfidence": "Confidenza della specie",
+    "snapshot": "Istantanea",
+    "connectionError": "Impossibile raggiungere Frigate. Controllare l’URL API e il protocollo HTTP/HTTPS nelle impostazioni Frigate.",
+    "observationsError": "Impossibile caricare le osservazioni salvate. Nuovo tentativo automatico.",
+    "sourceType": "Origine del rilevamento",
+    "allSources": "Tutte le origini",
+    "audioSource": "Suono"
   }
 }

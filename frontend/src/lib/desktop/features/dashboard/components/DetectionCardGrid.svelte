@@ -23,6 +23,8 @@
 -->
 <script lang="ts">
   import DetectionCard from './DetectionCard.svelte';
+  import CameraObservationCard from '$lib/desktop/features/live-stream/components/CameraObservationCard.svelte';
+  import type { VisualObservation } from '$lib/desktop/features/live-stream/components/CameraObservationResults.svelte';
   import ConfirmModal from '$lib/desktop/components/modals/ConfirmModal.svelte';
   import type { Detection } from '$lib/types/detection.types';
   import { RefreshCw, XCircle, ChevronDown, Check } from '@lucide/svelte';
@@ -45,6 +47,7 @@
 
   interface Props {
     data: Detection[];
+    cameraData?: VisualObservation[];
     loading?: boolean;
     error?: string | null;
     onRefresh: () => void;
@@ -60,6 +63,7 @@
 
   let {
     data = [],
+    cameraData = [],
     loading = false,
     error = null,
     onRefresh,
@@ -105,7 +109,29 @@
     return out;
   });
 
-  const visibleData = $derived(uniqueData.slice(0, selectedLimit));
+  type RecentItem =
+    | { source: 'audio'; detection: Detection; key: string; timestamp: number }
+    | { source: 'frigate'; observation: VisualObservation; key: string; timestamp: number };
+  const visibleData = $derived.by(() => {
+    const items: RecentItem[] = uniqueData.map(detection => ({
+      source: 'audio',
+      detection,
+      key: `audio:${detection.id}`,
+      timestamp: Date.parse(detection.timestamp || `${detection.date}T${detection.time}`) || 0,
+    }));
+    const seen = new Set<number>();
+    for (const observation of cameraData) {
+      if (seen.has(observation.id)) continue;
+      seen.add(observation.id);
+      items.push({
+        source: 'frigate',
+        observation,
+        key: `frigate:${observation.id}`,
+        timestamp: Date.parse(observation.startTime) || 0,
+      });
+    }
+    return items.sort((a, b) => b.timestamp - a.timestamp).slice(0, selectedLimit);
+  });
 
   // Toggle dropdown
   function toggleLimitDropdown() {
@@ -288,24 +314,29 @@
           class:three-cards={visibleData.length === 3}
           class:three-columns={selectedLimit >= 3}
         >
-          {#each visibleData as detection (detection.id)}
-            <DetectionCard
-              {detection}
-              isNew={newDetectionIds.has(detection.id)}
-              isExcluded={isSpeciesExcluded(detection.commonName)}
-              {onFreezeStart}
-              {onFreezeEnd}
-              onMarkCorrect={() => actions.handleMarkCorrect(detection)}
-              onMarkFalsePositive={() => actions.handleMarkFalsePositive(detection)}
-              onReview={() => actions.handleReview(detection)}
-              onToggleSpecies={() => actions.handleToggleSpecies(detection)}
-              onToggleLock={() => actions.handleToggleLock(detection)}
-              onDelete={() => actions.handleDelete(detection)}
-            />
+          {#each visibleData as item (item.key)}
+            {#if item.source === 'frigate'}
+              <CameraObservationCard observation={item.observation} />
+            {:else}
+              {@const detection = item.detection}
+              <DetectionCard
+                {detection}
+                isNew={newDetectionIds.has(detection.id)}
+                isExcluded={isSpeciesExcluded(detection.commonName)}
+                {onFreezeStart}
+                {onFreezeEnd}
+                onMarkCorrect={() => actions.handleMarkCorrect(detection)}
+                onMarkFalsePositive={() => actions.handleMarkFalsePositive(detection)}
+                onReview={() => actions.handleReview(detection)}
+                onToggleSpecies={() => actions.handleToggleSpecies(detection)}
+                onToggleLock={() => actions.handleToggleLock(detection)}
+                onDelete={() => actions.handleDelete(detection)}
+              />
+            {/if}
           {/each}
         </div>
 
-        {#if data.length === 0}
+        {#if visibleData.length === 0}
           <div class="text-center py-8 text-[var(--color-base-content)]/60">
             {t('dashboard.recentDetections.noDetections')}
           </div>

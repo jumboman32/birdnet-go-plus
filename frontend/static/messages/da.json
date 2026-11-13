@@ -3553,6 +3553,23 @@
           "inProgress": "Test i gang...",
           "description": "Test eBird API-forbindelse og godkendelse"
         }
+      },
+      "frigate": {
+        "baseURL": "Frigate-adresse",
+        "cameras": "Kameraer (kommasepareret)",
+        "pollInterval": "Forespørgselsinterval (sekunder)",
+        "requestTimeout": "Timeout for anmodning (sekunder)",
+        "maxAttempts": "Maksimalt antal forsøg",
+        "initialHistoryHours": "Indledende historik (timer)",
+        "overlapSeconds": "Overlap for opdateringer (sekunder)",
+        "classificationThreshold": "Mindste klassifikationssikkerhed",
+        "correlationWindow": "Vindue for lydkorrelation (sekunder)",
+        "snapshotRetentionHours": "Opbevaring af billeder (timer)",
+        "snapshotImport": "Hent billeder efter behov",
+        "test": "Test forbindelse",
+        "connected": "Forbindelse til Frigate lykkedes",
+        "savedTest": "Gem indstillingerne før testen. Testen bruger den gemte forbindelse.",
+        "help": "Importerer visuelle fugleobservationer til v2-databasen. Angiv loginoplysninger i serverens YAML; de sendes aldrig til browseren."
       }
     },
     "audio": {
@@ -6136,5 +6153,34 @@
     "allSpecies": "Alle arter",
     "caveat": "En manglende detektion beviser ikke fravær. Dage med registreringer er ikke lyttetid. Kalenderen er et dateret øjebliksbillede.",
     "snapshot": "Øjebliksbillede: {date}"
+  },
+  "cameraLive": {
+    "title": "Livekameraer",
+    "description": "Livevideo fra Frigate med detektionsrammer.",
+    "camera": "Kamera",
+    "live": "Direkte",
+    "connecting": "Opretter forbindelse til kamera...",
+    "offline": "Kameraet er offline",
+    "offlineHelp": "Start kamerastrømmen i Frigate for at se livevideo.",
+    "disabled": "Aktivér og konfigurér Frigate for at se dine kameraer.",
+    "empty": "Vælg mindst ét kamera i Frigate-indstillingerne.",
+    "settings": "Frigate-indstillinger",
+    "unavailable": "Livestrømmen blev afbrudt. Prøver automatisk igen.",
+    "paused": "Livevisning sat på pause",
+    "pause": "Sæt livevisning på pause",
+    "resume": "Genoptag livevisning",
+    "videoOnly": "Kun video",
+    "recentObservations": "Seneste kameraobservationer",
+    "noObservations": "Ingen kameraobservationer er importeret endnu.",
+    "observedAt": "Observeret",
+    "species": "Art",
+    "objectConfidence": "Sikkerhed for fugleobjekt",
+    "speciesConfidence": "Artssikkerhed",
+    "snapshot": "Øjebliksbillede",
+    "connectionError": "Kan ikke kontakte Frigate. Kontrollér API-adressen og HTTP/HTTPS-protokollen i Frigate-indstillingerne.",
+    "observationsError": "Kan ikke indlæse gemte kameraobservationer. Prøver automatisk igen.",
+    "sourceType": "Registreringskilde",
+    "allSources": "Alle kilder",
+    "audioSource": "Lyd"
   }
 }
