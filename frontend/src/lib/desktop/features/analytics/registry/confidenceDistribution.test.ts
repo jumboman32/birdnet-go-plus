@@ -1,122 +1,66 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, cleanup } from '@testing-library/svelte';
-
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { CHART_REGISTRY } from './charts';
-import type { AnalyticsParams } from './types';
-import { makeAnalyticsParams, makeChartCtx } from './__tests__/registryFixtures';
-import SpeciesRidgeline from '../components/charts/d3/SpeciesRidgeline.svelte';
-import type { RidgelineSeries } from '../components/charts/d3/utils/ridgeline';
+import ConfidenceHistogram from '../components/ConfidenceHistogram.svelte';
+import { makeAnalyticsParams } from './__tests__/registryFixtures';
+import {
+  confidenceSearch,
+  histogramBars,
+  percentChange,
+  precedingPeriod,
+} from '../utils/confidenceAnalytics';
 
-// Verifies the confidence-distribution registry entry reuses the SpeciesRidgeline component with
-// confidence-specific props: series mapping (common-name resolution), the bins x-tick formatter,
-// empty/sparse handling, and the a11y summary. jsdom has no layout engine; assert on element
-// counts/attributes only.
+import { confidenceFixture } from './__tests__/confidenceFixture';
 
-beforeEach(() => {
-  vi.clearAllMocks();
-});
+afterEach(() => vi.unstubAllGlobals());
 
-afterEach(() => {
-  cleanup();
-});
-
-const def = CHART_REGISTRY.find(c => c.id === 'confidence-distribution');
-// Guard at module scope so the rest of the file sees a defined def + mapProps without non-null
-// assertions (forbidden by lint); a missing entry fails every test with a clear message.
-if (!def?.mapProps) {
-  throw new Error('confidence-distribution chart def with mapProps is required');
-}
-const mapProps = def.mapProps;
-
-// mapProps for this chart ignores params (always top-N); any valid params will do.
-const params: AnalyticsParams = makeAnalyticsParams();
-
-/** A 20-length density with a single peak bin, mimicking the server's normalized confidence bins. */
-function bins(peak: number): number[] {
-  return Array.from({ length: 20 }, (_, i) => (i === peak ? 1 : 0));
-}
-
-const sample = [
-  {
-    scientificName: 'Turdus merula',
-    commonName: 'Eurasian Blackbird',
-    density: bins(16),
-    total: 40,
-  },
-  {
-    scientificName: 'Erithacus rubecula',
-    commonName: 'Erithacus rubecula',
-    density: bins(10),
-    total: 12,
-  },
-];
-
-describe('confidence-distribution chart def', () => {
-  it('is registered in the quality group reusing the ridgeline component', () => {
-    expect(def.group).toBe('quality');
-    expect(def.component).toBe(SpeciesRidgeline);
-    // Always top-N by volume; never filters by species, so the (sole) quality tab shows no species selector.
-    expect(def.supports.species).toBe(false);
-    expect(def.supports.source).toBe(false);
-    expect(def.maxSpecies).toBe(5);
-    expect(def.minDataPoints).toBe(2);
+describe('confidence analytics', () => {
+  it('enhances the existing registry entry and allows a single species', () => {
+    const entry = CHART_REGISTRY.find(chart => chart.id === 'confidence-distribution');
+    expect(entry?.component).toBe(ConfidenceHistogram);
+    expect(entry?.supports.species).toBe(true);
+    expect(entry?.minDataPoints).toBe(1);
+    expect(CHART_REGISTRY.filter(chart => chart.id === 'confidence-distribution')).toHaveLength(1);
   });
-
-  it('maps confidence data to ridgeline series using the payload common name, with an empty hub map (#4459)', () => {
-    const props = mapProps(sample, params, makeChartCtx());
-    const series = props.series as Array<{
-      scientificName: string;
-      commonName: string;
-      density: number[];
-      total: number;
-    }>;
-    expect(series).toHaveLength(2);
-    expect(series[0].scientificName).toBe('Turdus merula');
-    expect(series[0].commonName).toBe('Eurasian Blackbird');
-    // The payload carried the scientific name as the fallback.
-    expect(series[1].commonName).toBe('Erithacus rubecula');
-    expect(series[0].density).toHaveLength(20);
-    expect(series[0].total).toBe(40);
+  it('uses 5% bins and the complete count as percentage denominator', () => {
+    const row = confidenceFixture();
+    const counts = histogramBars(row, false);
+    const percentages = histogramBars(row, true);
+    expect(counts).toHaveLength(20);
+    expect(counts[4]).toEqual({ label: '20\u201325%', value: 1 });
+    expect(percentages[4].value).toBe(25);
+    expect(percentages.reduce((sum, bar) => sum + bar.value, 0)).toBe(100);
+    expect(counts[19].label).toBe('95\u2013100%');
+    expect(
+      histogramBars(confidenceFixture({ count: 0, bins: Array(20).fill(0) }), true).every(
+        bar => bar.value === 0
+      )
+    ).toBe(true);
   });
-
-  it('labels confidence bins as left-edge percentages (0/25/50/75% for 20 bins)', () => {
-    const props = mapProps(sample, params, makeChartCtx());
-    const fmt = props.xTickFormat as (_i: number) => string;
-    expect(fmt(0)).toBe('0%');
-    expect(fmt(5)).toBe('25%');
-    expect(fmt(10)).toBe('50%');
-    expect(fmt(15)).toBe('75%');
-    expect(props.xTickStep).toBe(5);
+  it('sends every selected species and the full date range', () => {
+    const params = makeAnalyticsParams({ species: ['Parus major', 'Turdus merula'] });
+    const search = confidenceSearch(params);
+    expect(search.getAll('species')).toEqual(params.species);
+    expect(search.get('format')).toBe('analysis');
+    expect(search.has('limit')).toBe(false);
+    expect(search.has('start_date')).toBe(true);
   });
-
-  it('keeps the formatter divisor safe on an empty result (bin-count fallback)', () => {
-    const props = mapProps([], params, makeChartCtx());
-    expect(props.series).toHaveLength(0);
-    const fmt = props.xTickFormat as (_i: number) => string;
-    // Falls back to the default 20 bins, so 5/20 = 25% rather than a divide-by-zero.
-    expect(fmt(5)).toBe('25%');
+  it('preserves cancellation and rejects malformed aggregates', async () => {
+    const controller = new AbortController();
+    const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => [{ count: 1 }] });
+    vi.stubGlobal('fetch', fetch);
+    const entry = CHART_REGISTRY.find(chart => chart.id === 'confidence-distribution');
+    await expect(entry?.fetch(makeAnalyticsParams(), controller.signal)).rejects.toThrow(
+      'Invalid confidence analytics'
+    );
+    expect(fetch.mock.calls[0][1].signal).toBe(controller.signal);
   });
-
-  it('wires this chart-specific i18n keys into the shared component', () => {
-    const props = mapProps(sample, params, makeChartCtx());
-    expect(props.ariaLabelKey).toBe('analytics.advanced.charts.confidence.ariaLabel');
-    expect(props.axisLabelKey).toBe('analytics.advanced.charts.confidence.axisLabel');
-    expect(props.summaryKey).toBe('analytics.advanced.charts.confidence.summary');
-    expect(props.noteKey).toBe('analytics.advanced.charts.confidence.note');
-    expect(props.totalLabelKey).toBe('analytics.advanced.charts.confidence.tooltipCount');
-    expect(props.peakLabelKey).toBe('analytics.advanced.charts.confidence.tooltipPeak');
-  });
-
-  it('renders one ridge per species through the shared component, with an a11y summary', async () => {
-    const series = mapProps(sample, params, makeChartCtx()).series as RidgelineSeries[];
-    const { container } = render(SpeciesRidgeline, { props: { series, width: 800 } });
-    await Promise.resolve();
-    expect(container.querySelectorAll('path.ridge-area')).toHaveLength(2);
-    expect(container.querySelector('[data-testid="ridgeline-summary"]')).toBeTruthy();
-  });
-
-  it('renders without throwing for an empty (sparse) result', () => {
-    const series = mapProps([], params, makeChartCtx()).series as RidgelineSeries[];
-    expect(() => render(SpeciesRidgeline, { props: { series } })).not.toThrow();
+  it('compares calendar periods across DST and avoids dividing by zero', () => {
+    const previous = precedingPeriod(
+      makeAnalyticsParams({ startDate: new Date(2026, 10, 1), endDate: new Date(2026, 10, 7) })
+    );
+    expect(previous.start).toBe('2026-10-25');
+    expect(previous.end).toBe('2026-10-31');
+    expect(percentChange(72, 100)).toBeCloseTo(-28);
+    expect(percentChange(10, 0)).toBeNull();
   });
 });

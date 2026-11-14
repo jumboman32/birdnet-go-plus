@@ -31,6 +31,11 @@ The calendar uses a private local eBird import and refreshes automatically when 
 
 **Regional species checklist** — Track lifetime species progress against county and state eBird lists, with an optional county override.
 
+The Species page includes [regional checklist progress](doc/species-target-progress.md).
+The [updated analytics](doc/confidence-analytics.md) adds Summary activity and
+period-comparison panels, top-10/top-20 species charts, and model-separated
+confidence histograms with detection review links.
+
 ![Regional species progress showing county and state checklist totals and an eBird county selector](doc/images/ui5.png)
 
 ## Repository layout
@@ -81,6 +86,14 @@ species classification retain separate confidence scores; an unidentified bird s
 unidentified. Camera observations use the v2 database and do not count as audio
 detections. See the [Frigate guide](doc/FRIGATE.md) for authentication, polling,
 snapshot retention, and configuration details.
+
+Live Cameras offers a lightweight preview with detection boxes and an optional
+**Source quality** mode for the original go2rtc video without a BirdNET-imposed
+resolution or frame-rate cap. Unsupported source playback falls back to preview.
+
+For automatic visual species identification, the
+[YA-WAMF Windows setup](deployment/yawamf/README.md) adds MQTT and a dedicated
+image classifier while retaining BirdNET-Go+ as the dashboard and audio analyzer.
 
 Built on the work of the BirdNET-Go contributors.
 

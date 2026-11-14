@@ -38,7 +38,6 @@ describe('server-chosen species charts read commonName from the payload', () => 
   const cases: Array<{ id: string; row: Record<string, unknown> }> = [
     { id: 'species-ridgeline', row: { buckets: [], total: 3 } },
     { id: 'acoustic-succession', row: { counts: [], total: 3 } },
-    { id: 'confidence-distribution', row: { bins: [], total: 3 } },
     {
       id: 'species-phenology',
       row: { firstSeen: '2026-03-01', lastSeen: '2026-03-20', count: 3 },

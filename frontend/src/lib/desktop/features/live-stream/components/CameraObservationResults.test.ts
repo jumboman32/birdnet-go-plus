@@ -33,6 +33,7 @@ describe('Camera observation snapshots', () => {
             commonName: 'Blue Jay',
             startTime: '2026-11-13T22:45:30Z',
             snapshotStatus: 'available',
+            classificationSource: 'frigate_sublabel',
           },
         ],
       },

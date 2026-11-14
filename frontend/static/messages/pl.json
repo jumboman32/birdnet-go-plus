@@ -1106,7 +1106,9 @@
         "rare": "Rzadki",
         "very_rare": "Bardzo rzadki",
         "unknown": "Nieznany"
-      }
+      },
+      "modelTitle": "Model geograficzny BirdNET",
+      "modelContext": "Bieżący sezonowy kontekst modelu; niezależny od lokalnego wskaźnika rzadkości i pewności identyfikacji."
     },
     "taxonomy": {
       "hierarchy": "Klasyfikacja Taksonomiczna",
@@ -2170,6 +2172,17 @@
         "detections": "Detekcje:",
         "confidence": "Pewność:",
         "first": "Pierwsze:"
+      },
+      "targets": {
+        "title": "Postęp w wykrywaniu gatunków regionalnych",
+        "description": "Gatunki wykryte przez stację w porównaniu z listami gatunków eBird dla hrabstwa i stanu.",
+        "region": "Kod hrabstwa eBird",
+        "regionHint": "Wpisz kod hrabstwa, np. US-NJ-001. Stan jest ustalany na podstawie hrabstwa. Pozostaw puste, aby użyć skonfigurowanego regionu.",
+        "regionRequired": "Wybierz kod hrabstwa eBird, aby zobaczyć postęp dla hrabstwa i stanu.",
+        "ebirdRequired": "Włącz integrację eBird i skonfiguruj klucz API w Ustawieniach, aby wczytać listy regionalne.",
+        "county": "Hrabstwo",
+        "state": "Stan",
+        "lifetime": "Różne gatunki z całej historii, z wyłączeniem sprawdzonych fałszywie dodatnich wykryć. Bieżące filtry strony nie zmieniają tej sumy."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Popołudnie (12-16)",
       "evening17to19": "Wieczór (17-19)",
       "night20to23": "Noc (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Wzorce w tym okresie",
+      "balanceHelp": "Efektywna różnorodność to liczba jednakowo częstych gatunków, które dałyby taki rozkład wykryć. Udział wykryć nie oznacza liczebności ptaków.",
+      "effective": "Efektywna różnorodność",
+      "topFive": "Udział 5 najczęstszych gatunków",
+      "coverage": "Gatunki odpowiadające za 80% wykryć",
+      "peakWindow": "Najaktywniejsze 3 godziny",
+      "windowShare": "{percentage}% wykryć",
+      "share": "Udział wykryć",
+      "otherSpecies": "Pozostałe gatunki",
+      "comparisonTitle": "Porównanie z poprzednim okresem",
+      "completedOnly": "Dzisiaj jest pomijane; wybierz zakres z zakończonymi dniami.",
+      "versus": "wobec",
+      "comparisonHelp": "Zakończone okresy o równej długości. Pokrycie nagraniami może się różnić.",
+      "comparisonError": "Nie udało się wczytać porównania okresów.",
+      "volumeChange": "Zmiana wykryć",
+      "diversityChange": "Zmiana różnorodności",
+      "retained": "Zachowane gatunki",
+      "noBaseline": "Brak wcześniejszych wykryć: zmiany procentowe nie mają podstawy porównania.",
+      "retainedHelp": "Zachowane gatunki wykryto w obu okresach, jako udział gatunków z poprzedniego okresu.",
+      "gaining": "Największe wzrosty udziału",
+      "losing": "Największe spadki udziału",
+      "shareChange": "{change} p.p.",
+      "noMovement": "Brak zmian udziału do wyświetlenia."
+    },
+    "confidenceAnalysis": {
+      "caution": "Pewność jest wynikiem modelu, a nie dokładnością identyfikacji ani skalibrowanym prawdopodobieństwem poprawności. Wyniki różnych modeli są wyświetlane oddzielnie.",
+      "threshold": "Skupienie wyników przy dolnej granicy może wynikać z minimalnych progów wykrywania. Obecne progi, ustawienia dla poszczególnych gatunków i progi dynamiczne mogą różnić się od użytych w starszych nagraniach.",
+      "population": "Uwzględniono wszystkie kwalifikujące się zapisane identyfikacje podstawowe z wybranych dni. Sprawdzone fałszywie dodatnie wykrycia i wyniki poza zakresem 0–100% są wykluczone. Prognozy dodatkowe nie są kolejnymi wykryciami.",
+      "normalized": "Pokaż procenty",
+      "models": "Modele identyfikacji",
+      "unknownModel": "Nieznany model",
+      "allModels": "Bez wyboru modelu wszystkie zarejestrowane modele są wyświetlane oddzielnie.",
+      "sample": "Liczba wykryć: {count}",
+      "median": "Mediana pewności",
+      "percent": "Odsetek wykryć",
+      "high": "Wysoka pewność (80%+)",
+      "binsHelp": "Wybierz słupek, aby sprawdzić wykrycia. Przedziały obejmują dolną granicę; tylko ostatni obejmuje górną granicę (100%). Procenty odnoszą się do całej tej serii, w tym wyników poniżej 20%.",
+      "review": "Sprawdź wykrycia",
+      "insights": "Wnioski z podsumowania",
+      "modelScope": "Poniższe wskaźniki pewności i wnioski wykorzystują {count} wykryć z modelu {model}. Wybierz inny zarejestrowany model do porównania; wyniki nigdy nie są łączone.",
+      "highInsight": "Spośród {count} wykryć {percent} uzyskało wynik co najmniej 80%.",
+      "speciesInsight": "Gatunek {species} stanowił {percent} spośród {count} wykryć.",
+      "lowInsight": "Spośród {count} wykryć {percent} uzyskało wynik od 20% do poniżej 30%.",
+      "changeInsight": "Liczba zarejestrowanych wykryć zmieniła się o {change} względem poprzedniego okresu kalendarzowego o tej samej długości ({current} wobec {previous} wykryć).",
+      "pointsInsight": "Udział wyników 80%+ zmienił się o {change} punktów procentowych względem poprzedniego okresu ({current} wobec {previous} wykryć)."
+    },
+    "summary": {
+      "activityTitle": "Przegląd aktywności",
+      "activeDays": "Dni z wykryciami",
+      "uptime": "Dostępność",
+      "uptimeUnavailable": "Niedostępne",
+      "uptimeHistoryMissing": "Historia dostępności nie obejmuje tego okresu.",
+      "uptimeScope": "Dostępność serwera w minionym okresie.",
+      "uptimeMinimum": "Co najmniej {percentage}%",
+      "uptimePartial": "Minimalna potwierdzona dostępność; wcześniejsze sesje nie zostały zapisane. Odświeżanie co 10 minut.",
+      "calendarAverage": "Wykrycia na dzień kalendarzowy",
+      "busiestDay": "Dzień z największą liczbą wykryć",
+      "calendarScope": "Na podstawie wybranych dni kalendarzowych, a nie czasu nagrywania.",
+      "topSpecies": "{count} najczęściej wykrywanych gatunków",
+      "speciesLimit": "Wyświetlane gatunki",
+      "chartStyle": "Typ wykresu",
+      "barChart": "Wykres słupkowy",
+      "pieChart": "Wykres kołowy",
+      "coverage": "Udział we wszystkich wykryciach",
+      "hourlyTitle": "Wykrycia według godziny"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Nie można wczytać zapisanych obserwacji. Próba zostanie ponowiona automatycznie.",
     "sourceType": "Źródło wykrycia",
     "allSources": "Wszystkie źródła",
-    "audioSource": "Dźwięk"
+    "audioSource": "Dźwięk",
+    "classificationSource": "Źródło klasyfikacji",
+    "frigateSublabel": "Podetykieta Frigate",
+    "ownerConfirmed": "Potwierdzone przez właściciela",
+    "qualityLabel": "Jakość wideo",
+    "previewQuality": "Podgląd · 720p / 3 FPS",
+    "sourceQuality": "Jakość źródłowa",
+    "previewHelp": "Podgląd o niskim zużyciu danych z ramkami wykrywania.",
+    "sourceHelp": "Oryginalne wideo go2rtc bez limitu rozdzielczości ani klatek. Bez ramek wykrywania.",
+    "sourceFallback": "Wideo źródłowe jest niedostępne lub nieobsługiwane. Wyświetlany jest podgląd.",
+    "detectionFps": "FPS wykrywania"
   }
 }

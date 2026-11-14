@@ -28,6 +28,7 @@
     formatValue?: (_n: number) => string;
     valueTooltipLabel?: string;
     ariaLabel?: string;
+    onBarClick?: (_datum: BarChartDatum) => void;
   }
 
   let {
@@ -40,6 +41,7 @@
     formatValue = (n: number) => String(n),
     valueTooltipLabel,
     ariaLabel,
+    onBarClick,
   }: Props = $props();
 
   // Styling constants
@@ -280,6 +282,20 @@
     bars: Selection<globalThis.SVGRectElement, BarChartDatum, globalThis.SVGGElement, unknown>
   ) {
     const tooltipLabel = valueTooltipLabel ?? '';
+    if (onBarClick) {
+      bars
+        .attr('tabindex', 0)
+        .attr('role', 'button')
+        .attr('aria-label', d => `${d.label}: ${formatValue(d.value)}`)
+        .style('cursor', 'pointer')
+        .on('click', (_event, d) => onBarClick?.(d))
+        .on('keydown', (event: KeyboardEvent, d) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onBarClick?.(d);
+          }
+        });
+    }
     bars
       .on('mouseenter', function (event: MouseEvent, d: BarChartDatum) {
         select(this).transition().duration(TRANSITION_MS).style('opacity', BAR_HOVER_OPACITY);
@@ -308,6 +324,7 @@
     void categoryAxisLabel;
     void formatValue;
     void valueTooltipLabel;
+    void onBarClick;
     if (chartContext) {
       drawChart(chartContext);
     }
@@ -326,7 +343,14 @@
 </script>
 
 <div class="bar-chart" bind:this={chartContainer}>
-  <BaseChart {width} {height} {ariaLabel} {margin} responsive={true}>
+  <BaseChart
+    {width}
+    {height}
+    {ariaLabel}
+    {margin}
+    containerRole={onBarClick ? 'group' : 'img'}
+    responsive={true}
+  >
     {#snippet children(context)}
       {((chartContext = context), '')}
     {/snippet}

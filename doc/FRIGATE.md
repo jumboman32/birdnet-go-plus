@@ -10,6 +10,11 @@ explicitly migrate through System > Database first.
 
 ## Local setup
 
+For visual species identification through MQTT, see the
+[YA-WAMF Windows deployment guide](../deployment/yawamf/README.md). It keeps this
+poller and dashboard, adds an independent classifier, and avoids duplicate audio
+ingestion.
+
 Use the existing backend rather than a separate dashboard. In a supported Linux
 development shell (including WSL), from the repository root:
 
@@ -140,6 +145,42 @@ It stores no relationships and changes no original model scores. Clock differenc
 must be corrected at the source or accommodated through the comparison window.
 Possible matches are not evidence that the same individual bird produced a call.
 
+## Owner species review
+
+`PUT /api/v2/visual-detections/:id/species` accepts a canonical scientific name:
+`{"scientificName":"Cardinalis cardinalis","verified":true}`. Authentication
+and CSRF protection apply. The species must exist in the active species index.
+Success returns 204, unknown IDs return 404, and invalid species return 400.
+
+The review sets `speciesVerified: true` and `classificationSource: "manual"`.
+Future Frigate imports preserve the reviewed identity while updating raw labels,
+snapshots and times. Manual identity has no invented classifier confidence.
+Sending `{"verified":false}` unlocks the record and clears the reviewed identity;
+the next eligible poll resolves the current automatic label again.
+
+On the local installation, the following PowerShell example uses the application's
+session and CSRF token. For servers requiring sign-in, first authenticate that
+same web session through the configured authentication flow.
+
+```powershell
+$base = 'http://127.0.0.1:8082'
+$app = Invoke-RestMethod "$base/api/v2/app/config" -SessionVariable birdnetSession
+$headers = @{ 'X-CSRF-Token' = $app.csrfToken }
+Invoke-RestMethod "$base/api/v2/visual-detections?limit=20" -WebSession $birdnetSession
+$observationId = Read-Host 'Enter the visual observation ID to review'
+$review = @{ scientificName = 'Cardinalis cardinalis'; verified = $true } | ConvertTo-Json
+Invoke-RestMethod "$base/api/v2/visual-detections/$observationId/species" -Method Put -WebSession $birdnetSession -Headers $headers -ContentType 'application/json' -Body $review
+# To return that same record to automatic classification:
+# Invoke-RestMethod "$base/api/v2/visual-detections/$observationId/species" -Method Put -WebSession $birdnetSession -Headers $headers -ContentType 'application/json' -Body '{"verified":false}'
+```
+
+Automatic labels expose `classificationSource: "frigate_sublabel"`. Frigate does
+not export the producing model ID or a manual-review flag, so this source does
+not claim a particular YA-WAMF model. Consult YA-WAMF's own history for model
+provenance. Manual edits only in Frigate or YA-WAMF do not create a BirdNET review
+lock automatically. The bounded overlap rechecks event start times for one hour
+by default; labels written after that window need a deliberate wider replay.
+
 ## Snapshots
 
 Snapshot import is off by default. When enabled, authenticated requests download
@@ -219,6 +260,56 @@ server. The proxy permits two concurrent viewers, bounds each connection to
 30 seconds and each frame to 8 MiB/24 megapixels, and does not record or encode
 video. The page renews its stream every 25 seconds and polls status every 10 seconds.
 Changes to integration settings apply to the next request.
+
+The viewer keeps the video within 70% of the window height and displays the
+camera's reported **Detection FPS** beside playback controls. This is Frigate's
+processing statistic, not measured playback FPS. **Refresh** reloads camera status
+and saved observations and reconnects the video. If the stream disconnects,
+**Retry** reconnects immediately; automatic recovery remains enabled. Connection
+failures show a disconnected state rather than an indefinite connecting message.
+
+### Source-quality video
+
+**Video quality** offers two choices. The default **Preview · 720p / 3 FPS** uses
+the bounded MJPEG proxy with detection boxes. **Source quality** plays the
+configured go2rtc video directly through an authenticated, same-origin MSE
+WebSocket proxy. BirdNET-Go+ does not resize, transcode or cap its frame rate.
+Actual quality depends on the go2rtc source configured in Frigate and the camera's
+output. The original video has no rendered detection boxes. Both modes are video
+only and leave audio analysis unchanged.
+
+Source playback requires Frigate go2rtc configuration and a browser supporting
+the source H.264 or H.265 codec through MediaSource. The camera-named go2rtc stream
+is preferred; configured `cameras.<camera>.live.streams` aliases are supported
+when that name is absent. Only existing, named streams are accepted. Browser
+requests cannot supply arbitrary input URLs, ffmpeg commands or go2rtc messages.
+Credentials stay on the backend and upstream error details are not exposed.
+
+`GET /api/v2/integrations/frigate/cameras/:camera/source?codecs=...` upgrades to
+WebSocket after authentication and same-origin validation. It negotiates only
+allowlisted video codecs and relays fragmented MP4 without saving it. The shared
+two-viewer limit applies to both modes; messages and the browser's fragment queue
+are bounded to 8 MiB. Old buffered video is trimmed. Connections last at most ten
+minutes and the page renews source playback after nine minutes. Pausing, switching
+quality/camera, hiding the tab or leaving the page closes the connection.
+Disabling the integration, removing the camera or changing credentials closes
+active source connections on the next ten-second heartbeat.
+
+An unsupported codec/browser, unavailable source or startup failure returns to
+the preview with an explicit message. **Refresh** retries source quality if it
+was selected. Source quality is opt-in on each page visit. A missing go2rtc source
+does not disable the working preview. Reverse proxies must pass WebSocket
+upgrades and preserve the public Host header; Vite's development proxy does this
+for `/api` as well. No extra go2rtc host port or camera credentials in browser URLs
+are needed.
+
+Source-playback verification uses an isolated 1920×1080, 30 FPS H.264 fixture:
+the browser decoded it through the real Go proxy without resizing, and separate
+UI checks exercised quality switching, pause/resume, hidden-tab cleanup and tablet
+sizing. Deployed checks on ports 8082 and 5173 verified same-origin handshakes,
+cross-origin rejection and fallback when go2rtc cannot retrieve the camera.
+These checks do not verify the physical camera's current source quality; that
+check was deferred by the owner. No test birds or visual observations were added.
 
 Recent imported observations appear below the feed, with snapshot thumbnails and
 separate object/species confidence scores. Search Detections searches both audio

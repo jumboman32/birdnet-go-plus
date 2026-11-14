@@ -1106,7 +1106,9 @@
         "rare": "Rare",
         "very_rare": "Very Rare",
         "unknown": "Unknown"
-      }
+      },
+      "modelTitle": "BirdNET geographic model",
+      "modelContext": "Current seasonal model context; separate from Local Rarity Score and identification confidence."
     },
     "taxonomy": {
       "hierarchy": "Taxonomic Classification",
@@ -2170,6 +2172,17 @@
         "detections": "Detections:",
         "confidence": "Confidence:",
         "first": "First:"
+      },
+      "targets": {
+        "title": "Regional species progress",
+        "description": "Station species detected compared with the eBird county and state species lists.",
+        "region": "eBird county code",
+        "regionHint": "Enter a county code such as US-NJ-001. The state is derived from the county. Leave blank to use the configured region.",
+        "regionRequired": "Choose an eBird county code to see county and state progress.",
+        "ebirdRequired": "Enable the eBird integration and configure an API key in Settings to load regional lists.",
+        "county": "County",
+        "state": "State",
+        "lifetime": "Lifetime distinct species, excluding reviewed false positives. Current page filters do not change this total."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Afternoon (12-16)",
       "evening17to19": "Evening (17-19)",
       "night20to23": "Night (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Patterns in this period",
+      "balanceHelp": "Effective diversity is the number of equally common species that would produce this detection mix. Detection share is not bird abundance.",
+      "effective": "Effective diversity",
+      "topFive": "Top 5 species’ share",
+      "coverage": "Species behind 80% of detections",
+      "peakWindow": "Peak 3-hour window",
+      "windowShare": "{percentage}% of detections",
+      "share": "Share of detections",
+      "otherSpecies": "Other species",
+      "comparisonTitle": "Compared with the previous period",
+      "completedOnly": "Today is excluded; select a range with completed days.",
+      "versus": "vs.",
+      "comparisonHelp": "Equal-length completed periods. Recording coverage may differ.",
+      "comparisonError": "Period comparison could not be loaded.",
+      "volumeChange": "Detection change",
+      "diversityChange": "Diversity change",
+      "retained": "Species retained",
+      "noBaseline": "No earlier detections: percentage changes have no baseline.",
+      "retainedHelp": "Retained species are those detected in both periods, as a share of the previous period’s species.",
+      "gaining": "Biggest share gains",
+      "losing": "Biggest share declines",
+      "shareChange": "{change} pp",
+      "noMovement": "No share changes to show."
+    },
+    "confidenceAnalysis": {
+      "caution": "Confidence is a model score, not identification accuracy or a calibrated probability of correctness. Scores from different models are shown separately.",
+      "threshold": "Clustering near the lower end may reflect minimum detection thresholds. Current thresholds, species overrides and dynamic thresholds can differ from those used for historical recordings.",
+      "population": "All eligible saved primary identifications in the selected dates are included. Reviewed false positives and scores outside 0-100% are excluded. Secondary predictions are not additional detections.",
+      "normalized": "Show percentages",
+      "models": "Identification models",
+      "unknownModel": "Unknown model",
+      "allModels": "No model selected shows all recorded models separately.",
+      "sample": "{count} detections",
+      "median": "Median confidence",
+      "percent": "Percentage of detections",
+      "high": "High confidence (80%+)",
+      "binsHelp": "Select a bar to review detections. Ranges include their lower bound; only the last range includes its upper bound (100%). Percentages use this series total, including scores below 20%.",
+      "review": "Review detections",
+      "insights": "Summary insights",
+      "modelScope": "Confidence metrics and insights below use {count} detections from {model}. Select another recorded model to compare; scores are never pooled.",
+      "highInsight": "{percent} of {count} detections scored 80% or higher.",
+      "speciesInsight": "{species} accounted for {percent} of {count} detections.",
+      "lowInsight": "{percent} of {count} detections scored from 20% to below 30%.",
+      "changeInsight": "Recorded detections changed {change} versus the preceding equal calendar period ({current} versus {previous} detections).",
+      "pointsInsight": "The share scoring 80%+ changed {change} percentage points versus the preceding period ({current} versus {previous} detections)."
+    },
+    "summary": {
+      "activityTitle": "Activity snapshot",
+      "activeDays": "Days with detections",
+      "uptime": "Uptime",
+      "uptimeUnavailable": "Unavailable",
+      "uptimeHistoryMissing": "Uptime history does not cover this period.",
+      "uptimeScope": "Server availability during the elapsed period.",
+      "uptimeMinimum": "At least {percentage}%",
+      "uptimePartial": "Minimum confirmed uptime; earlier sessions are not recorded. Refreshes every 10 minutes.",
+      "calendarAverage": "Detections per calendar day",
+      "busiestDay": "Busiest day",
+      "calendarScope": "Based on selected calendar days, not recording uptime.",
+      "topSpecies": "Top {count} species",
+      "speciesLimit": "Species displayed",
+      "chartStyle": "Chart type",
+      "barChart": "Bar chart",
+      "pieChart": "Pie chart",
+      "coverage": "Share of all detections",
+      "hourlyTitle": "Detections by hour"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Cannot load saved camera observations. Retrying automatically.",
     "sourceType": "Detection source",
     "allSources": "All sources",
-    "audioSource": "Audio"
+    "audioSource": "Audio",
+    "classificationSource": "Classification source",
+    "frigateSublabel": "Frigate sublabel",
+    "ownerConfirmed": "Owner confirmed",
+    "qualityLabel": "Video quality",
+    "previewQuality": "Preview · 720p / 3 FPS",
+    "sourceQuality": "Source quality",
+    "previewHelp": "Low-bandwidth preview with detection boxes.",
+    "sourceHelp": "Original go2rtc video without a resolution or frame-rate cap. Detection boxes are not included.",
+    "sourceFallback": "Source video is unavailable or unsupported. Showing the preview instead.",
+    "detectionFps": "Detection FPS"
   }
 }

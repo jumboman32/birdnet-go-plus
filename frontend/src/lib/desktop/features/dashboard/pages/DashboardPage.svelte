@@ -39,6 +39,8 @@ Performance Optimizations:
 -->
 <script lang="ts">
   import { onMount, untrack } from 'svelte';
+
+  const DASHBOARD_UI_SCALE = 0.95;
   import { ReconnectingEventSource } from '$lib/utils/ReconnectingEventSource';
   import CurrentlyHearingCard from '$lib/desktop/features/dashboard/components/CurrentlyHearingCard.svelte';
   import DailySummaryCard from '$lib/desktop/features/dashboard/components/DailySummaryCard.svelte';
@@ -1394,7 +1396,7 @@ Performance Optimizations:
   }
 </script>
 
-<div class="col-span-12">
+<div class="col-span-12" style:zoom={DASHBOARD_UI_SCALE}>
   <AcousticModelBanner class="mb-6" />
   <LegacyDatabaseBanner class="mb-6" />
   <DashboardEditMode

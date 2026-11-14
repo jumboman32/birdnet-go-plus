@@ -1106,7 +1106,9 @@
         "rare": "Sällsynt",
         "very_rare": "Mycket sällsynt",
         "unknown": "Okänd"
-      }
+      },
+      "modelTitle": "BirdNETs geografiska modell",
+      "modelContext": "Modellens aktuella säsongskontext; skild från lokalt sällsynthetsvärde och identifieringssäkerhet."
     },
     "taxonomy": {
       "hierarchy": "Taxonomisk klassificering",
@@ -2170,6 +2172,17 @@
         "detections": "Detektioner:",
         "confidence": "Konfidens:",
         "first": "Först:"
+      },
+      "targets": {
+        "title": "Framsteg för regionala arter",
+        "description": "Arter som stationen upptäckt jämfört med eBirds artlistor för county och delstat.",
+        "region": "eBird-county-kod",
+        "regionHint": "Ange en county-kod som US-NJ-001. Delstaten härleds från county-koden. Lämna tomt för att använda den konfigurerade regionen.",
+        "regionRequired": "Välj en eBird-county-kod för att se framsteg för county och delstat.",
+        "ebirdRequired": "Aktivera eBird-integrationen och ange en API-nyckel i Inställningar för att läsa in regionala listor.",
+        "county": "Län",
+        "state": "Delstat",
+        "lifetime": "Unika arter under hela stationens livstid, utan granskade falska positiva. Sidans aktuella filter ändrar inte detta totalantal."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Eftermiddag (12-16)",
       "evening17to19": "Kväll (17-19)",
       "night20to23": "Natt (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Mönster under perioden",
+      "balanceHelp": "Effektiv mångfald är antalet lika vanliga arter som skulle ge denna fördelning av detektioner. Detektionsandel är inte fågelbestånd.",
+      "effective": "Effektiv mångfald",
+      "topFive": "De 5 vanligaste arternas andel",
+      "coverage": "Arter bakom 80 % av detektionerna",
+      "peakWindow": "Mest aktiva 3-timmarsperiod",
+      "windowShare": "{percentage} % av detektionerna",
+      "share": "Andel av detektioner",
+      "otherSpecies": "Övriga arter",
+      "comparisonTitle": "Jämfört med föregående period",
+      "completedOnly": "I dag ingår inte; välj ett intervall med avslutade dagar.",
+      "versus": "mot",
+      "comparisonHelp": "Lika långa avslutade perioder. Inspelningstäckningen kan skilja sig.",
+      "comparisonError": "Kunde inte läsa in periodjämförelsen.",
+      "volumeChange": "Förändring i detektioner",
+      "diversityChange": "Förändring i mångfald",
+      "retained": "Bibehållna arter",
+      "noBaseline": "Inga tidigare detektioner: procentförändringar saknar jämförelsegrund.",
+      "retainedHelp": "Bibehållna arter har detekterats under båda perioderna, som andel av föregående periods arter.",
+      "gaining": "Största ökningar i andel",
+      "losing": "Största minskningar i andel",
+      "shareChange": "{change} procentenheter",
+      "noMovement": "Inga andelsförändringar att visa."
+    },
+    "confidenceAnalysis": {
+      "caution": "Konfidens är en modellpoäng, inte identifieringsnoggrannhet eller en kalibrerad sannolikhet för korrekthet. Poäng från olika modeller visas separat.",
+      "threshold": "En ansamling nära den nedre gränsen kan bero på lägsta detektionströsklar. Aktuella trösklar, artspecifika åsidosättanden och dynamiska trösklar kan skilja sig från dem som användes för historiska inspelningar.",
+      "population": "Alla tillämpliga sparade primära identifieringar inom de valda datumen ingår. Granskade falska positiva och poäng utanför 0–100 % utesluts. Sekundära förutsägelser är inte ytterligare detektioner.",
+      "normalized": "Visa procentandelar",
+      "models": "Identifieringsmodeller",
+      "unknownModel": "Okänd modell",
+      "allModels": "Om ingen modell är vald visas alla registrerade modeller separat.",
+      "sample": "{count} detektioner",
+      "median": "Mediankonfidens",
+      "percent": "Procentandel av detektioner",
+      "high": "Hög konfidens (80 %+)",
+      "binsHelp": "Välj en stapel för att granska detektionerna. Intervallen inkluderar sin nedre gräns; endast det sista inkluderar sin övre gräns (100 %). Procentandelarna beräknas från hela denna serie, inklusive poäng under 20 %.",
+      "review": "Granska detektioner",
+      "insights": "Sammanfattande insikter",
+      "modelScope": "Konfidensmåtten och insikterna nedan använder {count} detektioner från {model}. Välj en annan registrerad modell för att jämföra; poäng slås aldrig samman.",
+      "highInsight": "{percent} av {count} detektioner fick en poäng på minst 80 %.",
+      "speciesInsight": "{species} stod för {percent} av {count} detektioner.",
+      "lowInsight": "{percent} av {count} detektioner fick en poäng från 20 % till under 30 %.",
+      "changeInsight": "Antalet registrerade detektioner förändrades med {change} jämfört med föregående lika långa kalenderperiod ({current} jämfört med {previous} detektioner).",
+      "pointsInsight": "Andelen med poäng på 80 %+ förändrades med {change} procentenheter jämfört med föregående period ({current} jämfört med {previous} detektioner)."
+    },
+    "summary": {
+      "activityTitle": "Aktivitetsöversikt",
+      "activeDays": "Dagar med registreringar",
+      "uptime": "Drifttid",
+      "uptimeUnavailable": "Ej tillgängligt",
+      "uptimeHistoryMissing": "Drifttidshistoriken täcker inte denna period.",
+      "uptimeScope": "Serverns tillgänglighet under den förflutna perioden.",
+      "uptimeMinimum": "Minst {percentage} %",
+      "uptimePartial": "Minsta bekräftade drifttid; tidigare sessioner är inte registrerade. Uppdateras var 10:e minut.",
+      "calendarAverage": "Registreringar per kalenderdag",
+      "busiestDay": "Dag med flest registreringar",
+      "calendarScope": "Baserat på valda kalenderdagar, inte inspelningstid.",
+      "topSpecies": "De {count} vanligaste arterna",
+      "speciesLimit": "Visade arter",
+      "chartStyle": "Diagramtyp",
+      "barChart": "Stapeldiagram",
+      "pieChart": "Cirkeldiagram",
+      "coverage": "Andel av alla registreringar",
+      "hourlyTitle": "Detektioner per timme"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Kan inte läsa sparade kameraobservationer. Försöker automatiskt igen.",
     "sourceType": "Detektionskälla",
     "allSources": "Alla källor",
-    "audioSource": "Ljud"
+    "audioSource": "Ljud",
+    "classificationSource": "Klassificeringskälla",
+    "frigateSublabel": "Frigate-underetikett",
+    "ownerConfirmed": "Bekräftad av ägaren",
+    "qualityLabel": "Videokvalitet",
+    "previewQuality": "Förhandsvisning · 720p / 3 FPS",
+    "sourceQuality": "Originalkvalitet",
+    "previewHelp": "Förhandsvisning med låg dataförbrukning och detektionsrutor.",
+    "sourceHelp": "Ursprunglig go2rtc-video utan gräns för upplösning eller bildfrekvens. Utan detektionsrutor.",
+    "sourceFallback": "Originalvideon är otillgänglig eller stöds inte. Visar förhandsvisningen i stället.",
+    "detectionFps": "Detektions-FPS"
   }
 }

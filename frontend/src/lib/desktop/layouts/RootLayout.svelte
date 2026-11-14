@@ -114,7 +114,11 @@
 >
   <input id="my-drawer" type="checkbox" class="drawer-toggle" bind:checked={drawerOpen} />
 
-  <div class="drawer-content" class:dashboard-wide={currentPage === 'dashboard'}>
+  <div
+    class="drawer-content"
+    class:dashboard-wide={currentPage === 'dashboard'}
+    class:summary-wide={currentPage === 'analytics/summary'}
+  >
     <!-- Header -->
     <div class="mx-auto max-w-7xl">
       <div class="grid grid-cols-12 grid-rows-[min-content] p-3 pt-0 lg:px-8 lg:pb-0">
@@ -247,6 +251,10 @@
 
   .dashboard-wide {
     --content-max-width: 95%;
+  }
+
+  .summary-wide {
+    --content-max-width: 85.5%;
   }
 
   /* Max-width container */

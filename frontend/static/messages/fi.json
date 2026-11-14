@@ -1106,7 +1106,9 @@
         "rare": "Harvinainen",
         "very_rare": "Hyvin harvinainen",
         "unknown": "Tuntematon"
-      }
+      },
+      "modelTitle": "BirdNETin maantieteellinen malli",
+      "modelContext": "Mallin nykyinen vuodenaikaiskonteksti; erillinen paikallisesta harvinaisuuspistemäärästä ja tunnistuksen varmuudesta."
     },
     "taxonomy": {
       "hierarchy": "Taksonomiluokitus",
@@ -2170,6 +2172,17 @@
         "detections": "Havainnot:",
         "confidence": "Luottamus:",
         "first": "Ensimmäinen:"
+      },
+      "targets": {
+        "title": "Alueellisten lajien edistyminen",
+        "description": "Aseman havaitsemat lajit verrattuna eBirdin piirikunnan ja osavaltion lajiluetteloihin.",
+        "region": "eBirdin piirikuntakoodi",
+        "regionHint": "Anna piirikuntakoodi, esimerkiksi US-NJ-001. Osavaltio päätellään piirikunnasta. Jätä tyhjäksi käyttääksesi määritettyä aluetta.",
+        "regionRequired": "Valitse eBirdin piirikuntakoodi nähdäksesi piirikunnan ja osavaltion edistymisen.",
+        "ebirdRequired": "Ota eBird-integraatio käyttöön ja määritä API-avain asetuksissa ladataksesi alueelliset luettelot.",
+        "county": "Piirikunta",
+        "state": "Osavaltio",
+        "lifetime": "Eri lajit koko havaintohistorian ajalta, pois lukien tarkistetut väärät positiiviset havainnot. Sivun nykyiset suodattimet eivät muuta tätä kokonaismäärää."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Iltapäivä (12-16)",
       "evening17to19": "Ilta (17-19)",
       "night20to23": "Yö (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Tämän ajanjakson piirteet",
+      "balanceHelp": "Tehollinen monimuotoisuus on yhtä yleisten lajien määrä, joka tuottaisi tämän havaintojakauman. Havaintojen osuus ei kuvaa lintujen runsautta.",
+      "effective": "Tehollinen monimuotoisuus",
+      "topFive": "Viiden yleisimmän lajin osuus",
+      "coverage": "Lajit, jotka kattavat 80 % havainnoista",
+      "peakWindow": "Vilkkain 3 tunnin jakso",
+      "windowShare": "{percentage} % havainnoista",
+      "share": "Osuus havainnoista",
+      "otherSpecies": "Muut lajit",
+      "comparisonTitle": "Vertailu edelliseen ajanjaksoon",
+      "completedOnly": "Tämä päivä jätetään pois; valitse jakso, jossa on päättyneitä päiviä.",
+      "versus": "verrattuna",
+      "comparisonHelp": "Yhtä pitkät päättyneet ajanjaksot. Tallennuskattavuus voi vaihdella.",
+      "comparisonError": "Ajanjaksojen vertailua ei voitu ladata.",
+      "volumeChange": "Havaintojen muutos",
+      "diversityChange": "Monimuotoisuuden muutos",
+      "retained": "Säilyneet lajit",
+      "noBaseline": "Ei aiempia havaintoja: prosenttimuutoksille ei ole vertailupohjaa.",
+      "retainedHelp": "Säilyneet lajit havaittiin molemmilla jaksoilla suhteessa edellisen jakson lajeihin.",
+      "gaining": "Suurimmat osuuden kasvut",
+      "losing": "Suurimmat osuuden laskut",
+      "shareChange": "{change} prosenttiyksikköä",
+      "noMovement": "Ei näytettäviä osuuksien muutoksia."
+    },
+    "confidenceAnalysis": {
+      "caution": "Luottamus on mallin antama pistemäärä, ei tunnistustarkkuus eikä kalibroitu oikeellisuuden todennäköisyys. Eri mallien pisteet näytetään erikseen.",
+      "threshold": "Pisteiden kasautuminen alarajan lähelle voi johtua havaintojen vähimmäiskynnyksistä. Nykyiset kynnykset, lajikohtaiset ohitukset ja dynaamiset kynnykset voivat erota vanhoissa tallenteissa käytetyistä.",
+      "population": "Mukana ovat kaikki valittujen päivien ehdot täyttävät tallennetut ensisijaiset tunnistukset. Tarkistetut väärät positiiviset havainnot ja alueen 0–100 % ulkopuoliset pisteet jätetään pois. Toissijaiset ennusteet eivät ole lisähavaintoja.",
+      "normalized": "Näytä prosentit",
+      "models": "Tunnistusmallit",
+      "unknownModel": "Tuntematon malli",
+      "allModels": "Kun mallia ei ole valittu, kaikki tallennetut mallit näytetään erikseen.",
+      "sample": "{count} havaintoa",
+      "median": "Luottamuksen mediaani",
+      "percent": "Havaintojen prosenttiosuus",
+      "high": "Korkea luottamus (80 %+)",
+      "binsHelp": "Valitse pylväs tarkistaaksesi havainnot. Välit sisältävät alarajansa; vain viimeinen väli sisältää ylärajansa (100 %). Prosentit lasketaan koko tämän sarjan havaintomäärästä, mukaan lukien alle 20 %:n pisteet.",
+      "review": "Tarkista havainnot",
+      "insights": "Yhteenvedon havainnot",
+      "modelScope": "Alla olevat luottamusmittarit ja havainnot perustuvat mallin {model} havaintoihin, joita on {count}. Valitse toinen tallennettu malli vertailua varten; pisteitä ei koskaan yhdistetä.",
+      "highInsight": "Kaikista {count} havainnosta {percent} sai vähintään 80 %:n pisteet.",
+      "speciesInsight": "Lajin {species} osuus kaikista {count} havainnosta oli {percent}.",
+      "lowInsight": "Kaikista {count} havainnosta {percent} sai pisteet väliltä 20 % – alle 30 %.",
+      "changeInsight": "Tallennettujen havaintojen määrä muuttui {change} edelliseen yhtä pitkään kalenterijaksoon verrattuna ({current} verrattuna {previous} havaintoon).",
+      "pointsInsight": "Vähintään 80 %:n pisteet saaneiden osuus muuttui {change} prosenttiyksikköä edelliseen jaksoon verrattuna ({current} verrattuna {previous} havaintoon)."
+    },
+    "summary": {
+      "activityTitle": "Aktiivisuuden yhteenveto",
+      "activeDays": "Päivät, joina oli havaintoja",
+      "uptime": "Käytettävyys",
+      "uptimeUnavailable": "Ei saatavilla",
+      "uptimeHistoryMissing": "Käytettävyyshistoria ei kata tätä ajanjaksoa.",
+      "uptimeScope": "Palvelimen käytettävyys kuluneen ajanjakson aikana.",
+      "uptimeMinimum": "Vähintään {percentage} %",
+      "uptimePartial": "Vahvistettu vähimmäiskäytettävyys; aiempia istuntoja ei ole tallennettu. Päivittyy 10 minuutin välein.",
+      "calendarAverage": "Havaintoja kalenteripäivässä",
+      "busiestDay": "Eniten havaintoja päivänä",
+      "calendarScope": "Perustuu valittuihin kalenteripäiviin, ei tallennusaikaan.",
+      "topSpecies": "{count} yleisintä lajia",
+      "speciesLimit": "Näytettävät lajit",
+      "chartStyle": "Kaavion tyyppi",
+      "barChart": "Pylväskaavio",
+      "pieChart": "Ympyräkaavio",
+      "coverage": "Osuus kaikista havainnoista",
+      "hourlyTitle": "Havainnot tunneittain"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Tallennettuja kamerahavaintoja ei voida ladata. Yritetään automaattisesti uudelleen.",
     "sourceType": "Havainnon lähde",
     "allSources": "Kaikki lähteet",
-    "audioSource": "Ääni"
+    "audioSource": "Ääni",
+    "classificationSource": "Lajitunnistuksen lähde",
+    "frigateSublabel": "Frigaten alitunniste",
+    "ownerConfirmed": "Omistajan vahvistama",
+    "qualityLabel": "Videon laatu",
+    "previewQuality": "Esikatselu · 720p / 3 FPS",
+    "sourceQuality": "Alkuperäinen laatu",
+    "previewHelp": "Vähän kaistaa käyttävä esikatselu tunnistuskehyksillä.",
+    "sourceHelp": "Alkuperäinen go2rtc-video ilman resoluutio- tai kuvataajuusrajaa. Ei tunnistuskehyksiä.",
+    "sourceFallback": "Alkuperäinen video ei ole saatavilla tai tuettu. Näytetään esikatselu.",
+    "detectionFps": "Tunnistuksen FPS"
   }
 }

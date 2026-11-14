@@ -1106,7 +1106,9 @@
         "rare": "Raro",
         "very_rare": "Muy raro",
         "unknown": "Desconocido"
-      }
+      },
+      "modelTitle": "Modelo geográfico de BirdNET",
+      "modelContext": "Contexto estacional actual del modelo; independiente del índice de rareza local y de la confianza de identificación."
     },
     "taxonomy": {
       "hierarchy": "Clasificación taxonómica",
@@ -2170,6 +2172,17 @@
         "detections": "Detecciones:",
         "confidence": "Confianza:",
         "first": "Primera:"
+      },
+      "targets": {
+        "title": "Progreso de especies regionales",
+        "description": "Especies detectadas por la estación comparadas con las listas de especies de eBird del condado y el estado.",
+        "region": "Código de condado de eBird",
+        "regionHint": "Introduzca un código de condado como US-NJ-001. El estado se obtiene del condado. Déjelo en blanco para usar la región configurada.",
+        "regionRequired": "Seleccione un código de condado de eBird para ver el progreso del condado y del estado.",
+        "ebirdRequired": "Active la integración de eBird y configure una clave API en Ajustes para cargar las listas regionales.",
+        "county": "Condado",
+        "state": "Estado",
+        "lifetime": "Especies distintas de todo el historial, excluidos los falsos positivos revisados. Los filtros actuales de la página no modifican este total."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Tarde (12-16)",
       "evening17to19": "Atardecer (17-19)",
       "night20to23": "Noche (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Patrones de este período",
+      "balanceHelp": "La diversidad efectiva es el número de especies igualmente frecuentes que produciría esta mezcla de detecciones. La proporción de detecciones no indica abundancia de aves.",
+      "effective": "Diversidad efectiva",
+      "topFive": "Proporción de las 5 primeras especies",
+      "coverage": "Especies que suman el 80 % de detecciones",
+      "peakWindow": "Franja de 3 horas más activa",
+      "windowShare": "{percentage} % de las detecciones",
+      "share": "Proporción de detecciones",
+      "otherSpecies": "Otras especies",
+      "comparisonTitle": "Comparación con el período anterior",
+      "completedOnly": "Se excluye hoy; seleccione un intervalo con días completos.",
+      "versus": "frente a",
+      "comparisonHelp": "Períodos completos de igual duración. La cobertura de grabación puede variar.",
+      "comparisonError": "No se pudo cargar la comparación de períodos.",
+      "volumeChange": "Cambio en detecciones",
+      "diversityChange": "Cambio en diversidad",
+      "retained": "Especies conservadas",
+      "noBaseline": "Sin detecciones anteriores: los cambios porcentuales no tienen referencia.",
+      "retainedHelp": "Las especies conservadas se detectaron en ambos períodos, como proporción de las especies del período anterior.",
+      "gaining": "Mayores aumentos de proporción",
+      "losing": "Mayores descensos de proporción",
+      "shareChange": "{change} puntos porcentuales",
+      "noMovement": "No hay cambios de proporción que mostrar."
+    },
+    "confidenceAnalysis": {
+      "caution": "La confianza es una puntuación del modelo, no la precisión de identificación ni una probabilidad calibrada de acierto. Las puntuaciones de distintos modelos se muestran por separado.",
+      "threshold": "La concentración cerca del límite inferior puede deberse a los umbrales mínimos de detección. Los umbrales actuales, las excepciones por especie y los umbrales dinámicos pueden diferir de los utilizados en grabaciones históricas.",
+      "population": "Se incluyen todas las identificaciones primarias guardadas que cumplen los criterios en las fechas seleccionadas. Se excluyen los falsos positivos revisados y las puntuaciones fuera del 0–100 %. Las predicciones secundarias no son detecciones adicionales.",
+      "normalized": "Mostrar porcentajes",
+      "models": "Modelos de identificación",
+      "unknownModel": "Modelo desconocido",
+      "allModels": "Si no se selecciona ningún modelo, se muestran todos los modelos registrados por separado.",
+      "sample": "{count} detecciones",
+      "median": "Mediana de confianza",
+      "percent": "Porcentaje de detecciones",
+      "high": "Confianza alta (80 %+)",
+      "binsHelp": "Seleccione una barra para revisar las detecciones. Los intervalos incluyen su límite inferior; solo el último incluye su límite superior (100 %). Los porcentajes usan el total de esta serie, incluidas las puntuaciones inferiores al 20 %.",
+      "review": "Revisar detecciones",
+      "insights": "Observaciones del resumen",
+      "modelScope": "Las métricas de confianza y las observaciones siguientes usan {count} detecciones de {model}. Seleccione otro modelo registrado para comparar; las puntuaciones nunca se combinan.",
+      "highInsight": "El {percent} de {count} detecciones obtuvo una puntuación del 80 % o superior.",
+      "speciesInsight": "{species} representó el {percent} de {count} detecciones.",
+      "lowInsight": "El {percent} de {count} detecciones obtuvo una puntuación entre el 20 % y menos del 30 %.",
+      "changeInsight": "Las detecciones registradas variaron un {change} respecto al período natural anterior de igual duración ({current} frente a {previous} detecciones).",
+      "pointsInsight": "La proporción con puntuación del 80 %+ varió {change} puntos porcentuales respecto al período anterior ({current} frente a {previous} detecciones)."
+    },
+    "summary": {
+      "activityTitle": "Resumen de actividad",
+      "activeDays": "Días con detecciones",
+      "uptime": "Disponibilidad",
+      "uptimeUnavailable": "No disponible",
+      "uptimeHistoryMissing": "El historial de disponibilidad no cubre este período.",
+      "uptimeScope": "Disponibilidad del servidor durante el período transcurrido.",
+      "uptimeMinimum": "Al menos {percentage} %",
+      "uptimePartial": "Disponibilidad mínima confirmada; las sesiones anteriores no están registradas. Se actualiza cada 10 minutos.",
+      "calendarAverage": "Detecciones por día natural",
+      "busiestDay": "Día con más detecciones",
+      "calendarScope": "Basado en los días naturales seleccionados, no en el tiempo de grabación.",
+      "topSpecies": "Las {count} especies más detectadas",
+      "speciesLimit": "Especies mostradas",
+      "chartStyle": "Tipo de gráfico",
+      "barChart": "Gráfico de barras",
+      "pieChart": "Gráfico circular",
+      "coverage": "Proporción de todas las detecciones",
+      "hourlyTitle": "Detecciones por hora"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "No se pueden cargar las observaciones guardadas. Se reintentará automáticamente.",
     "sourceType": "Origen de detección",
     "allSources": "Todos los orígenes",
-    "audioSource": "Sonido"
+    "audioSource": "Sonido",
+    "classificationSource": "Origen de clasificación",
+    "frigateSublabel": "Subetiqueta de Frigate",
+    "ownerConfirmed": "Confirmado por el propietario",
+    "qualityLabel": "Calidad de vídeo",
+    "previewQuality": "Vista previa · 720p / 3 FPS",
+    "sourceQuality": "Calidad original",
+    "previewHelp": "Vista previa de bajo consumo de datos con cuadros de detección.",
+    "sourceHelp": "Vídeo original de go2rtc sin límite de resolución ni de fotogramas. No incluye cuadros de detección.",
+    "sourceFallback": "El vídeo original no está disponible o no es compatible. Se muestra la vista previa.",
+    "detectionFps": "FPS de detección"
   }
 }

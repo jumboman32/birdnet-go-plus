@@ -1106,7 +1106,9 @@
         "rare": "Raro",
         "very_rare": "Molto raro",
         "unknown": "Sconosciuto"
-      }
+      },
+      "modelTitle": "Modello geografico di BirdNET",
+      "modelContext": "Contesto stagionale attuale del modello; distinto dall’indice di rarità locale e dall’affidabilità dell’identificazione."
     },
     "taxonomy": {
       "hierarchy": "Classificazione Tassonomica",
@@ -2170,6 +2172,17 @@
         "detections": "Rilevamenti:",
         "confidence": "Confidenza:",
         "first": "Primo:"
+      },
+      "targets": {
+        "title": "Progressi delle specie regionali",
+        "description": "Specie rilevate dalla stazione confrontate con gli elenchi di specie eBird della contea e dello stato.",
+        "region": "Codice contea eBird",
+        "regionHint": "Inserisci un codice di contea come US-NJ-001. Lo stato viene ricavato dalla contea. Lascia vuoto per usare la regione configurata.",
+        "regionRequired": "Scegli un codice di contea eBird per visualizzare i progressi della contea e dello stato.",
+        "ebirdRequired": "Abilita l’integrazione eBird e configura una chiave API nelle Impostazioni per caricare gli elenchi regionali.",
+        "county": "Contea",
+        "state": "Stato",
+        "lifetime": "Specie distinte dell’intero storico, esclusi i falsi positivi verificati. I filtri attuali della pagina non modificano questo totale."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Pomeriggio (12-16)",
       "evening17to19": "Sera (17-19)",
       "night20to23": "Notte (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Andamenti del periodo",
+      "balanceHelp": "La diversità effettiva è il numero di specie ugualmente frequenti che produrrebbe questa distribuzione dei rilevamenti. La quota dei rilevamenti non indica l’abbondanza degli uccelli.",
+      "effective": "Diversità effettiva",
+      "topFive": "Quota delle prime 5 specie",
+      "coverage": "Specie che coprono l’80% dei rilevamenti",
+      "peakWindow": "Fascia di 3 ore più attiva",
+      "windowShare": "{percentage}% dei rilevamenti",
+      "share": "Quota dei rilevamenti",
+      "otherSpecies": "Altre specie",
+      "comparisonTitle": "Confronto con il periodo precedente",
+      "completedOnly": "Oggi è escluso; seleziona un intervallo con giorni completati.",
+      "versus": "rispetto a",
+      "comparisonHelp": "Periodi completati di uguale durata. La copertura delle registrazioni può variare.",
+      "comparisonError": "Impossibile caricare il confronto tra periodi.",
+      "volumeChange": "Variazione dei rilevamenti",
+      "diversityChange": "Variazione della diversità",
+      "retained": "Specie mantenute",
+      "noBaseline": "Nessun rilevamento precedente: le variazioni percentuali non hanno una base di confronto.",
+      "retainedHelp": "Le specie mantenute sono rilevate in entrambi i periodi, come quota delle specie del periodo precedente.",
+      "gaining": "Maggiori aumenti di quota",
+      "losing": "Maggiori cali di quota",
+      "shareChange": "{change} punti percentuali",
+      "noMovement": "Nessuna variazione di quota da mostrare."
+    },
+    "confidenceAnalysis": {
+      "caution": "La confidenza è un punteggio del modello, non l’accuratezza dell’identificazione né una probabilità calibrata di correttezza. I punteggi di modelli diversi sono mostrati separatamente.",
+      "threshold": "Una concentrazione vicino al limite inferiore può riflettere le soglie minime di rilevamento. Le soglie attuali, le eccezioni per specie e le soglie dinamiche possono differire da quelle utilizzate per le registrazioni storiche.",
+      "population": "Sono incluse tutte le identificazioni primarie salvate idonee nelle date selezionate. Sono esclusi i falsi positivi verificati e i punteggi al di fuori dello 0–100%. Le previsioni secondarie non sono rilevamenti aggiuntivi.",
+      "normalized": "Mostra percentuali",
+      "models": "Modelli di identificazione",
+      "unknownModel": "Modello sconosciuto",
+      "allModels": "Senza selezionare un modello, tutti i modelli registrati vengono mostrati separatamente.",
+      "sample": "{count} rilevamenti",
+      "median": "Confidenza mediana",
+      "percent": "Percentuale di rilevamenti",
+      "high": "Confidenza elevata (80%+)",
+      "binsHelp": "Seleziona una barra per esaminare i rilevamenti. Gli intervalli includono il limite inferiore; solo l’ultimo include il limite superiore (100%). Le percentuali usano il totale di questa serie, inclusi i punteggi inferiori al 20%.",
+      "review": "Esamina rilevamenti",
+      "insights": "Osservazioni del riepilogo",
+      "modelScope": "Le metriche di confidenza e le osservazioni seguenti usano {count} rilevamenti di {model}. Seleziona un altro modello registrato per confrontarli; i punteggi non vengono mai combinati.",
+      "highInsight": "Il {percent} di {count} rilevamenti ha ottenuto un punteggio pari o superiore all’80%.",
+      "speciesInsight": "{species} ha rappresentato il {percent} di {count} rilevamenti.",
+      "lowInsight": "Il {percent} di {count} rilevamenti ha ottenuto un punteggio dal 20% a meno del 30%.",
+      "changeInsight": "I rilevamenti registrati sono variati del {change} rispetto al precedente periodo di calendario di pari durata ({current} rispetto a {previous} rilevamenti).",
+      "pointsInsight": "La quota con punteggio 80%+ è variata di {change} punti percentuali rispetto al periodo precedente ({current} rispetto a {previous} rilevamenti)."
+    },
+    "summary": {
+      "activityTitle": "Panoramica delle attività",
+      "activeDays": "Giorni con rilevamenti",
+      "uptime": "Disponibilità",
+      "uptimeUnavailable": "Non disponibile",
+      "uptimeHistoryMissing": "La cronologia della disponibilità non copre questo periodo.",
+      "uptimeScope": "Disponibilità del server durante il periodo trascorso.",
+      "uptimeMinimum": "Almeno {percentage}%",
+      "uptimePartial": "Disponibilità minima confermata; le sessioni precedenti non sono registrate. Aggiornamento ogni 10 minuti.",
+      "calendarAverage": "Rilevamenti per giorno di calendario",
+      "busiestDay": "Giorno con più rilevamenti",
+      "calendarScope": "Basato sui giorni di calendario selezionati, non sul tempo di registrazione.",
+      "topSpecies": "Le {count} specie più rilevate",
+      "speciesLimit": "Specie visualizzate",
+      "chartStyle": "Tipo di grafico",
+      "barChart": "Grafico a barre",
+      "pieChart": "Grafico a torta",
+      "coverage": "Quota di tutti i rilevamenti",
+      "hourlyTitle": "Rilevamenti per ora"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Impossibile caricare le osservazioni salvate. Nuovo tentativo automatico.",
     "sourceType": "Origine del rilevamento",
     "allSources": "Tutte le origini",
-    "audioSource": "Suono"
+    "audioSource": "Suono",
+    "classificationSource": "Origine della classificazione",
+    "frigateSublabel": "Sottoetichetta Frigate",
+    "ownerConfirmed": "Confermato dal proprietario",
+    "qualityLabel": "Qualità video",
+    "previewQuality": "Anteprima · 720p / 3 FPS",
+    "sourceQuality": "Qualità originale",
+    "previewHelp": "Anteprima a basso consumo di dati con riquadri di rilevamento.",
+    "sourceHelp": "Video go2rtc originale senza limiti di risoluzione o frequenza. Senza riquadri di rilevamento.",
+    "sourceFallback": "Il video originale non è disponibile o supportato. Viene mostrata l’anteprima.",
+    "detectionFps": "FPS di rilevamento"
   }
 }

@@ -5,6 +5,7 @@
   interface Props {
     title: string;
     value: string | number;
+    secondaryValue?: string;
     subtitle?: string;
     icon?: Snippet;
     iconClassName?: string;
@@ -16,6 +17,7 @@
   let {
     title,
     value,
+    secondaryValue,
     subtitle,
     icon,
     iconClassName = '',
@@ -35,8 +37,15 @@
         </div>
       {/if}
       <div>
-        <div class={cn('text-3xl font-bold', valueClassName)}>
-          {isLoading ? '...' : value}
+        <div class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <div class={cn('text-3xl font-bold', valueClassName)}>
+            {isLoading ? '...' : value}
+          </div>
+          {#if secondaryValue && !isLoading}
+            <div class="text-sm font-medium text-[var(--color-base-content)] opacity-50">
+              {secondaryValue}
+            </div>
+          {/if}
         </div>
         {#if subtitle}
           <div class="text-xs text-[var(--color-base-content)] opacity-60">{subtitle}</div>

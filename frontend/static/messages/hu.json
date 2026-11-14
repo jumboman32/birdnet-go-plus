@@ -1106,7 +1106,9 @@
         "rare": "Nagyon ritka",
         "very_rare": "Rendkívül ritka",
         "unknown": "Ismeretlen"
-      }
+      },
+      "modelTitle": "A BirdNET földrajzi modellje",
+      "modelContext": "A modell jelenlegi évszakos környezete; független a helyi ritkasági pontszámtól és a fajazonosítás bizonyosságától."
     },
     "taxonomy": {
       "hierarchy": "Taxonómiai besorolás",
@@ -2170,6 +2172,17 @@
         "detections": "Észlelések:",
         "confidence": "Megbízhatóság:",
         "first": "Első:"
+      },
+      "targets": {
+        "title": "Regionális fajok előrehaladása",
+        "description": "Az állomás által észlelt fajok összehasonlítása az eBird megyei és állami fajlistáival.",
+        "region": "eBird megyekód",
+        "regionHint": "Adjon meg egy megyekódot, például US-NJ-001. Az államot a megye alapján határozzuk meg. Hagyja üresen a beállított régió használatához.",
+        "regionRequired": "Válasszon eBird megyekódot a megyei és állami előrehaladás megtekintéséhez.",
+        "ebirdRequired": "A regionális listák betöltéséhez engedélyezze az eBird-integrációt, és adjon meg API-kulcsot a Beállításokban.",
+        "county": "Megye",
+        "state": "Állam",
+        "lifetime": "Különböző fajok a teljes időszakban, az ellenőrzött téves pozitív észlelések nélkül. Az oldal aktuális szűrői nem változtatják meg ezt az összesítést."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Délután (12-16)",
       "evening17to19": "Este (17-19)",
       "night20to23": "Éjszaka (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Az időszak mintázatai",
+      "balanceHelp": "Az effektív diverzitás az egyformán gyakori fajok száma, amelyek ezt az észlelési összetételt eredményeznék. Az észlelési arány nem a madarak egyedszáma.",
+      "effective": "Effektív diverzitás",
+      "topFive": "Az 5 leggyakoribb faj aránya",
+      "coverage": "Az észlelések 80%-át adó fajok",
+      "peakWindow": "Legaktívabb 3 órás időszak",
+      "windowShare": "Az észlelések {percentage}%-a",
+      "share": "Észlelések aránya",
+      "otherSpecies": "Más fajok",
+      "comparisonTitle": "Összevetés az előző időszakkal",
+      "completedOnly": "A mai nap kimarad; válasszon lezárt napokat tartalmazó időszakot.",
+      "versus": "szemben",
+      "comparisonHelp": "Azonos hosszúságú lezárt időszakok. A felvételi lefedettség eltérhet.",
+      "comparisonError": "Az időszakok összehasonlítása nem tölthető be.",
+      "volumeChange": "Észlelések változása",
+      "diversityChange": "Diverzitás változása",
+      "retained": "Megmaradt fajok",
+      "noBaseline": "Nincsenek korábbi észlelések: a százalékos változásoknak nincs viszonyítási alapjuk.",
+      "retainedHelp": "A megmaradt fajokat mindkét időszakban észleltük, az előző időszak fajainak arányában.",
+      "gaining": "Legnagyobb aránynövekedések",
+      "losing": "Legnagyobb aránycsökkenések",
+      "shareChange": "{change} százalékpont",
+      "noMovement": "Nincs megjeleníthető arányváltozás."
+    },
+    "confidenceAnalysis": {
+      "caution": "A megbízhatóság a modell pontszáma, nem az azonosítás pontossága vagy a helyesség kalibrált valószínűsége. A különböző modellek pontszámai külön jelennek meg.",
+      "threshold": "Az alsó határ közelében kialakuló csoportosulás a minimális észlelési küszöböket tükrözheti. A jelenlegi küszöbök, fajonkénti felülbírálások és dinamikus küszöbök eltérhetnek a korábbi felvételeknél használtaktól.",
+      "population": "A kiválasztott napok minden megfelelő, mentett elsődleges azonosítása szerepel. Az ellenőrzött téves pozitív észlelések és a 0–100%-on kívüli pontszámok kimaradnak. A másodlagos előrejelzések nem további észlelések.",
+      "normalized": "Százalékok megjelenítése",
+      "models": "Azonosítási modellek",
+      "unknownModel": "Ismeretlen modell",
+      "allModels": "Ha nincs kiválasztott modell, minden rögzített modell külön jelenik meg.",
+      "sample": "{count} észlelés",
+      "median": "Medián megbízhatóság",
+      "percent": "Észlelések százalékos aránya",
+      "high": "Magas megbízhatóság (80%+)",
+      "binsHelp": "Az észlelések ellenőrzéséhez válasszon egy oszlopot. Az intervallumok tartalmazzák az alsó határt; csak az utolsó tartalmazza a felső határt (100%). A százalékok alapja a teljes adatsor, beleértve a 20% alatti pontszámokat.",
+      "review": "Észlelések ellenőrzése",
+      "insights": "Összefoglaló megfigyelések",
+      "modelScope": "Az alábbi megbízhatósági mutatók és megfigyelések a(z) {model} modell {count} észlelését használják. Összehasonlításhoz válasszon másik rögzített modellt; a pontszámokat soha nem vonjuk össze.",
+      "highInsight": "A(z) {count} észlelés {percent}-a ért el legalább 80%-os pontszámot.",
+      "speciesInsight": "A(z) {species} a(z) {count} észlelés {percent}-át tette ki.",
+      "lowInsight": "A(z) {count} észlelés {percent}-a ért el 20%-tól 30% alatti pontszámot.",
+      "changeInsight": "A rögzített észlelések száma {change}-kal változott az előző, azonos hosszúságú naptári időszakhoz képest ({current}, illetve {previous} észlelés).",
+      "pointsInsight": "A 80%+ pontszámú észlelések aránya {change} százalékponttal változott az előző időszakhoz képest ({current}, illetve {previous} észlelés)."
+    },
+    "summary": {
+      "activityTitle": "Aktivitási áttekintés",
+      "activeDays": "Észlelést tartalmazó napok",
+      "uptime": "Rendelkezésre állás",
+      "uptimeUnavailable": "Nem érhető el",
+      "uptimeHistoryMissing": "A rendelkezésre állási előzmények nem fedik le ezt az időszakot.",
+      "uptimeScope": "A szerver rendelkezésre állása az eltelt időszakban.",
+      "uptimeMinimum": "Legalább {percentage}%",
+      "uptimePartial": "Igazolt minimális rendelkezésre állás; a korábbi munkamenetek nincsenek rögzítve. Frissítés 10 percenként.",
+      "calendarAverage": "Észlelések naptári naponként",
+      "busiestDay": "A legtöbb észlelést mutató nap",
+      "calendarScope": "A kiválasztott naptári napok alapján, nem a rögzítési időből.",
+      "topSpecies": "A {count} leggyakoribb faj",
+      "speciesLimit": "Megjelenített fajok",
+      "chartStyle": "Diagram típusa",
+      "barChart": "Oszlopdiagram",
+      "pieChart": "Kördiagram",
+      "coverage": "Az összes észlelés aránya",
+      "hourlyTitle": "Észlelések óránként"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "A mentett kamerás megfigyelések nem tölthetők be. Automatikus újrapróbálkozás.",
     "sourceType": "Észlelés forrása",
     "allSources": "Minden forrás",
-    "audioSource": "Hang"
+    "audioSource": "Hang",
+    "classificationSource": "Osztályozás forrása",
+    "frigateSublabel": "Frigate alcímke",
+    "ownerConfirmed": "Tulajdonos által megerősítve",
+    "qualityLabel": "Videóminőség",
+    "previewQuality": "Előnézet · 720p / 3 FPS",
+    "sourceQuality": "Eredeti minőség",
+    "previewHelp": "Kis sávszélességű előnézet észlelési keretekkel.",
+    "sourceHelp": "Eredeti go2rtc-videó felbontás- és képkockasebesség-korlát nélkül. Észlelési keretek nélkül.",
+    "sourceFallback": "Az eredeti videó nem érhető el vagy nem támogatott. Az előnézet látható.",
+    "detectionFps": "Észlelési FPS"
   }
 }

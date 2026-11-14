@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
+	"github.com/tphakala/birdnet-go/internal/speciesindex"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -47,15 +49,49 @@ func TestFrigateRoutesRequireAuth(t *testing.T) {
 		return func(ctx echo.Context) error { return echo.NewHTTPError(http.StatusUnauthorized) }
 	}
 	h.RegisterRoutes(h.Group)
-	for _, path := range []string{"/visual-detections", "/visual-detections/summary", "/visual-detections/1", "/visual-detections/1/snapshot", "/visual-detections/1/correlations", "/integrations/frigate/status", "/integrations/frigate/test", "/integrations/frigate/cameras", "/integrations/frigate/cameras/feeder/live"} {
+	for _, path := range []string{"/visual-detections", "/visual-detections/summary", "/visual-detections/1", "/visual-detections/1/snapshot", "/visual-detections/1/correlations", "/visual-detections/1/species", "/integrations/frigate/status", "/integrations/frigate/test", "/integrations/frigate/cameras", "/integrations/frigate/cameras/feeder/live", "/integrations/frigate/cameras/feeder/source"} {
 		method := http.MethodGet
 		if path == "/integrations/frigate/test" {
 			method = http.MethodPost
+		}
+		if path == "/visual-detections/1/species" {
+			method = http.MethodPut
 		}
 		response := httptest.NewRecorder()
 		h.Echo.ServeHTTP(response, httptest.NewRequest(method, "/api/v2"+path, http.NoBody))
 		assert.Equal(t, http.StatusUnauthorized, response.Code, path)
 	}
+}
+
+func TestFrigateOwnerSpeciesReview(t *testing.T) {
+	t.Parallel()
+	h := visualTestHandler(t)
+	names := speciesindex.Build([]string{cardinalScientificName + "_Northern Cardinal"}, nil, "en")
+	h.names = func() *speciesindex.Snapshot { return names }
+	require.NoError(t, h.repo.Upsert(t.Context(), []entities.VisualDetection{{Source: "frigate", Instance: "test", ExternalEventID: "review-bird", Camera: "feeder", ObjectLabel: "bird", StartTime: time.Now().UTC()}}))
+	rows, _, err := h.repo.List(t.Context(), &repository.VisualFilter{})
+	require.NoError(t, err)
+	invoke := func(body string) error {
+		request := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(body))
+		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		ctx := h.Echo.NewContext(request, httptest.NewRecorder())
+		ctx.SetParamNames("id")
+		ctx.SetParamValues("1")
+		return h.reviewSpecies(ctx)
+	}
+	require.Error(t, invoke(`{"scientificName":"not a real indexed species"}`))
+	require.NoError(t, invoke(`{"scientificName":"`+cardinalScientificName+`"}`))
+	row, err := h.repo.Get(t.Context(), rows[0].ID)
+	require.NoError(t, err)
+	assert.True(t, row.SpeciesVerified)
+	assert.Equal(t, entities.VisualClassificationManual, row.ClassificationSource)
+	assert.Equal(t, new(cardinalScientificName), row.ScientificName)
+	assert.Nil(t, row.ClassificationConfidence)
+	require.NoError(t, invoke(`{"verified":false}`))
+	row, err = h.repo.Get(t.Context(), rows[0].ID)
+	require.NoError(t, err)
+	assert.False(t, row.SpeciesVerified)
+	assert.Nil(t, row.ScientificName)
 }
 
 func TestFrigateVisualFilters(t *testing.T) {

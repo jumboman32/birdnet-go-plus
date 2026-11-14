@@ -99,6 +99,8 @@
       duration: durationParam ? parseInt(durationParam) : undefined,
       species: params.get('species') || undefined,
       search: search || undefined,
+      start_date: params.get('start_date') || undefined,
+      end_date: params.get('end_date') || undefined,
       numResults,
       offset: parseInt(params.get('offset') || '0'),
       sortBy,

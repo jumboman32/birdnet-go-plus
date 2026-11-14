@@ -15,6 +15,7 @@
   import SpeciesCard from '../components/ui/SpeciesCard.svelte';
   import SpeciesCardMobile from '../components/ui/SpeciesCardMobile.svelte';
   import StatCard from '../components/ui/StatCard.svelte';
+  import SpeciesTargetProgress from '../components/SpeciesTargetProgress.svelte';
 
   const logger = loggers.analytics;
 
@@ -546,6 +547,8 @@
       </div>
     </div>
   </div>
+
+  <SpeciesTargetProgress />
 
   <!-- Filter Controls -->
   <SpeciesFilterForm

@@ -166,6 +166,13 @@ export default defineConfig(({ command, isPreview, mode }) => ({
       '/api': {
         target: loadEnv(mode, process.cwd(), 'BIRDNET_DEV_').BIRDNET_DEV_BACKEND || DEFAULT_DEVELOPMENT_BACKEND,
         changeOrigin: true,
+          ws: true,
+          configure(proxy) {
+            // Keep the browser-facing host for the backend's WebSocket Origin check.
+            proxy.on('proxyReqWs', (proxyRequest, request) => {
+              if (request.headers.host) proxyRequest.setHeader('Host', request.headers.host)
+            })
+          },
       },
     },
   },

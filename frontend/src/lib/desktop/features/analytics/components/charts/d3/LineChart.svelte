@@ -110,7 +110,8 @@
 
     const xScale = createTimeScale({
       domain: dateRange ?? safeDateExtent,
-      range: [0, innerWidth],
+      // Keep complete endpoint dots inside the plot's clip, including their hover radius.
+      range: [POINT_HOVER_RADIUS, Math.max(POINT_HOVER_RADIUS, innerWidth - POINT_HOVER_RADIUS)],
     });
     const yScale = createLinearScale({
       domain: [0, maxValue * VALUE_HEADROOM || 1],

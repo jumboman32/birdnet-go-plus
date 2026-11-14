@@ -1,37 +1,33 @@
-<!--
-  Analytics hub: Overview tab.
-
-  The old standalone Analytics overview page (summary StatCards, top-species /
-  time-of-day / trend / new-species charts, and the recent-detections table),
-  folded into the tabbed hub as the Overview tab (PR0b). The only behavioral
-  change from the old page is that the date range now comes from the hub's
-  shared control bar (AnalyticsParams) instead of a per-page FilterForm, so the
-  whole hub shares one date control. Data fetching, transforms, charts, and the
-  recent-detections table are carried over unchanged.
--->
+<!-- Summary overview: date-filtered station totals, ranked species, and calendar activity. -->
 <script lang="ts">
-  import { untrack, type Snippet } from 'svelte';
-  import { XCircle } from '@lucide/svelte';
+  import { onMount, untrack, type Snippet } from 'svelte';
+  import { Bird, ListChecks, TrendingUp, XCircle } from '@lucide/svelte';
 
   import { t, type TranslationKey } from '$lib/i18n';
   import { api } from '$lib/utils/api';
-  import { formatNumber, formatDateTime } from '$lib/utils/formatters';
+  import { generateId } from '$lib/utils/uuid';
+  import { getStoredValue, setStoredValue } from '$lib/utils/storage';
+  import {
+    summarizeActivity,
+    summarizeSystemUptime,
+    type PeriodUptime,
+    DEFAULT_TOP_SPECIES_LIMIT,
+    MAX_TOP_SPECIES_LIMIT,
+  } from '../utils/summaryMeasures';
+  import { buildAppUrl } from '$lib/utils/urlHelpers';
+  import { formatNumber, formatDate } from '$lib/utils/formatters';
+  import { parseLocalDateString } from '$lib/utils/date';
   import { getLogger } from '$lib/utils/logger';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
-  import { getSpeciesImageUrl, handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import LoadingSpinner from '$lib/desktop/components/ui/LoadingSpinner.svelte';
-  import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
-  import type { SourceInfo } from '$lib/types/detection.types';
 
   import StatCard from './ui/StatCard.svelte';
   import BarChart from './charts/d3/BarChart.svelte';
+  import PieChart, { type PieChartDatum } from './charts/d3/PieChart.svelte';
   import LineChart from './charts/d3/LineChart.svelte';
   import NewSpeciesTimelineChart from './charts/d3/NewSpeciesTimelineChart.svelte';
-  import {
-    bucketHourlyByPeriod,
-    aggregateTrendPoints,
-    mapNewSpecies,
-  } from '../utils/analyticsTransforms';
+  import SummaryPatterns from './SummaryPatterns.svelte';
+  import { aggregateTrendPoints, mapNewSpecies } from '../utils/analyticsTransforms';
   import { formatDateForAPI } from '../registry/analyticsParams';
   import type { AnalyticsParams, DateRangePreset } from '../registry/types';
 
@@ -43,10 +39,48 @@
   let { params }: Props = $props();
 
   const logger = getLogger('analytics-overview');
+  const SPECIES_LIMIT_STORAGE_KEY = 'analytics.summary.speciesLimit';
+  const SPECIES_STYLE_STORAGE_KEY = 'analytics.summary.speciesChartStyle';
+  const LEGACY_TOP_SPECIES_LIMIT = 25;
+  const speciesLimitId = generateId('summary-species-limit');
+  const speciesStyleId = generateId('summary-species-style');
+  const DEFAULT_SPECIES_CHART_HEIGHT = 400;
+  const EXPANDED_SPECIES_CHART_HEIGHT = 700;
+  const HOURS_PER_DAY = 24;
+  const UPTIME_REFRESH_INTERVAL_MS = 600_000;
+  const UPTIME_DISPLAY_PRECISION = 10;
+  const PERCENT_SCALE = 100;
+  const restoredSpeciesLimit = getStoredValue<number>(
+    SPECIES_LIMIT_STORAGE_KEY,
+    DEFAULT_TOP_SPECIES_LIMIT,
+    value =>
+      value === DEFAULT_TOP_SPECIES_LIMIT ||
+      value === MAX_TOP_SPECIES_LIMIT ||
+      value === LEGACY_TOP_SPECIES_LIMIT
+  );
+  let topSpeciesLimit = $state(
+    restoredSpeciesLimit === LEGACY_TOP_SPECIES_LIMIT ? MAX_TOP_SPECIES_LIMIT : restoredSpeciesLimit
+  );
+  let speciesChartStyle = $state(
+    getStoredValue<'bar' | 'pie'>(
+      SPECIES_STYLE_STORAGE_KEY,
+      'bar',
+      value => value === 'bar' || value === 'pie'
+    )
+  );
+  const showSpeciesPie = $derived(
+    topSpeciesLimit === DEFAULT_TOP_SPECIES_LIMIT && speciesChartStyle === 'pie'
+  );
+  const speciesChartHeight = $derived(
+    topSpeciesLimit === MAX_TOP_SPECIES_LIMIT
+      ? EXPANDED_SPECIES_CHART_HEIGHT
+      : DEFAULT_SPECIES_CHART_HEIGHT
+  );
 
-  // Cap the new-species timeline to the most recent N entries to keep the chart
-  // readable (matches the prior overview page's 20-item limit).
-  const NEW_SPECIES_LIMIT = 20;
+  const NEW_SPECIES_PAGE_SIZE = 100;
+  const NEW_SPECIES_ROW_HEIGHT = 28;
+  const NEW_SPECIES_CHART_PADDING = 105;
+  const NEW_SPECIES_MIN_HEIGHT = 384;
 
   // Period subtitle for the StatCards, derived from the shared range preset.
   // Reuses the existing analytics.periods.* strings; `quarter` (90 days) maps to
@@ -64,36 +98,13 @@
   // Type definitions
   interface Summary {
     totalDetections: number;
+    avgConfidence: number | null;
     uniqueSpecies: number;
-    avgConfidence: number;
     mostCommonSpecies: string;
     // Canonical scientific name of the most-common species, so the displayed
     // common name can localize per visitor while the lookup stays canonical.
     mostCommonScientific: string;
     mostCommonCount: number;
-  }
-
-  interface Detection {
-    id: string;
-    timestamp: string | null;
-    commonName: string;
-    scientificName: string;
-    confidence: number;
-    timeOfDay: string;
-    source?: SourceInfo | null;
-  }
-
-  // API response type (may have date/time instead of timestamp)
-  interface ApiDetection {
-    id: string;
-    timestamp?: string;
-    date?: string;
-    time?: string;
-    commonName: string;
-    scientificName: string;
-    confidence: number;
-    timeOfDay?: string;
-    source?: SourceInfo | null;
   }
 
   interface SpeciesData {
@@ -103,7 +114,7 @@
     avg_confidence: number;
   }
 
-  interface TimeOfDayData {
+  interface HourlyData {
     hour: number;
     count: number;
   }
@@ -123,7 +134,7 @@
 
   interface ChartData {
     species: SpeciesData[];
-    timeOfDay: TimeOfDayData[];
+    hourly: HourlyData[];
     trend: TrendData | null;
     newSpecies: NewSpeciesData[];
   }
@@ -131,27 +142,61 @@
   // State variables
   let isLoading = $state<boolean>(true);
   let error = $state<string | null>(null);
+  let fullSpecies = $state<SpeciesData[] | null>(null);
 
   // Summary data
   let summary = $state<Summary>({
     totalDetections: 0,
+    avgConfidence: null,
     uniqueSpecies: 0,
-    avgConfidence: 0,
     mostCommonSpecies: '',
     mostCommonScientific: '',
     mostCommonCount: 0,
   });
 
   // Data arrays
-  let recentDetections = $state<Detection[]>([]);
 
   // Chart data storage
   let chartData = $state<ChartData>({
     species: [],
-    timeOfDay: [],
+    hourly: [],
     trend: null,
     newSpecies: [],
   });
+
+  let uptime = $state<PeriodUptime | null>(null);
+
+  onMount(() => {
+    if (restoredSpeciesLimit === LEGACY_TOP_SPECIES_LIMIT) {
+      setStoredValue(SPECIES_LIMIT_STORAGE_KEY, MAX_TOP_SPECIES_LIMIT);
+    }
+    const timer = setInterval(() => {
+      void fetchUptime(analyticsFetchSeq, params.startDate, params.endDate);
+    }, UPTIME_REFRESH_INTERVAL_MS);
+    return () => clearInterval(timer);
+  });
+
+  async function fetchUptime(seq: number, start: Date, end: Date) {
+    try {
+      const info = await api.get<{
+        uptime_seconds: number;
+        app_start_time: string;
+        app_uptime_seconds: number;
+      }>('/api/v2/system/info');
+      if (seq !== analyticsFetchSeq) return;
+      uptime = summarizeSystemUptime(
+        info.uptime_seconds,
+        info.app_start_time,
+        info.app_uptime_seconds,
+        start,
+        end
+      );
+    } catch (err) {
+      if (seq !== analyticsFetchSeq) return;
+      logger.error('Error fetching Summary uptime:', err);
+      uptime = null;
+    }
+  }
 
   // Monotonic token guarding against stale-response races. Each fetchData() run
   // captures the latest value; a fetcher only commits its result when its captured
@@ -165,30 +210,51 @@
   const speciesBars = $derived(
     [...(chartData.species ?? [])]
       .sort((a, b) => b.count - a.count)
+      .slice(0, topSpeciesLimit)
       .map(s => ({ label: localizeSpeciesName(s.scientific_name, s.common_name), value: s.count }))
   );
 
-  // Time of day: hourly counts bucketed into the six fixed periods. The period
-  // display labels are localized at render time so the pure transform stays
-  // i18n-free. The map is keyed on the transform's stable English labels, so the
-  // localization is robust to bucket order or length; an unmapped label falls
-  // back to its English text. The two Night labels (0-4 and 20-23) must remain
-  // distinct in every locale: the BarChart uses the label as its d3 band-scale
-  // domain key, so identical strings would collapse the two buckets into one bar.
-  const TIME_OF_DAY_PERIOD_LABEL_KEYS = new Map<string, TranslationKey>([
-    ['Night (0-4)', 'analytics.timeOfDayPeriods.night0to4'],
-    ['Dawn (5-8)', 'analytics.timeOfDayPeriods.dawn5to8'],
-    ['Morning (9-11)', 'analytics.timeOfDayPeriods.morning9to11'],
-    ['Afternoon (12-16)', 'analytics.timeOfDayPeriods.afternoon12to16'],
-    ['Evening (17-19)', 'analytics.timeOfDayPeriods.evening17to19'],
-    ['Night (20-23)', 'analytics.timeOfDayPeriods.night20to23'],
-  ]);
-  const timeOfDayBars = $derived.by(() =>
-    bucketHourlyByPeriod(chartData.timeOfDay).map(bucket => {
-      const key = TIME_OF_DAY_PERIOD_LABEL_KEYS.get(bucket.label);
-      return { label: key ? t(key) : bucket.label, value: bucket.value };
-    })
+  const shownSpeciesCount = $derived(speciesBars.reduce((sum, species) => sum + species.value, 0));
+  const speciesPieData = $derived.by(() => {
+    const rows: PieChartDatum[] = [...speciesBars];
+    const otherDetections = summary.totalDetections - shownSpeciesCount;
+    if (otherDetections > 0) {
+      rows.push({
+        label: t('analytics.patterns.otherSpecies'),
+        value: otherDetections,
+        clickable: false,
+      });
+    }
+    return rows;
+  });
+  const speciesShare = $derived(
+    summary.totalDetections > 0 && shownSpeciesCount <= summary.totalDetections
+      ? (shownSpeciesCount / summary.totalDetections) * 100
+      : null
   );
+  const activity = $derived(summarizeActivity(chartData.trend, params.startDate, params.endDate));
+  const hourlyBars = $derived(
+    Array.from({ length: HOURS_PER_DAY }, (_, hour) => ({
+      label: String(hour).padStart(2, '0'),
+      value: chartData.hourly
+        .filter(row => row.hour === hour && Number.isFinite(row.count) && row.count >= 0)
+        .reduce((total, row) => total + row.count, 0),
+    }))
+  );
+
+  function openSpecies(label: string) {
+    const species = chartData.species.find(
+      row => localizeSpeciesName(row.scientific_name, row.common_name) === label
+    );
+    if (!species) return;
+    const search = new URLSearchParams({
+      queryType: 'search',
+      species: species.scientific_name || species.common_name,
+      start_date: formatDateForAPI(params.startDate),
+      end_date: formatDateForAPI(params.endDate),
+    });
+    window.location.href = buildAppUrl(`/ui/detections?${search}`);
+  }
 
   // Detection trend: aggregated/sorted daily points, wrapped as a single series.
   const trendSeries = $derived([
@@ -200,24 +266,28 @@
   ]);
 
   // New species: API rows mapped to { commonName, scientificName, firstHeard }.
-  // Sorted desc by date then limited to the most recent NEW_SPECIES_LIMIT, to
-  // match the original chart which capped the display at 20 species.
+  // Keep every species in the selected period; a scrollable chart preserves legible rows.
   const newSpeciesPoints = $derived(
-    mapNewSpecies(chartData.newSpecies)
-      .sort((a, b) => b.firstHeard.getTime() - a.firstHeard.getTime())
-      .slice(0, NEW_SPECIES_LIMIT)
+    mapNewSpecies(chartData.newSpecies).sort(
+      (a, b) => b.firstHeard.getTime() - a.firstHeard.getTime()
+    )
+  );
+  const newSpeciesChartHeight = $derived(
+    Math.max(
+      NEW_SPECIES_MIN_HEIGHT,
+      newSpeciesPoints.length * NEW_SPECIES_ROW_HEIGHT + NEW_SPECIES_CHART_PADDING
+    )
   );
 
-  // Explicit date range for the time-based charts, taken from the shared params.
-  const chartDateRange = $derived<[Date, Date]>([params.startDate, params.endDate]);
+  // Daily API points are parsed at local noon. Match those calendar boundaries
+  // so the final day's point is inside the domain even before noon or for custom dates.
+  const chartDateRange = $derived<[Date, Date]>([
+    parseLocalDateString(formatDateForAPI(params.startDate)) ?? params.startDate,
+    parseLocalDateString(formatDateForAPI(params.endDate)) ?? params.endDate,
+  ]);
 
   // Subtitle shown on every StatCard, describing the active range.
   const periodLabel = $derived(t(RANGE_LABEL_KEYS[params.range]));
-
-  // Format percentage
-  function formatPercentage(value: number): string {
-    return (value * 100).toFixed(1) + '%';
-  }
 
   // Refetch whenever the resolved date range changes. Day-granular so a same-day
   // re-resolve of the Date objects does not spuriously refetch. The first run
@@ -239,20 +309,22 @@
     const seq = ++analyticsFetchSeq;
     isLoading = true;
     error = null;
+    fullSpecies = null;
+    uptime = null;
+    void fetchUptime(seq, snapshot.startDate, snapshot.endDate);
 
     // Clear the previous range's data up front so a slow or failing request can
     // never leave stale metrics on screen (the loading overlays mask the blank
     // slate). Each fetcher then only commits success; failures just log + rethrow.
     summary = {
       totalDetections: 0,
+      avgConfidence: null,
       uniqueSpecies: 0,
-      avgConfidence: 0,
       mostCommonSpecies: '',
       mostCommonScientific: '',
       mostCommonCount: 0,
     };
-    recentDetections = [];
-    chartData = { species: [], timeOfDay: [], trend: null, newSpecies: [] };
+    chartData = { species: [], hourly: [], trend: null, newSpecies: [] };
 
     logger.debug('Loading overview analytics', { startDate, endDate });
 
@@ -263,8 +335,7 @@
     const results = await Promise.allSettled([
       fetchSummaryData(seq, startDate, endDate),
       fetchSpeciesSummary(seq, startDate, endDate),
-      fetchRecentDetections(seq),
-      fetchTimeOfDayData(seq, startDate, endDate),
+      fetchHourlyData(seq, startDate, endDate),
       fetchTrendData(seq, startDate, endDate),
       fetchNewSpeciesData(seq, startDate, endDate),
     ]);
@@ -291,20 +362,29 @@
       const speciesData = await api.get<SpeciesData[]>(url);
       if (seq !== analyticsFetchSeq) return; // superseded by a newer fetch
       const speciesArray = Array.isArray(speciesData) ? speciesData : [];
+      fullSpecies = speciesArray;
 
       // Calculate summary metrics
       let totalDetections = 0;
-      let totalConfidence = 0;
+      let confidenceSum = 0;
+      let confidenceCount = 0;
       let mostCommonSpecies = '';
       let mostCommonScientific = '';
       let mostCommonCount = 0;
 
       speciesArray.forEach(species => {
         const count = species.count || 0;
-        const confidence = species.avg_confidence || 0;
 
         totalDetections += count;
-        totalConfidence += confidence * count;
+        if (
+          count > 0 &&
+          Number.isFinite(species.avg_confidence) &&
+          species.avg_confidence >= 0 &&
+          species.avg_confidence <= 1
+        ) {
+          confidenceSum += species.avg_confidence * count;
+          confidenceCount += count;
+        }
 
         if (count > mostCommonCount) {
           mostCommonCount = count;
@@ -315,8 +395,11 @@
 
       summary = {
         totalDetections,
+        avgConfidence:
+          confidenceCount > 0 && confidenceCount === totalDetections
+            ? confidenceSum / confidenceCount
+            : null,
         uniqueSpecies: speciesArray.length,
-        avgConfidence: totalDetections > 0 ? totalConfidence / totalDetections : 0,
         mostCommonSpecies,
         mostCommonScientific,
         mostCommonCount,
@@ -331,7 +414,7 @@
   // Fetch species summary for chart
   async function fetchSpeciesSummary(seq: number, startDate: string, endDate: string) {
     try {
-      const search = new URLSearchParams({ limit: '10' });
+      const search = new URLSearchParams({ limit: String(MAX_TOP_SPECIES_LIMIT) });
       if (startDate) search.set('start_date', startDate);
       if (endDate) search.set('end_date', endDate);
 
@@ -346,62 +429,20 @@
     }
   }
 
-  // Fetch recent detections
-  async function fetchRecentDetections(seq: number) {
-    try {
-      const data = await api.get<ApiDetection[]>('/api/v2/detections/recent?limit=10');
-      if (seq !== analyticsFetchSeq) return; // superseded by a newer fetch
-      const detections = Array.isArray(data) ? data : [];
-
-      recentDetections = detections.map(detection => {
-        // Compute timestamp once to avoid 'undefined undefined' edge case
-        const computedTimestamp =
-          detection.timestamp ||
-          (detection.date && detection.time ? `${detection.date}T${detection.time}` : null);
-
-        return {
-          id: detection.id,
-          timestamp: computedTimestamp,
-          commonName: detection.commonName,
-          scientificName: detection.scientificName,
-          confidence: detection.confidence,
-          timeOfDay:
-            detection.timeOfDay || (computedTimestamp ? calculateTimeOfDay(computedTimestamp) : ''),
-          source: detection.source ?? null,
-        };
-      });
-    } catch (err) {
-      if (seq !== analyticsFetchSeq) return; // superseded by a newer fetch
-      logger.error('Error fetching recent detections:', err);
-      throw err; // rethrow so fetchData can detect a total-failure load
-    }
-  }
-
-  // Calculate time of day from timestamp
-  function calculateTimeOfDay(timestamp: string) {
-    const date = new Date(timestamp);
-    const hour = date.getHours();
-
-    if (hour >= 5 && hour < 8) return 'Sunrise';
-    if (hour >= 8 && hour < 17) return 'Day';
-    if (hour >= 17 && hour < 20) return 'Sunset';
-    return 'Night';
-  }
-
-  // Fetch time of day data
-  async function fetchTimeOfDayData(seq: number, startDate: string, endDate: string) {
+  // Fetch hourly counts for the selected date range
+  async function fetchHourlyData(seq: number, startDate: string, endDate: string) {
     try {
       const search = new URLSearchParams();
       if (startDate) search.set('start_date', startDate);
       if (endDate) search.set('end_date', endDate);
 
       const url = `/api/v2/analytics/time/distribution/hourly?${search}`;
-      const timeData = await api.get<TimeOfDayData[]>(url);
+      const timeData = await api.get<HourlyData[]>(url);
       if (seq !== analyticsFetchSeq) return; // superseded by a newer fetch
-      chartData.timeOfDay = Array.isArray(timeData) ? timeData : [];
+      chartData.hourly = Array.isArray(timeData) ? timeData : [];
     } catch (err) {
       if (seq !== analyticsFetchSeq) return; // superseded by a newer fetch
-      logger.error('Error fetching time of day data:', err);
+      logger.error('Error fetching hourly data:', err);
       throw err; // rethrow so fetchData can detect a total-failure load
     }
   }
@@ -441,10 +482,19 @@
       if (startDate) search.set('start_date', startDate);
       if (endDate) search.set('end_date', endDate);
 
-      const url = `/api/v2/analytics/species/detections/new?${search}`;
-      const data = await api.get<NewSpeciesData[]>(url);
-      if (seq !== analyticsFetchSeq) return; // superseded by a newer fetch
-      chartData.newSpecies = Array.isArray(data) ? data : [];
+      search.set('limit', String(NEW_SPECIES_PAGE_SIZE));
+      const rows: NewSpeciesData[] = [];
+      for (let offset = 0; ; offset += NEW_SPECIES_PAGE_SIZE) {
+        search.set('offset', String(offset));
+        const data = await api.get<NewSpeciesData[]>(
+          `/api/v2/analytics/species/detections/new?${search}`
+        );
+        if (seq !== analyticsFetchSeq) return;
+        if (!Array.isArray(data)) throw new Error('Invalid new-species response');
+        rows.push(...data);
+        if (data.length < NEW_SPECIES_PAGE_SIZE) break;
+      }
+      chartData.newSpecies = rows;
     } catch (err) {
       if (seq !== analyticsFetchSeq) return; // superseded by a newer fetch
       logger.error('Error fetching new species data:', err);
@@ -471,82 +521,19 @@
       iconClassName="bg-[var(--color-primary)]/20"
       {isLoading}
     >
-      {#snippet icon()}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-[var(--color-primary)]"
-          viewBox="0 0 921.998 921.998"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            d="M869.694,385.652c-11.246-12.453-132.373-110.907-154.023-117.272c-9.421-2.735-18.892-4.447-28.681-5.164
-              c-45.272-3.315-95.213,10.875-126.684,44.794c-2.741,2.956-4.311,4.645-4.311,4.645s1.172-1.996,3.224-5.488
-              c9.706-16.365,23.847-30.577,38.989-41.956c6.979-5.243,14.37-9.937,22.088-14.014c2.116-1.118,21.797-11.751,23.12-10.357
-              c-0.003-0.003-10.744-11.33-10.744-11.33c-17.273-17.276-35.963-32.167-61.415-32.167c-31.547,0-58.505,19.559-69.472,47.201
-              c-9.306-6.917-24.11-11.392-40.788-11.392c-16.678,0-31.481,4.475-40.788,11.392c-10.967-27.643-37.925-47.201-69.472-47.201
-              c-25.452,0-44.142,14.891-61.416,32.166c0,0-10.741,11.327-10.744,11.33c1.322-1.395,21.003,9.239,23.12,10.357
-              c7.718,4.077,15.109,8.771,22.088,14.014c15.145,11.378,29.283,25.591,38.989,41.956c2.052,3.493,3.224,5.488,3.224,5.488
-              s-1.566-1.689-4.31-4.645c-31.471-33.919-81.411-48.109-126.683-44.794c-9.789,0.717-19.26,2.429-28.681,5.164
-              c-21.651,6.365-142.778,104.819-154.023,117.272C19.797,421.645,0,469.336,0,521.655c0,112.112,90.886,203,203,203
-              c102.56,0,187.34-76.062,201.048-174.851c15.983,11.645,35.663,18.52,56.951,18.52c21.289,0,40.968-6.875,56.951-18.52
-              c13.708,98.788,98.487,174.851,201.048,174.851c112.114,0,203-90.888,203-203C921.996,469.336,902.199,421.647,869.694,385.652z
-              M198.497,649.155c-67.611,0-122.421-54.811-122.421-122.421s54.81-122.42,122.421-122.42s122.421,54.81,122.421,122.42
-              S266.108,649.155,198.497,649.155z M460.997,515.234c-17.833,0-32.29-14.457-32.29-32.29s14.457-32.289,32.29-32.289
-              s32.29,14.457,32.29,32.289C493.287,500.777,478.83,515.234,460.997,515.234z M723.497,649.155
-              c-67.611,0-122.421-54.811-122.421-122.421s54.81-122.42,122.421-122.42s122.421,54.81,122.421,122.42
-              S791.108,649.155,723.497,649.155z"
-          />
-        </svg>
-      {/snippet}
+      {#snippet icon()}<Bird class="h-6 w-6 text-[var(--color-primary)]" />{/snippet}
     </StatCard>
 
     <!-- Unique Species Card -->
     <StatCard
       title={t('analytics.stats.uniqueSpecies')}
       value={formatNumber(summary.uniqueSpecies)}
+      secondaryValue={`${formatNumber(newSpeciesPoints.length)} ${t('species.tracking.newSpecies')}`}
       subtitle={periodLabel}
       iconClassName="bg-[var(--color-secondary)]/20"
       {isLoading}
     >
-      {#snippet icon()}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-[var(--color-secondary)]"
-          viewBox="0 0 256 256"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            d="M236.4375,73.34375,213.207,57.85547A60.00943,60.00943,0,0,0,96,76V93.19385L1.75293,211.00244A7.99963,7.99963,0,0,0,8,224H112A104.11791,104.11791,0,0,0,216,120V100.28125l20.4375-13.625a7.99959,7.99959,0,0,0,0-13.3125Zm-126.292,67.77783-40,48a7.99987,7.99987,0,0,1-12.291-10.24316l40-48a7.99987,7.99987,0,0,1,12.291,10.24316ZM164,80a12,12,0,1,1,12-12A12,12,0,0,1,164,80Z"
-          />
-        </svg>
-      {/snippet}
-    </StatCard>
-
-    <!-- Average Confidence Card -->
-    <StatCard
-      title={t('analytics.stats.avgConfidence')}
-      value={formatPercentage(summary.avgConfidence)}
-      subtitle={periodLabel}
-      iconClassName="bg-[var(--color-accent)]/20"
-      {isLoading}
-    >
-      {#snippet icon()}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-[var(--color-accent)]"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      {/snippet}
+      {#snippet icon()}<ListChecks class="h-6 w-6 text-[var(--color-primary)]" />{/snippet}
     </StatCard>
 
     <!-- Most Common Species Card -->
@@ -559,46 +546,85 @@
         ? formatNumber(summary.mostCommonCount) + ' ' + t('analytics.stats.detections')
         : ''}
       iconClassName="bg-[var(--color-success)]/20"
-      valueClassName="text-lg truncate max-w-[150px]"
+      valueClassName="text-lg leading-tight break-words"
       {isLoading}
     >
-      {#snippet icon()}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-[var(--color-success)]"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      {/snippet}
+      {#snippet icon()}<TrendingUp class="h-6 w-6 text-[var(--color-primary)]" />{/snippet}
     </StatCard>
   </div>
 
+  <section
+    class="activity-snapshot rounded-xl border border-[var(--color-base-200)] bg-[var(--color-base-100)] p-4 md:p-6 space-y-4"
+  >
+    <h2 class="text-lg font-semibold">{t('analytics.summary.activityTitle')}</h2>
+    <div class="grid gap-4 summary-cards-grid activity-cards-grid">
+      <StatCard
+        title={t('analytics.stats.avgConfidence')}
+        value={summary.avgConfidence === null
+          ? '—'
+          : `${formatNumber(summary.avgConfidence * PERCENT_SCALE, 1)}%`}
+        subtitle={periodLabel}
+        {isLoading}
+      />
+      <StatCard
+        title={t('analytics.summary.uptime')}
+        value={uptime === null
+          ? t('analytics.summary.uptimeUnavailable')
+          : uptime.complete
+            ? `${formatNumber(uptime.percentage, 1)}%`
+            : `${formatNumber(
+                Math.floor(uptime.percentage * UPTIME_DISPLAY_PRECISION) / UPTIME_DISPLAY_PRECISION,
+                1
+              )}%`}
+        subtitle={uptime === null
+          ? t('analytics.summary.uptimeHistoryMissing')
+          : uptime.complete
+            ? t('analytics.summary.uptimeScope')
+            : undefined}
+        {isLoading}
+      />
+      <StatCard
+        title={t('analytics.summary.calendarAverage')}
+        value={activity ? formatNumber(activity.dailyAverage, 1) : '—'}
+        subtitle={periodLabel}
+        {isLoading}
+      />
+      <StatCard
+        title={t('analytics.summary.busiestDay')}
+        value={activity?.busiest ? formatDate(activity.busiest.date) : '—'}
+        subtitle={activity?.busiest
+          ? t('analytics.confidenceAnalysis.sample', {
+              count: formatNumber(activity.busiest.count),
+            })
+          : t('analytics.charts.noDataAvailable')}
+        {isLoading}
+      />
+    </div>
+  </section>
+
   <!-- Charts Section -->
   <div class="grid gap-4 charts-grid">
-    <!-- Species Distribution Chart -->
-    {@render chartCard(
-      t('analytics.charts.top10Species'),
-      'h-80',
-      speciesChart,
-      speciesBars.length === 0,
-      t('analytics.charts.noDataAvailable')
-    )}
+    <div class:species-expanded={topSpeciesLimit === MAX_TOP_SPECIES_LIMIT} class="min-w-0">
+      {@render chartCard(
+        t('analytics.summary.topSpecies', { count: topSpeciesLimit }),
+        '',
+        speciesChart,
+        speciesBars.length === 0,
+        t('analytics.charts.noDataAvailable'),
+        speciesControls,
+        speciesChartHeight
+      )}
+    </div>
 
-    <!-- Time of Day Chart -->
-    {@render chartCard(
-      t('analytics.charts.detectionsByTimeOfDay'),
-      'h-80',
-      timeOfDayChart,
-      timeOfDayBars.every(b => b.value === 0),
-      t('analytics.charts.noDataAvailable')
-    )}
+    <div class:species-expanded={topSpeciesLimit === MAX_TOP_SPECIES_LIMIT} class="min-w-0">
+      {@render chartCard(
+        t('analytics.summary.hourlyTitle'),
+        'h-96',
+        hourlyChart,
+        hourlyBars.every(bar => bar.value === 0),
+        t('analytics.charts.noDataAvailable')
+      )}
+    </div>
   </div>
 
   <!-- Trend Chart -->
@@ -610,6 +636,8 @@
     t('analytics.charts.noDataAvailable')
   )}
 
+  <SummaryPatterns {params} species={fullSpecies} hourly={chartData.hourly} {isLoading} />
+
   <!-- New Species Chart -->
   {@render chartCard(
     t('analytics.charts.newSpeciesDetected'),
@@ -618,153 +646,6 @@
     newSpeciesPoints.length === 0,
     t('analytics.charts.noNewSpecies')
   )}
-
-  <!-- Data Table for Recent Detections -->
-  <div class="card bg-[var(--color-base-100)] shadow-xs">
-    <div class="card-body card-padding">
-      <h2 class="card-title">{t('analytics.recentDetections.title')}</h2>
-      {#if isLoading}
-        <div class="flex justify-center items-center p-8">
-          <LoadingSpinner size="lg" />
-        </div>
-      {:else}
-        <!-- Desktop/tablet table -->
-        <div class="overflow-x-auto hidden md:block">
-          <table class="table w-full">
-            <thead>
-              <tr>
-                <th>{t('analytics.recentDetections.headers.dateTime')}</th>
-                <th>{t('analytics.recentDetections.headers.species')}</th>
-                <th>{t('analytics.recentDetections.headers.confidence')}</th>
-                <th>{t('analytics.recentDetections.headers.source')}</th>
-                <th>{t('analytics.recentDetections.headers.timeOfDay')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {#each recentDetections as detection, index (detection.id ?? index)}
-                <tr
-                  class={index % 2 === 0
-                    ? 'bg-[var(--color-base-100)]'
-                    : 'bg-[var(--color-base-200)]'}
-                >
-                  <td>{detection.timestamp ? formatDateTime(detection.timestamp) : '-'}</td>
-                  <td>
-                    <div class="flex items-center gap-2">
-                      <div class="w-8 h-8 rounded-full bg-[var(--color-base-200)] overflow-hidden">
-                        <!-- PERFORMANCE OPTIMIZATION: Enhanced image loading for species thumbnails -->
-                        <img
-                          src={getSpeciesImageUrl(detection.scientificName ?? '')}
-                          alt={detection.commonName ||
-                            t('analytics.recentDetections.unknownSpecies')}
-                          class="w-full h-full object-cover"
-                          onerror={handleBirdImageError}
-                          loading="lazy"
-                          decoding="async"
-                          fetchpriority="low"
-                        />
-                      </div>
-                      <div>
-                        <div class="font-medium">
-                          {localizeSpeciesName(detection.scientificName, detection.commonName) ||
-                            t('analytics.recentDetections.unknownSpecies')}
-                        </div>
-                        <div class="text-xs opacity-50">{detection.scientificName || ''}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="flex items-center gap-2">
-                      <div class="w-16 h-4 rounded-full overflow-hidden bg-[var(--color-base-200)]">
-                        <div
-                          class="h-full {detection.confidence >= 0.8
-                            ? 'bg-[var(--color-success)]'
-                            : detection.confidence >= 0.4
-                              ? 'bg-[var(--color-warning)]'
-                              : 'bg-[var(--color-error)]'}"
-                          style:width="{detection.confidence * 100}%"
-                        ></div>
-                      </div>
-                      <span class="text-sm">{formatPercentage(detection.confidence)}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <SourceBadge {detection} variant="inline" />
-                    {#if !detection.source}
-                      <span class="text-xs opacity-40">-</span>
-                    {/if}
-                  </td>
-                  <td>{detection.timeOfDay || t('analytics.recentDetections.unknown')}</td>
-                </tr>
-              {:else}
-                <tr>
-                  <td
-                    colspan="5"
-                    class="text-center py-4 text-[var(--color-base-content)] opacity-50"
-                    >{t('analytics.recentDetections.noRecentDetections')}</td
-                  >
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Mobile list -->
-        <div class="md:hidden space-y-2">
-          {#each recentDetections as detection, index (detection.id ?? index)}
-            <div class="bg-[var(--color-base-100)] rounded-lg p-3">
-              <div class="flex items-start gap-3">
-                <!-- Thumbnail -->
-                <div
-                  class="w-10 h-10 rounded-full bg-[var(--color-base-200)] overflow-hidden shrink-0"
-                >
-                  <img
-                    src={getSpeciesImageUrl(detection.scientificName ?? '')}
-                    alt={detection.commonName || t('analytics.recentDetections.unknownSpecies')}
-                    class="w-full h-full object-cover"
-                    onerror={handleBirdImageError}
-                    loading="lazy"
-                    decoding="async"
-                    fetchpriority="low"
-                  />
-                </div>
-                <!-- Content -->
-                <div class="flex-1 min-w-0">
-                  <div class="text-sm text-[var(--color-base-content)]/70">
-                    {detection.timestamp ? formatDateTime(detection.timestamp) : '-'}
-                  </div>
-                  <div class="font-medium leading-tight truncate">
-                    {localizeSpeciesName(detection.scientificName, detection.commonName) ||
-                      t('analytics.recentDetections.unknownSpecies')}
-                  </div>
-                  <div class="text-xs opacity-60 truncate">{detection.scientificName || ''}</div>
-                  <div class="mt-2 flex items-center justify-between">
-                    <!-- Confidence badge -->
-                    <span
-                      class="badge {detection.confidence >= 0.8
-                        ? 'badge-success'
-                        : detection.confidence >= 0.4
-                          ? 'badge-warning'
-                          : 'badge-error'}"
-                    >
-                      {formatPercentage(detection.confidence)}
-                    </span>
-                    <SourceBadge {detection} variant="inline" />
-                    <span class="text-xs opacity-70"
-                      >{detection.timeOfDay || t('analytics.recentDetections.unknown')}</span
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          {:else}
-            <div class="text-center py-4 text-[var(--color-base-content)] opacity-50">
-              {t('analytics.recentDetections.noRecentDetections')}
-            </div>
-          {/each}
-        </div>
-      {/if}
-    </div>
-  </div>
 </div>
 
 <!-- Shared card chrome for the overview charts (loading overlay + empty state). -->
@@ -773,18 +654,27 @@
   chartHeight: string,
   chart: Snippet,
   empty: boolean,
-  emptyMessage: string
+  emptyMessage: string,
+  controls?: Snippet,
+  height?: number
 )}
   <div class="card bg-[var(--color-base-100)] shadow-xs">
     <div class="card-body p-4 md:p-6">
-      <h2 class="card-title">{title}</h2>
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+        <h2 class="card-title">{title}</h2>
+        {#if controls}{@render controls()}{/if}
+      </div>
       {#if empty && !isLoading}
         <div class="text-center py-4 text-[var(--color-base-content)] opacity-50">
           {emptyMessage}
         </div>
       {:else}
         <div class="relative" aria-busy={isLoading}>
-          <div class="chart-container {chartHeight}" class:invisible={isLoading}>
+          <div
+            class="chart-container {chartHeight}"
+            style:height={height === undefined ? undefined : `${height}px`}
+            class:invisible={isLoading}
+          >
             {@render chart()}
           </div>
           {#if isLoading}
@@ -798,27 +688,95 @@
   </div>
 {/snippet}
 
-{#snippet speciesChart()}
+{#snippet speciesControls()}
+  <div class="flex flex-wrap items-center gap-3 text-sm">
+    <div class="flex items-center gap-2">
+      <label for={speciesLimitId}>{t('analytics.summary.speciesLimit')}</label>
+      <select
+        id={speciesLimitId}
+        value={topSpeciesLimit}
+        class="rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-100)] px-3 py-2"
+        onchange={event => {
+          const limit = Number(event.currentTarget.value);
+          if (limit === DEFAULT_TOP_SPECIES_LIMIT || limit === MAX_TOP_SPECIES_LIMIT) {
+            topSpeciesLimit = limit;
+            setStoredValue(SPECIES_LIMIT_STORAGE_KEY, limit);
+          }
+        }}
+      >
+        <option value={DEFAULT_TOP_SPECIES_LIMIT}
+          >{t('analytics.summary.topSpecies', { count: DEFAULT_TOP_SPECIES_LIMIT })}</option
+        >
+        <option value={MAX_TOP_SPECIES_LIMIT}
+          >{t('analytics.summary.topSpecies', { count: MAX_TOP_SPECIES_LIMIT })}</option
+        >
+      </select>
+    </div>
+    {#if topSpeciesLimit === DEFAULT_TOP_SPECIES_LIMIT}
+      <div class="flex items-center gap-2">
+        <label for={speciesStyleId}>{t('analytics.summary.chartStyle')}</label>
+        <select
+          id={speciesStyleId}
+          value={speciesChartStyle}
+          class="rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-100)] px-3 py-2"
+          onchange={event => {
+            const style = event.currentTarget.value;
+            if (style === 'bar' || style === 'pie') {
+              speciesChartStyle = style;
+              setStoredValue(SPECIES_STYLE_STORAGE_KEY, style);
+            }
+          }}
+        >
+          <option value="bar">{t('analytics.summary.barChart')}</option>
+          <option value="pie">{t('analytics.summary.pieChart')}</option>
+        </select>
+      </div>
+    {/if}
+  </div>
+  {#if speciesShare !== null && !isLoading}
+    <p class="text-xs opacity-70">
+      {t('analytics.summary.coverage')}: {formatNumber(shownSpeciesCount)} / {formatNumber(
+        summary.totalDetections
+      )} ({speciesShare.toFixed(1)}%)
+    </p>
+  {/if}
+{/snippet}
+
+{#snippet hourlyChart()}
   <BarChart
-    data={speciesBars}
-    orientation="horizontal"
+    data={hourlyBars}
+    height={384}
+    categoryAxisLabel={t('analytics.advanced.charts.nocturnal.axisHour')}
     valueAxisLabel={t('analytics.charts.numberOfDetections')}
     valueTooltipLabel={t('analytics.charts.detections')}
     formatValue={formatNumber}
-    ariaLabel={t('analytics.charts.top10Species')}
+    ariaLabel={t('analytics.summary.hourlyTitle')}
   />
 {/snippet}
 
-{#snippet timeOfDayChart()}
-  <BarChart
-    data={timeOfDayBars}
-    orientation="vertical"
-    valueAxisLabel={t('analytics.charts.numberOfDetections')}
-    categoryAxisLabel={t('analytics.charts.timePeriod')}
-    valueTooltipLabel={t('analytics.charts.detections')}
-    formatValue={formatNumber}
-    ariaLabel={t('analytics.charts.detectionsByTimeOfDay')}
-  />
+{#snippet speciesChart()}
+  {#if showSpeciesPie}
+    <PieChart
+      data={speciesPieData}
+      height={speciesChartHeight}
+      formatValue={formatNumber}
+      formatPercentage={value => formatNumber(value, 1)}
+      valueTooltipLabel={t('analytics.charts.detections')}
+      ariaLabel={t('analytics.summary.topSpecies', { count: topSpeciesLimit })}
+      onSliceClick={datum => openSpecies(datum.label)}
+    />
+  {:else}
+    <BarChart
+      data={speciesBars}
+      height={speciesChartHeight}
+      orientation="horizontal"
+      valueAxisLabel={t('analytics.charts.numberOfDetections')}
+      valueTooltipLabel={t('analytics.charts.detections')}
+      formatValue={formatNumber}
+      ariaLabel={t('analytics.summary.topSpecies', { count: topSpeciesLimit })}
+      onBarClick={datum => openSpecies(datum.label)}
+    />
+  {/if}
 {/snippet}
 
 {#snippet trendChart()}
@@ -834,16 +792,32 @@
 {/snippet}
 
 {#snippet newSpeciesChart()}
-  <NewSpeciesTimelineChart
-    data={newSpeciesPoints}
-    dateRange={chartDateRange}
-    firstHeardLabel={t('analytics.charts.firstHeard')}
-    dateAxisLabel={t('analytics.charts.firstHeardDate')}
-    ariaLabel={t('analytics.charts.newSpeciesDetected')}
-  />
+  <!-- The scrollable timeline needs keyboard focus so all species can be reached with arrow keys. -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div
+    class="h-full overflow-y-auto"
+    tabindex="0"
+    role="region"
+    aria-label={t('analytics.charts.newSpeciesDetected')}
+  >
+    <div style:height={`${newSpeciesChartHeight}px`}>
+      <NewSpeciesTimelineChart
+        data={newSpeciesPoints}
+        dateRange={chartDateRange}
+        firstHeardLabel={t('analytics.charts.firstHeard')}
+        dateAxisLabel={t('analytics.charts.firstHeardDate')}
+        ariaLabel={t('analytics.charts.newSpeciesDetected')}
+        height={newSpeciesChartHeight}
+      />
+    </div>
+  </div>
 {/snippet}
 
 <style>
+  .species-expanded {
+    grid-column: 1 / -1;
+  }
+
   .card-padding {
     padding: 1rem;
   }
@@ -854,10 +828,18 @@
     }
   }
 
-  /* Summary cards grid - matches grid-cols-1 md:grid-cols-2 lg:grid-cols-4 */
+  /* Station totals use three columns; the activity snapshot has four metrics. */
+  .activity-snapshot {
+    container-type: inline-size;
+  }
+
   .summary-cards-grid {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .activity-cards-grid {
+    grid-auto-rows: 1fr;
   }
 
   @media (min-width: 768px) {
@@ -868,6 +850,17 @@
 
   @media (min-width: 1024px) {
     .summary-cards-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .activity-cards-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Use four columns only when each card has room for full-size values and padding. */
+  @container (min-width: 72rem) {
+    .activity-cards-grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }

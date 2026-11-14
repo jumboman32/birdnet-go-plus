@@ -34,6 +34,7 @@ type Client struct {
 	species       *ttlcache.Cache[speciesKey, *TaxonomyEntry] // keyed by species code and locale
 	familyTrees   *ttlcache.Cache[string, *TaxonomyTree]      // keyed by scientific name as passed
 	observations  *ttlcache.Cache[observationKey, []Observation]
+	regionSpecies *ttlcache.Cache[string, []string]
 	rateLimiter   *time.Ticker
 	mu            sync.RWMutex
 	lastRequest   time.Time
@@ -82,12 +83,13 @@ func NewClient(config Config) (*Client, error) {
 		httpClient: &http.Client{
 			Timeout: config.Timeout,
 		},
-		taxonomy:     ttlcache.New[string, []TaxonomyEntry](config.CacheTTL),
-		species:      ttlcache.New[speciesKey, *TaxonomyEntry](config.CacheTTL),
-		familyTrees:  ttlcache.New[string, *TaxonomyTree](config.CacheTTL),
-		observations: ttlcache.New[observationKey, []Observation](config.CacheTTL),
-		rateLimiter:  time.NewTicker(time.Duration(config.RateLimitMS) * time.Millisecond),
-		debug:        debug,
+		taxonomy:      ttlcache.New[string, []TaxonomyEntry](config.CacheTTL),
+		species:       ttlcache.New[speciesKey, *TaxonomyEntry](config.CacheTTL),
+		familyTrees:   ttlcache.New[string, *TaxonomyTree](config.CacheTTL),
+		observations:  ttlcache.New[observationKey, []Observation](config.CacheTTL),
+		regionSpecies: ttlcache.New[string, []string](config.CacheTTL, ttlcache.WithMaxEntries(maxRegionSpeciesLists)),
+		rateLimiter:   time.NewTicker(time.Duration(config.RateLimitMS) * time.Millisecond),
+		debug:         debug,
 	}
 
 	// Log successful initialization

@@ -66,9 +66,11 @@ routeInitializers := []struct {
 
 The authenticated Frigate integration adds `GET /integrations/frigate/status`,
 `POST /integrations/frigate/test`, `GET /integrations/frigate/cameras`,
-`GET /integrations/frigate/cameras/:camera/live`, `GET /visual-detections`,
+`GET /integrations/frigate/cameras/:camera/live`,
+`GET /integrations/frigate/cameras/:camera/source` (video-only MSE WebSocket; `codecs` query), `GET /visual-detections`,
 `GET /visual-detections/summary`, `GET /visual-detections/:id`,
-`GET /visual-detections/:id/snapshot`, and `GET /visual-detections/:id/correlations`.
+`GET /visual-detections/:id/snapshot`, `GET /visual-detections/:id/correlations`,
+and `PUT /visual-detections/:id/species` for owner-confirmed identity protection.
 All paths use the `/api/v2` prefix. Visual storage requires v2 repositories.
 See the [Frigate guide](../../../doc/FRIGATE.md#api-v2) for request parameters,
 response shapes, authentication, configuration, and media/correlation semantics.
@@ -487,6 +489,21 @@ Both verbs report identically under the `skippedFields` response key: it lists o
 | GET    | `/filesystem/browse` | `BrowseFileSystem` | ✅   | Browse files and directories with secure path validation |
 
 ### Species (`species/species.go`)
+
+`GET /species/target-progress` provides read-only lifetime county/state checklist
+progress from the v2 detection repository and eBird's regional species lists.
+The optional `county` parameter overrides `BIRDNET_RARITY_REGION` for that request.
+Responses include a prerequisite `status`, or county/state objects containing
+`region`, `detected`, `total`, and nullable `percentage`. See the
+[regional progress guide](../../../doc/species-target-progress.md).
+
+The existing `/analytics/confidence/distribution` endpoint also accepts
+`format=analysis`: SQL-aggregated, model-separated statistics with exact medians
+and twenty confidence bins. Repeated `species` and `model` filters are supported.
+`format=review` loads at most 25 matching detections using one model, an optional
+species, a zero-based `bin` from 0 to 19, and optional `offset`. Both formats require
+`start_date` and `end_date`; the default representation remains unchanged.
+See the [confidence analytics guide](../../../doc/confidence-analytics.md).
 
 | Method | Route                         | Handler                  | Auth | Description                                                                                                                                                                                                                     |
 | ------ | ----------------------------- | ------------------------ | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

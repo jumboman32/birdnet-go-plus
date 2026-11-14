@@ -238,6 +238,7 @@ func (e *Event) Observation(instance string) (*entities.VisualDetection, error) 
 	}
 	if label != "" {
 		row.OriginalLabel = &label
+		row.ClassificationSource = entities.VisualClassificationFrigate
 		row.ClassificationConfidence = confidence
 		if confidence == nil {
 			row.ClassificationConfidence = score(e.Data.SubLabelScore)

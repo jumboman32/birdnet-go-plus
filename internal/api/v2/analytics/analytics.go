@@ -1743,6 +1743,9 @@ func clampConfidenceBins(value string) int {
 // GetConfidenceHistogram (it computes a per-species histogram); this endpoint and the chart present
 // it as a distribution, hence the route/handler naming.
 func (c *Handler) GetConfidenceDistribution(ctx echo.Context) error {
+	if ctx.QueryParam("format") == "analysis" || ctx.QueryParam("format") == "review" {
+		return c.getConfidenceAnalysis(ctx)
+	}
 	const operation = "confidence distribution"
 
 	// Validate required parameter

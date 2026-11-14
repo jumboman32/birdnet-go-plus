@@ -16,7 +16,6 @@
 -->
 <script lang="ts">
   import ConfidenceCircle from '$lib/desktop/components/data/ConfidenceCircle.svelte';
-  import LocalRarityCard from './LocalRarityCard.svelte';
   import WeatherDetails from '$lib/desktop/components/data/WeatherDetails.svelte';
   import AudioPlayer from '$lib/desktop/components/media/AudioPlayer.svelte';
   import SpectrogramImage from '$lib/desktop/components/media/SpectrogramImage.svelte';
@@ -820,14 +819,13 @@
 
 {#snippet overviewTab(det: Detection)}
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <LocalRarityCard scientificName={det.scientificName} date={det.date} />
     <!-- Species Rarity -->
     {#if speciesInfo?.rarity}
       <section aria-labelledby="rarity-heading">
-        <h3 id="rarity-heading" class="section-heading">{t('species.localRarity.modelTitle')}</h3>
+        <h3 id="rarity-heading" class="section-heading">{t('species.rarity.modelTitle')}</h3>
         <div class="content-panel">
           <div class="text-sm mb-2">
-            {t('species.localRarity.modelContext')}
+            {t('species.rarity.modelContext')}
           </div>
           <div class="flex items-center gap-3 mb-1">
             <span class="rarity-label"

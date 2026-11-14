@@ -1106,7 +1106,9 @@
         "rare": "Sjælden",
         "very_rare": "Meget sjælden",
         "unknown": "Ukendt"
-      }
+      },
+      "modelTitle": "BirdNETs geografiske model",
+      "modelContext": "Modellens aktuelle sæsonkontekst; adskilt fra lokal sjældenhedsscore og identifikationssikkerhed."
     },
     "taxonomy": {
       "hierarchy": "Taksonomisk klassifikation",
@@ -2170,6 +2172,17 @@
         "detections": "Registreringer:",
         "confidence": "Sikkerhed:",
         "first": "Første:"
+      },
+      "targets": {
+        "title": "Fremskridt for regionale arter",
+        "description": "Arter registreret af stationen sammenlignet med eBirds artslister for county og delstat.",
+        "region": "eBird-county-kode",
+        "regionHint": "Indtast en county-kode som US-NJ-001. Delstaten udledes af county-koden. Lad feltet være tomt for at bruge den konfigurerede region.",
+        "regionRequired": "Vælg en eBird-county-kode for at se fremskridt for county og delstat.",
+        "ebirdRequired": "Aktivér eBird-integrationen, og angiv en API-nøgle i Indstillinger for at indlæse regionale lister.",
+        "county": "Amt",
+        "state": "Delstat",
+        "lifetime": "Unikke arter i hele stationens levetid, eksklusive gennemgåede falske positiver. Sidens aktuelle filtre ændrer ikke dette totalantal."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Eftermiddag (12-16)",
       "evening17to19": "Aften (17-19)",
       "night20to23": "Nat (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Mønstre i denne periode",
+      "balanceHelp": "Effektiv diversitet er antallet af lige almindelige arter, der ville give denne registreringsfordeling. Registreringsandel er ikke fuglebestand.",
+      "effective": "Effektiv diversitet",
+      "topFive": "De 5 hyppigste arters andel",
+      "coverage": "Arter bag 80 % af registreringerne",
+      "peakWindow": "Mest aktive 3 timer",
+      "windowShare": "{percentage} % af registreringerne",
+      "share": "Andel af registreringer",
+      "otherSpecies": "Andre arter",
+      "comparisonTitle": "Sammenlignet med forrige periode",
+      "completedOnly": "I dag er udeladt; vælg et interval med afsluttede dage.",
+      "versus": "mod",
+      "comparisonHelp": "Lige lange afsluttede perioder. Optagedækningen kan variere.",
+      "comparisonError": "Periodesammenligningen kunne ikke indlæses.",
+      "volumeChange": "Ændring i registreringer",
+      "diversityChange": "Ændring i diversitet",
+      "retained": "Fastholdte arter",
+      "noBaseline": "Ingen tidligere registreringer: procentændringer mangler et grundlag.",
+      "retainedHelp": "Fastholdte arter er registreret i begge perioder som andel af arterne i forrige periode.",
+      "gaining": "Største stigninger i andel",
+      "losing": "Største fald i andel",
+      "shareChange": "{change} procentpoint",
+      "noMovement": "Ingen andelsændringer at vise."
+    },
+    "confidenceAnalysis": {
+      "caution": "Konfidens er en modelscore, ikke identifikationsnøjagtighed eller en kalibreret sandsynlighed for korrekthed. Scorer fra forskellige modeller vises hver for sig.",
+      "threshold": "En ophobning ved den nedre grænse kan skyldes minimumstærskler for detektion. Aktuelle tærskler, artsspecifikke tilsidesættelser og dynamiske tærskler kan afvige fra dem, der blev brugt til historiske optagelser.",
+      "population": "Alle relevante gemte primære identifikationer inden for de valgte datoer er medtaget. Gennemgåede falske positiver og scorer uden for 0–100 % er udeladt. Sekundære forudsigelser er ikke yderligere detektioner.",
+      "normalized": "Vis procenter",
+      "models": "Identifikationsmodeller",
+      "unknownModel": "Ukendt model",
+      "allModels": "Uden en valgt model vises alle registrerede modeller hver for sig.",
+      "sample": "{count} detektioner",
+      "median": "Mediankonfidens",
+      "percent": "Procentdel af detektioner",
+      "high": "Høj konfidens (80 %+)",
+      "binsHelp": "Vælg en søjle for at gennemgå detektionerne. Intervaller omfatter den nedre grænse; kun det sidste interval omfatter den øvre grænse (100 %). Procenter beregnes ud fra hele denne serie, inklusive scorer under 20 %.",
+      "review": "Gennemgå detektioner",
+      "insights": "Sammenfattende indsigter",
+      "modelScope": "Konfidensmål og indsigter nedenfor bygger på {count} detektioner fra {model}. Vælg en anden registreret model for at sammenligne; scorer sammenlægges aldrig.",
+      "highInsight": "{percent} af {count} detektioner havde en score på mindst 80 %.",
+      "speciesInsight": "{species} udgjorde {percent} af {count} detektioner.",
+      "lowInsight": "{percent} af {count} detektioner havde en score fra 20 % til under 30 %.",
+      "changeInsight": "Antallet af registrerede detektioner ændrede sig {change} i forhold til den foregående lige lange kalenderperiode ({current} mod {previous} detektioner).",
+      "pointsInsight": "Andelen med en score på 80 %+ ændrede sig {change} procentpoint i forhold til den foregående periode ({current} mod {previous} detektioner)."
+    },
+    "summary": {
+      "activityTitle": "Aktivitetsoversigt",
+      "activeDays": "Dage med registreringer",
+      "uptime": "Oppetid",
+      "uptimeUnavailable": "Ikke tilgængelig",
+      "uptimeHistoryMissing": "Oppetidshistorikken dækker ikke denne periode.",
+      "uptimeScope": "Serverens tilgængelighed i den forløbne periode.",
+      "uptimeMinimum": "Mindst {percentage} %",
+      "uptimePartial": "Mindste bekræftede oppetid; tidligere sessioner er ikke registreret. Opdateres hvert 10. minut.",
+      "calendarAverage": "Registreringer pr. kalenderdag",
+      "busiestDay": "Dag med flest registreringer",
+      "calendarScope": "Baseret på valgte kalenderdage, ikke optagetid.",
+      "topSpecies": "De {count} hyppigste arter",
+      "speciesLimit": "Viste arter",
+      "chartStyle": "Diagramtype",
+      "barChart": "Søjlediagram",
+      "pieChart": "Cirkeldiagram",
+      "coverage": "Andel af alle registreringer",
+      "hourlyTitle": "Registreringer pr. time"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Kan ikke indlæse gemte kameraobservationer. Prøver automatisk igen.",
     "sourceType": "Registreringskilde",
     "allSources": "Alle kilder",
-    "audioSource": "Lyd"
+    "audioSource": "Lyd",
+    "classificationSource": "Klassifikationskilde",
+    "frigateSublabel": "Frigate-underetiket",
+    "ownerConfirmed": "Bekræftet af ejeren",
+    "qualityLabel": "Videokvalitet",
+    "previewQuality": "Forhåndsvisning · 720p / 3 FPS",
+    "sourceQuality": "Original kvalitet",
+    "previewHelp": "Forhåndsvisning med lavt dataforbrug og detektionsfelter.",
+    "sourceHelp": "Original go2rtc-video uden grænse for opløsning eller billedhastighed. Uden detektionsfelter.",
+    "sourceFallback": "Original video er utilgængelig eller understøttes ikke. Viser forhåndsvisningen i stedet.",
+    "detectionFps": "Detektions-FPS"
   }
 }

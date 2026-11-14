@@ -146,6 +146,8 @@ export interface ChartDef {
   ) => Record<string, unknown>;
   /** Relative size in the responsive grid. */
   size: ChartSize;
+  /** Content contains controls, multiple charts, or a review panel. */
+  autoHeight?: boolean;
   /** Which shared filters this chart honors. */
   supports: ChartSupports;
   /** Below this many data points, ChartCard shows "not enough data yet". */

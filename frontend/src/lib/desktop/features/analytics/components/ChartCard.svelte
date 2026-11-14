@@ -16,6 +16,7 @@
   import { t } from '$lib/i18n';
   import { getLogger } from '$lib/utils/logger';
   import { formatDateForAPI } from '../registry/analyticsParams';
+  import { ConfidenceAnalyticsUnavailableError } from '../utils/confidenceAnalytics';
   import type { AnalyticsParams, ChartDef } from '../registry/types';
 
   interface Props {
@@ -85,6 +86,7 @@
 
       loading = true;
       error = null;
+      if (currentChart.autoHeight) result = null;
 
       currentChart
         .fetch(currentParams, ac.signal)
@@ -96,7 +98,10 @@
         .catch((err: unknown) => {
           if (ac.signal.aborted || (err instanceof Error && err.name === 'AbortError')) return;
           logger.error('Chart fetch failed', err, { chart: currentChart.id });
-          error = t('analytics.errors.loadFailed');
+          error =
+            err instanceof ConfidenceAnalyticsUnavailableError
+              ? t('errors.insights.v2Required')
+              : t('analytics.errors.loadFailed');
           loading = false;
         });
 
@@ -183,7 +188,7 @@
     </div>
 
     <!-- Body: state machine + chart, with a loading overlay that preserves the chart underneath -->
-    <div class="h-96 relative">
+    <div class={chart.autoHeight ? 'min-h-96 relative' : 'h-96 relative'}>
       {#if error}
         <div class="absolute inset-0 flex items-center justify-center rounded-lg" role="alert">
           <div class="text-center max-w-sm px-4">

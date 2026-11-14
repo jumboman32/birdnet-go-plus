@@ -49,6 +49,14 @@
       {#if observation.scientificName}<p class="text-xs italic">
           {observation.scientificName}
         </p>{/if}
+      {#if observation.classificationSource}<p
+          class="mt-1 text-xs"
+          title={t('cameraLive.classificationSource')}
+        >
+          {observation.classificationSource === 'manual'
+            ? t('cameraLive.ownerConfirmed')
+            : t('cameraLive.frigateSublabel')}
+        </p>{/if}
     </div>
   </a>
   <div class="mt-1.5 h-20 shrink-0 space-y-1 rounded-xl p-2">

@@ -30,6 +30,7 @@ type VisualRepository interface {
 	SetCursor(context.Context, string, time.Time) error
 	Get(context.Context, uint) (*entities.VisualDetection, error)
 	List(context.Context, *VisualFilter) ([]entities.VisualDetection, int64, error)
+	ReviewSpecies(context.Context, uint, string, string, bool) error
 	Summary(context.Context, time.Time, time.Time) (*VisualSummary, error)
 }
 
@@ -81,6 +82,9 @@ func visualSQLTimePointer(t *time.Time) any {
 }
 
 func (r *visualRepository) restoreUTC(row *entities.VisualDetection) {
+	if row.ClassificationSource == "" && row.OriginalLabel != nil {
+		row.ClassificationSource = entities.VisualClassificationFrigate
+	}
 	row.StartTime = time.UnixMicro(row.StartUnixMicro).UTC()
 	if row.EndUnixMicro != nil {
 		end := time.UnixMicro(*row.EndUnixMicro).UTC()
@@ -92,7 +96,7 @@ func (r *visualRepository) restoreUTC(row *entities.VisualDetection) {
 
 func visualValues(row *entities.VisualDetection) map[string]any {
 	now := visualSQLTime(time.Now())
-	return map[string]any{"source": row.Source, "instance": row.Instance, "external_event_id": row.ExternalEventID, "camera": row.Camera, "object_label": row.ObjectLabel, "original_label": row.OriginalLabel, "common_name": row.CommonName, scientificNameColumn: row.ScientificName, "detection_confidence": row.DetectionConfidence, "classification_confidence": row.ClassificationConfidence, "start_time": visualSQLTime(row.StartTime), "end_time": visualSQLTimePointer(row.EndTime), "zones": mustZones(row.Zones), "snapshot_status": row.SnapshotStatus, "clip_available": row.ClipAvailable, "false_positive": row.FalsePositive, "created_at": now, "updated_at": now}
+	return map[string]any{"source": row.Source, "instance": row.Instance, "external_event_id": row.ExternalEventID, "camera": row.Camera, "object_label": row.ObjectLabel, "original_label": row.OriginalLabel, "common_name": row.CommonName, scientificNameColumn: row.ScientificName, "detection_confidence": row.DetectionConfidence, "classification_confidence": row.ClassificationConfidence, "classification_source": row.ClassificationSource, "start_time": visualSQLTime(row.StartTime), "end_time": visualSQLTimePointer(row.EndTime), "zones": mustZones(row.Zones), "snapshot_status": row.SnapshotStatus, "clip_available": row.ClipAvailable, "false_positive": row.FalsePositive, "created_at": now, "updated_at": now}
 }
 
 // NewVisualRepository uses the running v2 manager's naming mode for both dialects.
@@ -113,14 +117,15 @@ func (r *visualRepository) Upsert(ctx context.Context, rows []entities.VisualDet
 					updates["zones"] = mustZones(rows[i].Zones)
 				}
 				if rows[i].OriginalLabel != nil {
+					updates["classification_source"] = entities.VisualClassificationFrigate
 					updates["original_label"] = rows[i].OriginalLabel
 					// A changed species label must never retain the previous species identity.
-					for _, column := range []string{"scientific_name", "common_name", "classification_confidence"} {
+					for _, column := range []string{scientificNameColumn, "common_name", "classification_confidence"} {
 						updates[column] = clause.Expr{SQL: "CASE WHEN original_label = ? THEN " + column + " ELSE NULL END", Vars: []any{*rows[i].OriginalLabel}}
 					}
 				}
 				if rows[i].ScientificName != nil {
-					updates["scientific_name"] = rows[i].ScientificName
+					updates[scientificNameColumn] = rows[i].ScientificName
 					updates["common_name"] = rows[i].CommonName
 				}
 				if rows[i].DetectionConfidence != nil {
@@ -135,15 +140,9 @@ func (r *visualRepository) Upsert(ctx context.Context, rows []entities.VisualDet
 				if rows[i].FalsePositive != nil {
 					updates["false_positive"] = rows[i].FalsePositive
 				}
-				// Original label is assigned last: MySQL evaluates assignments left to right.
-				assignments := clause.Assignments(updates)
-				for j := range assignments {
-					if assignments[j].Column.Name == "original_label" {
-						item := assignments[j]
-						assignments = append(append(assignments[:j:j], assignments[j+1:]...), item)
-						break
-					}
-				}
+				// Owner-confirmed identity is independent of Frigate's provisional label.
+				// Keep importing event metadata while protecting the reviewed species.
+				assignments := visualAssignments(updates)
 				if err := tx.Table(r.prefix + visualTable).Clauses(clause.OnConflict{Columns: []clause.Column{{Name: "source"}, {Name: "instance"}, {Name: "external_event_id"}}, DoUpdates: assignments}).Create(visualValues(&rows[i])).Error; err != nil {
 					return err
 				}
@@ -151,6 +150,48 @@ func (r *visualRepository) Upsert(ctx context.Context, rows []entities.VisualDet
 			return nil
 		})
 	}, nil)
+}
+
+// visualAssignments keeps owner reviews intact and assigns original_label last:
+// MySQL evaluates assignments from left to right.
+func visualAssignments(updates map[string]any) clause.Set {
+	for _, column := range []string{scientificNameColumn, "common_name", "classification_confidence", "classification_source"} {
+		if value, exists := updates[column]; exists {
+			updates[column] = clause.Expr{SQL: "CASE WHEN species_verified = ? THEN " + column + " ELSE ? END", Vars: []any{true, value}}
+		}
+	}
+	assignments := clause.Assignments(updates)
+	for j := range assignments {
+		if assignments[j].Column.Name == "original_label" {
+			item := assignments[j]
+			assignments = append(append(assignments[:j:j], assignments[j+1:]...), item)
+			break
+		}
+	}
+	return assignments
+}
+
+// ReviewSpecies confirms an owner-supplied identity or returns the event to automatic classification.
+func (r *visualRepository) ReviewSpecies(ctx context.Context, id uint, scientificName, commonName string, verified bool) error {
+	updates := map[string]any{"species_verified": verified, "updated_at": visualSQLTime(time.Now())}
+	updates[scientificNameColumn] = nil
+	updates["common_name"] = nil
+	updates["classification_confidence"] = nil
+	updates["classification_source"] = entities.VisualClassificationFrigate
+	if verified {
+		updates[scientificNameColumn] = scientificName
+		updates["common_name"] = commonName
+		updates["classification_confidence"] = nil
+		updates["classification_source"] = entities.VisualClassificationManual
+	}
+	result := r.db.WithContext(ctx).Table(r.prefix+visualTable).Where("id = ?", id).Updates(updates)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
 }
 
 func (r *visualRepository) Cursor(ctx context.Context, key string) (time.Time, error) {

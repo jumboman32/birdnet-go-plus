@@ -31,6 +31,7 @@ describe('Camera observation card', () => {
           startTime: '2026-11-13T22:45:30Z',
           snapshotStatus: 'available',
           detectionConfidence: 0.84375,
+          classificationSource: 'frigate_sublabel',
         },
       },
     });
@@ -40,6 +41,7 @@ describe('Camera observation card', () => {
     );
     expect(screen.getByText('Frigate · feeder')).toBeInTheDocument();
     expect(screen.getByText('84%')).toBeInTheDocument();
+    expect(screen.getByText('cameraLive.frigateSublabel')).toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });

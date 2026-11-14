@@ -49,7 +49,7 @@
   // Only species-filtered tabs auto-select top species into the URL; the release on teardown keeps
   // a late list from writing into another tab's URL.
   $effect(() => {
-    if (!speciesApplicable) return;
+    if (!speciesApplicable || group === 'quality') return;
     return untrack(() => analyticsControls.enableAutoSelect());
   });
 </script>

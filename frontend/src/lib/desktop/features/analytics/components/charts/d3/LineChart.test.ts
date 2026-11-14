@@ -99,6 +99,21 @@ describe('LineChart', () => {
     expect(container.querySelector(`clipPath#${id} rect`)).toBeTruthy();
   });
 
+  it('keeps both endpoint dots fully inside the clip, including their hover radius', async () => {
+    const { container } = render(LineChart, { props: { series: [makeSeries('a', [1, 2, 3])] } });
+    await Promise.resolve();
+    const clipRect = container.querySelector('clipPath rect');
+    const clipWidth = Number(clipRect?.getAttribute('width'));
+    const hoverRadius = 6;
+    const points = Array.from(container.querySelectorAll('circle.line-point'));
+    expect(points).toHaveLength(3);
+    for (const point of [points[0], points[points.length - 1]]) {
+      const center = Number(point.getAttribute('cx'));
+      expect(center - hoverRadius).toBeGreaterThanOrEqual(0);
+      expect(center + hoverRadius).toBeLessThanOrEqual(clipWidth);
+    }
+  });
+
   it('sets an accessible label on the chart container', () => {
     const series = [makeSeries('a', [1])];
     const { container } = render(LineChart, {

@@ -16,7 +16,7 @@ import (
 // first_created (set once on INSERT, never trampled) and created_at (GORM autoCreateTime),
 // so periodic re-flushes preserve the true creation timestamp. See #4195.
 var thresholdConflictColumns = []string{
-	"scientific_name",
+	scientificNameColumn,
 	"level",
 	"current_value",
 	"base_threshold",

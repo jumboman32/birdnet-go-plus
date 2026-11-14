@@ -874,6 +874,8 @@ export type TranslationKey =
   | 'species.rarity.statuses.rare'
   | 'species.rarity.statuses.very_rare'
   | 'species.rarity.statuses.unknown'
+  | 'species.rarity.modelTitle'
+  | 'species.rarity.modelContext'
   | 'species.taxonomy.hierarchy'
   | 'species.taxonomy.subspecies'
   | 'species.taxonomy.noData'
@@ -1692,6 +1694,15 @@ export type TranslationKey =
   | 'analytics.species.card.detections'
   | 'analytics.species.card.confidence'
   | 'analytics.species.card.first'
+  | 'analytics.species.targets.title'
+  | 'analytics.species.targets.description'
+  | 'analytics.species.targets.region'
+  | 'analytics.species.targets.regionHint'
+  | 'analytics.species.targets.regionRequired'
+  | 'analytics.species.targets.ebirdRequired'
+  | 'analytics.species.targets.county'
+  | 'analytics.species.targets.state'
+  | 'analytics.species.targets.lifetime'
   | 'analytics.advanced.chartControls'
   | 'analytics.advanced.dateRange'
   | 'analytics.advanced.chartOptions'
@@ -1849,6 +1860,67 @@ export type TranslationKey =
   | 'analytics.timeOfDayPeriods.afternoon12to16'
   | 'analytics.timeOfDayPeriods.evening17to19'
   | 'analytics.timeOfDayPeriods.night20to23'
+  | 'analytics.patterns.balanceTitle'
+  | 'analytics.patterns.balanceHelp'
+  | 'analytics.patterns.effective'
+  | 'analytics.patterns.topFive'
+  | 'analytics.patterns.coverage'
+  | 'analytics.patterns.peakWindow'
+  | 'analytics.patterns.windowShare' // params: percentage
+  | 'analytics.patterns.share'
+  | 'analytics.patterns.otherSpecies'
+  | 'analytics.patterns.comparisonTitle'
+  | 'analytics.patterns.completedOnly'
+  | 'analytics.patterns.versus'
+  | 'analytics.patterns.comparisonHelp'
+  | 'analytics.patterns.comparisonError'
+  | 'analytics.patterns.volumeChange'
+  | 'analytics.patterns.diversityChange'
+  | 'analytics.patterns.retained'
+  | 'analytics.patterns.noBaseline'
+  | 'analytics.patterns.retainedHelp'
+  | 'analytics.patterns.gaining'
+  | 'analytics.patterns.losing'
+  | 'analytics.patterns.shareChange' // params: change
+  | 'analytics.patterns.noMovement'
+  | 'analytics.confidenceAnalysis.caution'
+  | 'analytics.confidenceAnalysis.threshold'
+  | 'analytics.confidenceAnalysis.population'
+  | 'analytics.confidenceAnalysis.normalized'
+  | 'analytics.confidenceAnalysis.models'
+  | 'analytics.confidenceAnalysis.unknownModel'
+  | 'analytics.confidenceAnalysis.allModels'
+  | 'analytics.confidenceAnalysis.sample' // params: count
+  | 'analytics.confidenceAnalysis.median'
+  | 'analytics.confidenceAnalysis.percent'
+  | 'analytics.confidenceAnalysis.high'
+  | 'analytics.confidenceAnalysis.binsHelp'
+  | 'analytics.confidenceAnalysis.review'
+  | 'analytics.confidenceAnalysis.insights'
+  | 'analytics.confidenceAnalysis.modelScope' // params: count, model
+  | 'analytics.confidenceAnalysis.highInsight' // params: percent, count
+  | 'analytics.confidenceAnalysis.speciesInsight' // params: species, percent, count
+  | 'analytics.confidenceAnalysis.lowInsight' // params: percent, count
+  | 'analytics.confidenceAnalysis.changeInsight' // params: change, current, previous
+  | 'analytics.confidenceAnalysis.pointsInsight' // params: change, current, previous
+  | 'analytics.summary.activityTitle'
+  | 'analytics.summary.activeDays'
+  | 'analytics.summary.uptime'
+  | 'analytics.summary.uptimeUnavailable'
+  | 'analytics.summary.uptimeHistoryMissing'
+  | 'analytics.summary.uptimeScope'
+  | 'analytics.summary.uptimeMinimum' // params: percentage
+  | 'analytics.summary.uptimePartial'
+  | 'analytics.summary.calendarAverage'
+  | 'analytics.summary.busiestDay'
+  | 'analytics.summary.calendarScope'
+  | 'analytics.summary.topSpecies' // params: count
+  | 'analytics.summary.speciesLimit'
+  | 'analytics.summary.chartStyle'
+  | 'analytics.summary.barChart'
+  | 'analytics.summary.pieChart'
+  | 'analytics.summary.coverage'
+  | 'analytics.summary.hourlyTitle'
   | 'settings.title'
   | 'settings.loading'
   | 'settings.sections.analysis'
@@ -4543,7 +4615,17 @@ export type TranslationKey =
   | 'cameraLive.observationsError'
   | 'cameraLive.sourceType'
   | 'cameraLive.allSources'
-  | 'cameraLive.audioSource';
+  | 'cameraLive.audioSource'
+  | 'cameraLive.classificationSource'
+  | 'cameraLive.frigateSublabel'
+  | 'cameraLive.ownerConfirmed'
+  | 'cameraLive.qualityLabel'
+  | 'cameraLive.previewQuality'
+  | 'cameraLive.sourceQuality'
+  | 'cameraLive.previewHelp'
+  | 'cameraLive.sourceHelp'
+  | 'cameraLive.sourceFallback'
+  | 'cameraLive.detectionFps';
 
 /**
  * Parameter types for translations that require parameters
@@ -4889,6 +4971,29 @@ export type TranslationParams = {
     species: string | number;
     time: string | number;
   };
+  'analytics.patterns.windowShare': { percentage: string | number };
+  'analytics.patterns.shareChange': { change: string | number };
+  'analytics.confidenceAnalysis.sample': { count: string | number };
+  'analytics.confidenceAnalysis.modelScope': { count: string | number; model: string | number };
+  'analytics.confidenceAnalysis.highInsight': { percent: string | number; count: string | number };
+  'analytics.confidenceAnalysis.speciesInsight': {
+    species: string | number;
+    percent: string | number;
+    count: string | number;
+  };
+  'analytics.confidenceAnalysis.lowInsight': { percent: string | number; count: string | number };
+  'analytics.confidenceAnalysis.changeInsight': {
+    change: string | number;
+    current: string | number;
+    previous: string | number;
+  };
+  'analytics.confidenceAnalysis.pointsInsight': {
+    change: string | number;
+    current: string | number;
+    previous: string | number;
+  };
+  'analytics.summary.uptimeMinimum': { percentage: string | number };
+  'analytics.summary.topSpecies': { count: string | number };
   'settings.notFound.message': { section: string | number };
   'settings.main.sections.falsePositiveFilter.detectionCount': {
     count: string | number;

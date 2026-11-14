@@ -1,0 +1,58 @@
+# Apply after the official v2.23.2 docker-compose.monolith.yml.
+# Its existing network, health check, non-root user and image settings are retained.
+services:
+  yawamf:
+    container_name: birdnet-yawamf
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    volumes:
+      - yawamf_config:/config
+      - yawamf_data:/data
+    environment:
+      FRIGATE__BIRDNET_ENABLED: "false"
+      CLASSIFICATION__INFERENCE_PROVIDER: cpu
+      CLASSIFICATION__BIRD_CROP_INFERENCE_PROVIDER: cpu
+      CLASSIFICATION__WRITE_FRIGATE_SUBLABEL: "true"
+      CLASSIFICATION__AUTO_VIDEO_CLASSIFICATION: "false"
+      CLASSIFICATION__LIVE_WORKER_COUNT: "1"
+      CLASSIFICATION__BACKGROUND_WORKER_COUNT: "1"
+      OMP_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "1"
+  mosquitto:
+    image: eclipse-mosquitto:2.0.22
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-America/New_York}
+    networks:
+      yawamf_network:
+        aliases:
+          - birdnet-mqtt
+    # No host port: only containers on the existing Docker network can connect.
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mosquitto_pub",
+          "-h",
+          "127.0.0.1",
+          "-t",
+          "birdnet/health",
+          "-m",
+          "ok",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  yawamf_config:
+  yawamf_data:
+  mosquitto_data:

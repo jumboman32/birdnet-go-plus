@@ -1106,7 +1106,9 @@
         "rare": "Reta",
         "very_rare": "Ļoti reta",
         "unknown": "Nezināma"
-      }
+      },
+      "modelTitle": "BirdNET ģeogrāfiskais modelis",
+      "modelContext": "Modeļa pašreizējais sezonas konteksts; neatkarīgs no vietējā retuma vērtējuma un identifikācijas ticamības."
     },
     "taxonomy": {
       "hierarchy": "Taksonomiskā klasifikācija",
@@ -2170,6 +2172,17 @@
         "detections": "Atpazīšanas:",
         "confidence": "Ticamība:",
         "first": "Pirmā:"
+      },
+      "targets": {
+        "title": "Reģionālo sugu progress",
+        "description": "Stacijā konstatētās sugas salīdzinājumā ar eBird apgabala un štata sugu sarakstiem.",
+        "region": "eBird apgabala kods",
+        "regionHint": "Ievadiet apgabala kodu, piemēram, US-NJ-001. Štats tiek noteikts pēc apgabala. Atstājiet tukšu, lai izmantotu konfigurēto reģionu.",
+        "regionRequired": "Izvēlieties eBird apgabala kodu, lai redzētu apgabala un štata progresu.",
+        "ebirdRequired": "Lai ielādētu reģionālos sarakstus, iestatījumos iespējojiet eBird integrāciju un konfigurējiet API atslēgu.",
+        "county": "Apgabals",
+        "state": "Štats",
+        "lifetime": "Atšķirīgas sugas visā novērojumu vēsturē, izņemot pārbaudītos kļūdaini pozitīvos novērojumus. Pašreizējie lapas filtri šo kopskaitu nemaina."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Pēcpusdiena (12-16)",
       "evening17to19": "Vakars (17-19)",
       "night20to23": "Nakts (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Šī perioda tendences",
+      "balanceHelp": "Efektīvā daudzveidība ir vienādi biežu sugu skaits, kas radītu šo noteikšanu sadalījumu. Noteikšanu īpatsvars nav putnu skaits.",
+      "effective": "Efektīvā daudzveidība",
+      "topFive": "5 biežāko sugu īpatsvars",
+      "coverage": "Sugas, kas veido 80 % noteikšanu",
+      "peakWindow": "Aktīvākais 3 stundu periods",
+      "windowShare": "{percentage} % noteikšanu",
+      "share": "Noteikšanu īpatsvars",
+      "otherSpecies": "Citas sugas",
+      "comparisonTitle": "Salīdzinājums ar iepriekšējo periodu",
+      "completedOnly": "Šodiena netiek iekļauta; izvēlieties periodu ar pabeigtām dienām.",
+      "versus": "pret",
+      "comparisonHelp": "Vienāda ilguma pabeigti periodi. Ierakstu pārklājums var atšķirties.",
+      "comparisonError": "Neizdevās ielādēt periodu salīdzinājumu.",
+      "volumeChange": "Noteikšanu izmaiņa",
+      "diversityChange": "Daudzveidības izmaiņa",
+      "retained": "Saglabātās sugas",
+      "noBaseline": "Nav iepriekšēju noteikšanu: procentuālām izmaiņām nav salīdzinājuma bāzes.",
+      "retainedHelp": "Saglabātās sugas noteiktas abos periodos kā iepriekšējā perioda sugu īpatsvars.",
+      "gaining": "Lielākie īpatsvara pieaugumi",
+      "losing": "Lielākie īpatsvara kritumi",
+      "shareChange": "{change} procentpunkti",
+      "noMovement": "Nav parādāmu īpatsvara izmaiņu."
+    },
+    "confidenceAnalysis": {
+      "caution": "Ticamība ir modeļa vērtējums, nevis identifikācijas precizitāte vai kalibrēta pareizības varbūtība. Dažādu modeļu vērtējumi tiek rādīti atsevišķi.",
+      "threshold": "Vērtējumu koncentrēšanās pie apakšējās robežas var atspoguļot minimālos noteikšanas sliekšņus. Pašreizējie sliekšņi, sugu individuālie iestatījumi un dinamiskie sliekšņi var atšķirties no vēsturiskajiem ierakstiem izmantotajiem.",
+      "population": "Tiek iekļautas visas atbilstošās saglabātās primārās identifikācijas atlasītajos datumos. Pārbaudītie kļūdaini pozitīvie novērojumi un vērtējumi ārpus 0–100 % tiek izslēgti. Sekundārās prognozes nav papildu novērojumi.",
+      "normalized": "Rādīt procentus",
+      "models": "Identifikācijas modeļi",
+      "unknownModel": "Nezināms modelis",
+      "allModels": "Ja modelis nav atlasīts, visi reģistrētie modeļi tiek rādīti atsevišķi.",
+      "sample": "Novērojumu skaits: {count}",
+      "median": "Ticamības mediāna",
+      "percent": "Novērojumu procentuālā daļa",
+      "high": "Augsta ticamība (80 %+)",
+      "binsHelp": "Atlasiet stabiņu, lai pārskatītu novērojumus. Intervāli ietver apakšējo robežu; tikai pēdējais ietver augšējo robežu (100 %). Procenti tiek aprēķināti no visas šīs sērijas, ieskaitot vērtējumus zem 20 %.",
+      "review": "Pārskatīt novērojumus",
+      "insights": "Kopsavilkuma atziņas",
+      "modelScope": "Tālāk redzamie ticamības rādītāji un atziņas izmanto {count} novērojumus no modeļa {model}. Salīdzināšanai atlasiet citu reģistrēto modeli; vērtējumi nekad netiek apvienoti.",
+      "highInsight": "No {count} novērojumiem {percent} sasniedza vismaz 80 % vērtējumu.",
+      "speciesInsight": "Suga {species} veidoja {percent} no {count} novērojumiem.",
+      "lowInsight": "No {count} novērojumiem {percent} saņēma vērtējumu no 20 % līdz mazāk nekā 30 %.",
+      "changeInsight": "Reģistrēto novērojumu skaits mainījās par {change}, salīdzinot ar iepriekšējo vienāda ilguma kalendāro periodu ({current} pret {previous} novērojumiem).",
+      "pointsInsight": "Vērtējumu ar 80 %+ īpatsvars mainījās par {change} procentpunktiem, salīdzinot ar iepriekšējo periodu ({current} pret {previous} novērojumiem)."
+    },
+    "summary": {
+      "activityTitle": "Aktivitātes pārskats",
+      "activeDays": "Dienas ar noteikšanām",
+      "uptime": "Darbspējas laiks",
+      "uptimeUnavailable": "Nav pieejams",
+      "uptimeHistoryMissing": "Darbspējas vēsture neaptver šo periodu.",
+      "uptimeScope": "Servera pieejamība pagājušajā periodā.",
+      "uptimeMinimum": "Vismaz {percentage} %",
+      "uptimePartial": "Minimālā apstiprinātā darbspēja; iepriekšējās sesijas nav reģistrētas. Atjaunojas ik pēc 10 minūtēm.",
+      "calendarAverage": "Noteikšanas kalendāra dienā",
+      "busiestDay": "Diena ar visvairāk noteikšanām",
+      "calendarScope": "Pamatojoties uz atlasītajām kalendāra dienām, nevis ierakstīšanas ilgumu.",
+      "topSpecies": "{count} biežāk noteiktās sugas",
+      "speciesLimit": "Attēloto sugu skaits",
+      "chartStyle": "Diagrammas veids",
+      "barChart": "Joslu diagramma",
+      "pieChart": "Sektoru diagramma",
+      "coverage": "Daļa no visām noteikšanām",
+      "hourlyTitle": "Noteikšanas pa stundām"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Saglabātos kameras novērojumus nevar ielādēt. Automātisks atkārtots mēģinājums.",
     "sourceType": "Noteikšanas avots",
     "allSources": "Visi avoti",
-    "audioSource": "Skaņa"
+    "audioSource": "Skaņa",
+    "classificationSource": "Klasifikācijas avots",
+    "frigateSublabel": "Frigate apakšetiķete",
+    "ownerConfirmed": "Īpašnieka apstiprināts",
+    "qualityLabel": "Video kvalitāte",
+    "previewQuality": "Priekšskatījums · 720p / 3 FPS",
+    "sourceQuality": "Sākotnējā kvalitāte",
+    "previewHelp": "Priekšskatījums ar mazu datu patēriņu un noteikšanas rāmjiem.",
+    "sourceHelp": "Sākotnējais go2rtc video bez izšķirtspējas vai kadru ātruma ierobežojuma. Bez noteikšanas rāmjiem.",
+    "sourceFallback": "Sākotnējais video nav pieejams vai atbalstīts. Tiek rādīts priekšskatījums.",
+    "detectionFps": "Noteikšanas FPS"
   }
 }

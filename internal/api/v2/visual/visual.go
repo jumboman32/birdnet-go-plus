@@ -61,11 +61,13 @@ func (c *Handler) RegisterRoutes(g *echo.Group) {
 	group.GET("/:id", c.get)
 	group.GET("/:id/snapshot", c.snapshot)
 	group.GET("/:id/correlations", c.correlations)
+	group.PUT("/:id/species", c.reviewSpecies)
 	integration := g.Group("/integrations/frigate", c.AuthMiddleware)
 	integration.GET("/status", c.status)
 	integration.POST("/test", c.test)
 	integration.GET("/cameras", c.cameras)
 	integration.GET("/cameras/:camera/live", c.live)
+	integration.GET("/cameras/:camera/source", c.source)
 }
 
 func (c *Handler) available() error {

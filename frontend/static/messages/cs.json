@@ -1106,7 +1106,9 @@
         "rare": "Vzácný",
         "very_rare": "Velmi vzácný",
         "unknown": "Neznámý"
-      }
+      },
+      "modelTitle": "Geografický model BirdNET",
+      "modelContext": "Aktuální sezónní kontext modelu; oddělený od indexu místní vzácnosti a jistoty určení."
     },
     "taxonomy": {
       "hierarchy": "Taxonomická klasifikace",
@@ -2170,6 +2172,17 @@
         "detections": "Detekce:",
         "confidence": "Spolehlivost:",
         "first": "Poprvé:"
+      },
+      "targets": {
+        "title": "Pokrok v regionálních druzích",
+        "description": "Druhy zjištěné stanicí v porovnání se seznamy druhů eBird pro okres a stát.",
+        "region": "Kód okresu eBird",
+        "regionHint": "Zadejte kód okresu, například US-NJ-001. Stát se odvodí z okresu. Ponechte prázdné pro použití nastaveného regionu.",
+        "regionRequired": "Vyberte kód okresu eBird pro zobrazení pokroku okresu a státu.",
+        "ebirdRequired": "Pro načtení regionálních seznamů zapněte integraci eBird a nastavte klíč API v Nastavení.",
+        "county": "Okres",
+        "state": "Stát",
+        "lifetime": "Unikátní druhy za celou dobu, bez ověřených falešně pozitivních detekcí. Aktuální filtry stránky tento součet nemění."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Odpoledne (12-16)",
       "evening17to19": "Večer (17-19)",
       "night20to23": "Noc (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Vzorce v tomto období",
+      "balanceHelp": "Efektivní diverzita je počet stejně častých druhů, které by vytvořily tuto skladbu detekcí. Podíl detekcí nevyjadřuje početnost ptáků.",
+      "effective": "Efektivní diverzita",
+      "topFive": "Podíl 5 nejčastějších druhů",
+      "coverage": "Druhy tvořící 80 % detekcí",
+      "peakWindow": "Nejaktivnější 3 hodiny",
+      "windowShare": "{percentage} % detekcí",
+      "share": "Podíl detekcí",
+      "otherSpecies": "Ostatní druhy",
+      "comparisonTitle": "Srovnání s předchozím obdobím",
+      "completedOnly": "Dnešek se nezahrnuje; vyberte rozsah s dokončenými dny.",
+      "versus": "oproti",
+      "comparisonHelp": "Stejně dlouhá dokončená období. Pokrytí nahráváním se může lišit.",
+      "comparisonError": "Srovnání období se nepodařilo načíst.",
+      "volumeChange": "Změna detekcí",
+      "diversityChange": "Změna diverzity",
+      "retained": "Zachované druhy",
+      "noBaseline": "Žádné dřívější detekce: procentní změny nemají základ pro srovnání.",
+      "retainedHelp": "Zachované druhy byly detekovány v obou obdobích, jako podíl druhů předchozího období.",
+      "gaining": "Největší nárůsty podílu",
+      "losing": "Největší poklesy podílu",
+      "shareChange": "{change} p. b.",
+      "noMovement": "Žádné změny podílu k zobrazení."
+    },
+    "confidenceAnalysis": {
+      "caution": "Spolehlivost je skóre modelu, nikoli přesnost určení ani kalibrovaná pravděpodobnost správnosti. Skóre různých modelů se zobrazují samostatně.",
+      "threshold": "Shlukování u dolního okraje může odrážet minimální prahy detekce. Aktuální prahy, nastavení pro jednotlivé druhy a dynamické prahy se mohou lišit od těch použitých u starších nahrávek.",
+      "population": "Zahrnuta jsou všechna způsobilá uložená primární určení ve vybraných dnech. Ověřené falešně pozitivní detekce a skóre mimo rozsah 0–100 % jsou vyloučeny. Sekundární předpovědi nejsou dalšími detekcemi.",
+      "normalized": "Zobrazit procenta",
+      "models": "Identifikační modely",
+      "unknownModel": "Neznámý model",
+      "allModels": "Bez výběru modelu se všechny zaznamenané modely zobrazují samostatně.",
+      "sample": "Počet detekcí: {count}",
+      "median": "Medián spolehlivosti",
+      "percent": "Podíl detekcí v procentech",
+      "high": "Vysoká spolehlivost (80 %+)",
+      "binsHelp": "Výběrem sloupce zobrazíte detekce ke kontrole. Intervaly zahrnují dolní mez; pouze poslední interval zahrnuje i horní mez (100 %). Procenta se počítají z celkového počtu této řady včetně skóre pod 20 %.",
+      "review": "Zkontrolovat detekce",
+      "insights": "Souhrnné poznatky",
+      "modelScope": "Níže uvedené metriky spolehlivosti a poznatky vycházejí z {count} detekcí modelu {model}. Pro porovnání vyberte jiný zaznamenaný model; skóre se nikdy neslučují.",
+      "highInsight": "Podíl detekcí se skóre alespoň 80 % činil {percent} z celkového počtu {count}.",
+      "speciesInsight": "Druh {species} představoval {percent} z celkového počtu {count} detekcí.",
+      "lowInsight": "Podíl detekcí se skóre od 20 % do méně než 30 % činil {percent} z celkového počtu {count}.",
+      "changeInsight": "Počet zaznamenaných detekcí se oproti předchozímu stejně dlouhému kalendářnímu období změnil o {change} ({current} oproti {previous} detekcím).",
+      "pointsInsight": "Podíl skóre 80 %+ se oproti předchozímu období změnil o {change} procentních bodů ({current} oproti {previous} detekcím)."
+    },
+    "summary": {
+      "activityTitle": "Přehled aktivity",
+      "activeDays": "Dny s detekcemi",
+      "uptime": "Dostupnost",
+      "uptimeUnavailable": "Nedostupné",
+      "uptimeHistoryMissing": "Historie dostupnosti nepokrývá toto období.",
+      "uptimeScope": "Dostupnost serveru během uplynulé části období.",
+      "uptimeMinimum": "Alespoň {percentage} %",
+      "uptimePartial": "Minimální potvrzená dostupnost; předchozí relace nejsou zaznamenány. Obnovuje se každých 10 minut.",
+      "calendarAverage": "Detekce za kalendářní den",
+      "busiestDay": "Den s nejvíce detekcemi",
+      "calendarScope": "Podle vybraných kalendářních dnů, nikoli doby nahrávání.",
+      "topSpecies": "Nejčastější druhy: {count}",
+      "speciesLimit": "Počet zobrazených druhů",
+      "chartStyle": "Typ grafu",
+      "barChart": "Sloupcový graf",
+      "pieChart": "Výsečový graf",
+      "coverage": "Podíl všech detekcí",
+      "hourlyTitle": "Detekce podle hodin"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Uložená pozorování nelze načíst. Pokus se automaticky opakuje.",
     "sourceType": "Zdroj detekce",
     "allSources": "Všechny zdroje",
-    "audioSource": "Zvuk"
+    "audioSource": "Zvuk",
+    "classificationSource": "Zdroj určení druhu",
+    "frigateSublabel": "Podštítek Frigate",
+    "ownerConfirmed": "Potvrzeno vlastníkem",
+    "qualityLabel": "Kvalita videa",
+    "previewQuality": "Náhled · 720p / 3 FPS",
+    "sourceQuality": "Původní kvalita",
+    "previewHelp": "Náhled s nízkou spotřebou dat a rámečky detekcí.",
+    "sourceHelp": "Původní video go2rtc bez omezení rozlišení nebo snímkové frekvence. Bez rámečků detekcí.",
+    "sourceFallback": "Zdrojové video není dostupné nebo podporované. Zobrazuje se náhled.",
+    "detectionFps": "FPS detekce"
   }
 }

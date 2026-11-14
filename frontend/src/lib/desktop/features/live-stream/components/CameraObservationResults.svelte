@@ -9,6 +9,8 @@
     endTime?: string | null;
     detectionConfidence?: number | null;
     classificationConfidence?: number | null;
+    classificationSource?: string;
+    speciesVerified?: boolean;
     snapshotStatus: string;
   };
 </script>
@@ -38,6 +40,7 @@
     { key: 'camera', header: t('cameraLive.camera') },
     { key: 'detectionConfidence', header: t('cameraLive.objectConfidence') },
     { key: 'classificationConfidence', header: t('cameraLive.speciesConfidence') },
+    { key: 'classificationSource', header: t('cameraLive.classificationSource') },
   ]);
   function confidence(value: number | null | undefined): string {
     return value == null ? t('common.unknown') : `${Math.round(value * PERCENT)}%`;
@@ -66,6 +69,12 @@
       {:else if column.key === 'classificationConfidence'}{confidence(
           item.classificationConfidence
         )}
+      {:else if column.key === 'classificationSource'}
+        {item.classificationSource === 'manual'
+          ? t('cameraLive.ownerConfirmed')
+          : item.classificationSource === 'frigate_sublabel'
+            ? t('cameraLive.frigateSublabel')
+            : t('common.unknown')}
       {:else if item.snapshotStatus === 'available'}
         <a
           class="inline-block underline"

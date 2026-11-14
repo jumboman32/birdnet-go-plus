@@ -1106,7 +1106,9 @@
         "rare": "Zeldzaam",
         "very_rare": "Zeer zeldzaam",
         "unknown": "Onbekend"
-      }
+      },
+      "modelTitle": "Geografisch BirdNET-model",
+      "modelContext": "Huidige seizoenscontext van het model; los van de lokale zeldzaamheidsscore en identificatiezekerheid."
     },
     "taxonomy": {
       "hierarchy": "Taxonomische klassificatie",
@@ -2170,6 +2172,17 @@
         "detections": "Aantal herkend:",
         "confidence": "Betrouwbaarheid:",
         "first": "Eerst:"
+      },
+      "targets": {
+        "title": "Voortgang van regionale soorten",
+        "description": "Door het station gedetecteerde soorten vergeleken met de eBird-soortenlijsten voor county en staat.",
+        "region": "eBird-countycode",
+        "regionHint": "Voer een countycode in, zoals US-NJ-001. De staat wordt afgeleid van de county. Laat leeg om de ingestelde regio te gebruiken.",
+        "regionRequired": "Kies een eBird-countycode om de voortgang voor county en staat te zien.",
+        "ebirdRequired": "Schakel de eBird-integratie in en stel een API-sleutel in bij Instellingen om regionale lijsten te laden.",
+        "county": "District",
+        "state": "Staat",
+        "lifetime": "Unieke soorten over de gehele gebruiksduur, exclusief beoordeelde foutpositieve detecties. De huidige paginafilters veranderen dit totaal niet."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Middag (12-16)",
       "evening17to19": "Avond (17-19)",
       "night20to23": "Nacht (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Patronen in deze periode",
+      "balanceHelp": "Effectieve diversiteit is het aantal even algemene soorten dat deze detectieverdeling zou opleveren. Het detectieaandeel is geen maat voor het aantal vogels.",
+      "effective": "Effectieve diversiteit",
+      "topFive": "Aandeel van de top 5 soorten",
+      "coverage": "Soorten achter 80% van de detecties",
+      "peakWindow": "Actiefste periode van 3 uur",
+      "windowShare": "{percentage}% van de detecties",
+      "share": "Aandeel van detecties",
+      "otherSpecies": "Overige soorten",
+      "comparisonTitle": "Vergeleken met de vorige periode",
+      "completedOnly": "Vandaag wordt uitgesloten; kies een bereik met voltooide dagen.",
+      "versus": "tegenover",
+      "comparisonHelp": "Even lange voltooide perioden. De opnamedekking kan verschillen.",
+      "comparisonError": "De periodevergelijking kon niet worden geladen.",
+      "volumeChange": "Verandering in detecties",
+      "diversityChange": "Verandering in diversiteit",
+      "retained": "Behouden soorten",
+      "noBaseline": "Geen eerdere detecties: procentuele veranderingen hebben geen vergelijkingsbasis.",
+      "retainedHelp": "Behouden soorten zijn in beide perioden gedetecteerd, als aandeel van de soorten uit de vorige periode.",
+      "gaining": "Grootste stijgingen in aandeel",
+      "losing": "Grootste dalingen in aandeel",
+      "shareChange": "{change} procentpunt",
+      "noMovement": "Geen veranderingen in aandeel om te tonen."
+    },
+    "confidenceAnalysis": {
+      "caution": "Betrouwbaarheid is een modelscore, geen identificatienauwkeurigheid of gekalibreerde kans op juistheid. Scores van verschillende modellen worden afzonderlijk getoond.",
+      "threshold": "Een opeenhoping bij de ondergrens kan het gevolg zijn van minimale detectiedrempels. Huidige drempels, soortspecifieke afwijkingen en dynamische drempels kunnen verschillen van die voor historische opnamen.",
+      "population": "Alle geschikte opgeslagen primaire identificaties binnen de geselecteerde datums zijn opgenomen. Beoordeelde foutpositieve detecties en scores buiten 0–100% zijn uitgesloten. Secundaire voorspellingen zijn geen extra detecties.",
+      "normalized": "Percentages tonen",
+      "models": "Identificatiemodellen",
+      "unknownModel": "Onbekend model",
+      "allModels": "Zonder modelselectie worden alle geregistreerde modellen afzonderlijk getoond.",
+      "sample": "{count} detecties",
+      "median": "Mediane betrouwbaarheid",
+      "percent": "Percentage van de detecties",
+      "high": "Hoge betrouwbaarheid (80%+)",
+      "binsHelp": "Selecteer een balk om de detecties te beoordelen. Intervallen bevatten hun ondergrens; alleen het laatste bevat de bovengrens (100%). Percentages gebruiken het totaal van deze reeks, inclusief scores onder 20%.",
+      "review": "Detecties beoordelen",
+      "insights": "Samenvattende inzichten",
+      "modelScope": "De betrouwbaarheidsmetingen en inzichten hieronder gebruiken {count} detecties van {model}. Selecteer een ander geregistreerd model om te vergelijken; scores worden nooit samengevoegd.",
+      "highInsight": "{percent} van {count} detecties had een score van minstens 80%.",
+      "speciesInsight": "{species} was goed voor {percent} van {count} detecties.",
+      "lowInsight": "{percent} van {count} detecties had een score van 20% tot minder dan 30%.",
+      "changeInsight": "Het aantal geregistreerde detecties veranderde met {change} ten opzichte van de voorgaande even lange kalenderperiode ({current} tegenover {previous} detecties).",
+      "pointsInsight": "Het aandeel met een score van 80%+ veranderde met {change} procentpunt ten opzichte van de voorgaande periode ({current} tegenover {previous} detecties)."
+    },
+    "summary": {
+      "activityTitle": "Activiteitsoverzicht",
+      "activeDays": "Dagen met detecties",
+      "uptime": "Beschikbaarheid",
+      "uptimeUnavailable": "Niet beschikbaar",
+      "uptimeHistoryMissing": "De beschikbaarheidsgeschiedenis dekt deze periode niet.",
+      "uptimeScope": "Beschikbaarheid van de server tijdens de verstreken periode.",
+      "uptimeMinimum": "Minstens {percentage}%",
+      "uptimePartial": "Minimaal bevestigde beschikbaarheid; eerdere sessies zijn niet vastgelegd. Vernieuwt elke 10 minuten.",
+      "calendarAverage": "Detecties per kalenderdag",
+      "busiestDay": "Dag met de meeste detecties",
+      "calendarScope": "Gebaseerd op geselecteerde kalenderdagen, niet op opnametijd.",
+      "topSpecies": "De {count} meest gedetecteerde soorten",
+      "speciesLimit": "Getoonde soorten",
+      "chartStyle": "Grafiektype",
+      "barChart": "Staafdiagram",
+      "pieChart": "Cirkeldiagram",
+      "coverage": "Aandeel van alle detecties",
+      "hourlyTitle": "Detecties per uur"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Opgeslagen camerawaarnemingen kunnen niet worden geladen. Automatische nieuwe poging.",
     "sourceType": "Detectiebron",
     "allSources": "Alle bronnen",
-    "audioSource": "Geluid"
+    "audioSource": "Geluid",
+    "classificationSource": "Classificatiebron",
+    "frigateSublabel": "Frigate-sublabel",
+    "ownerConfirmed": "Bevestigd door eigenaar",
+    "qualityLabel": "Videokwaliteit",
+    "previewQuality": "Voorbeeld · 720p / 3 FPS",
+    "sourceQuality": "Bronkwaliteit",
+    "previewHelp": "Databesparend voorbeeld met detectiekaders.",
+    "sourceHelp": "Originele go2rtc-video zonder limiet op resolutie of beeldsnelheid. Zonder detectiekaders.",
+    "sourceFallback": "Bronvideo is niet beschikbaar of wordt niet ondersteund. Het voorbeeld wordt getoond.",
+    "detectionFps": "Detectie-FPS"
   }
 }

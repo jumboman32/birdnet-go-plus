@@ -2,6 +2,13 @@ package entities
 
 import "time"
 
+const (
+	// VisualClassificationFrigate identifies a label received through Frigate's sublabel API.
+	VisualClassificationFrigate = "frigate_sublabel"
+	// VisualClassificationManual identifies an owner-confirmed species assignment.
+	VisualClassificationManual = "manual"
+)
+
 // VisualDetection is a camera observation, independent of audio detection counts.
 // Confidence values are nullable: an absent score is never invented.
 type VisualDetection struct {
@@ -16,6 +23,8 @@ type VisualDetection struct {
 	ScientificName           *string    `gorm:"size:200;index;index:idx_visual_species_time" json:"scientificName"`
 	DetectionConfidence      *float64   `json:"detectionConfidence"`
 	ClassificationConfidence *float64   `json:"classificationConfidence"`
+	ClassificationSource     string     `gorm:"size:50;not null;default:''" json:"classificationSource"`
+	SpeciesVerified          bool       `gorm:"not null;default:false" json:"speciesVerified"`
 	StartTime                time.Time  `gorm:"-" json:"startTime"`
 	EndTime                  *time.Time `gorm:"-" json:"endTime"`
 	// Unix microseconds are the stored source of truth, independent of SQL connection zones.

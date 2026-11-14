@@ -1106,7 +1106,9 @@
         "rare": "Selten",
         "very_rare": "Sehr selten",
         "unknown": "Unbekannt"
-      }
+      },
+      "modelTitle": "Geografisches BirdNET-Modell",
+      "modelContext": "Aktueller saisonaler Modellkontext; unabhängig vom lokalen Seltenheitswert und der Bestimmungssicherheit."
     },
     "taxonomy": {
       "hierarchy": "Taxonomische Klassifizierung",
@@ -2170,6 +2172,17 @@
         "detections": "Erkennungen:",
         "confidence": "Konfidenz:",
         "first": "Erste:"
+      },
+      "targets": {
+        "title": "Fortschritt bei regionalen Arten",
+        "description": "Von der Station erkannte Arten im Vergleich zu den eBird-Artenlisten für Landkreis und Bundesstaat.",
+        "region": "eBird-Landkreiscode",
+        "regionHint": "Geben Sie einen Landkreiscode wie US-NJ-001 ein. Der Bundesstaat wird aus dem Landkreis abgeleitet. Leer lassen, um die konfigurierte Region zu verwenden.",
+        "regionRequired": "Wählen Sie einen eBird-Landkreiscode, um den Fortschritt für Landkreis und Bundesstaat zu sehen.",
+        "ebirdRequired": "Aktivieren Sie die eBird-Integration und hinterlegen Sie einen API-Schlüssel in den Einstellungen, um regionale Listen zu laden.",
+        "county": "Landkreis",
+        "state": "Bundesstaat",
+        "lifetime": "Unterschiedliche Arten über die gesamte Laufzeit, ohne als falsch positiv geprüfte Erkennungen. Die aktuellen Seitenfilter ändern diese Gesamtzahl nicht."
       }
     },
     "advanced": {
@@ -2372,6 +2385,73 @@
       "afternoon12to16": "Nachmittag (12-16)",
       "evening17to19": "Abend (17-19)",
       "night20to23": "Nacht (20-23)"
+    },
+    "patterns": {
+      "balanceTitle": "Muster in diesem Zeitraum",
+      "balanceHelp": "Die effektive Vielfalt ist die Anzahl gleich häufiger Arten, die diese Erkennungsverteilung ergeben würde. Der Erkennungsanteil entspricht nicht dem Vogelbestand.",
+      "effective": "Effektive Vielfalt",
+      "topFive": "Anteil der 5 häufigsten Arten",
+      "coverage": "Arten für 80 % der Erkennungen",
+      "peakWindow": "Aktivstes 3-Stunden-Fenster",
+      "windowShare": "{percentage} % der Erkennungen",
+      "share": "Anteil der Erkennungen",
+      "otherSpecies": "Weitere Arten",
+      "comparisonTitle": "Vergleich mit dem vorherigen Zeitraum",
+      "completedOnly": "Heute wird ausgeschlossen; wählen Sie einen Zeitraum mit abgeschlossenen Tagen.",
+      "versus": "gegenüber",
+      "comparisonHelp": "Gleich lange abgeschlossene Zeiträume. Die Aufzeichnungsabdeckung kann abweichen.",
+      "comparisonError": "Der Zeitraumvergleich konnte nicht geladen werden.",
+      "volumeChange": "Änderung der Erkennungen",
+      "diversityChange": "Änderung der Vielfalt",
+      "retained": "Wiedererkannte Arten",
+      "noBaseline": "Keine früheren Erkennungen: Prozentänderungen haben keine Vergleichsbasis.",
+      "retainedHelp": "Wiedererkannte Arten wurden in beiden Zeiträumen erkannt, als Anteil der Arten des vorherigen Zeitraums.",
+      "gaining": "Größte Anteilszunahmen",
+      "losing": "Größte Anteilsrückgänge",
+      "shareChange": "{change} Prozentpunkte",
+      "noMovement": "Keine Anteilsänderungen anzuzeigen."
+    },
+    "confidenceAnalysis": {
+      "caution": "Konfidenz ist ein Modellwert, keine Bestimmungsgenauigkeit oder kalibrierte Wahrscheinlichkeit für eine korrekte Bestimmung. Werte verschiedener Modelle werden getrennt angezeigt.",
+      "threshold": "Eine Häufung am unteren Ende kann durch Mindestschwellen für Erkennungen entstehen. Aktuelle Schwellen, artspezifische Vorgaben und dynamische Schwellen können von denen bei älteren Aufnahmen abweichen.",
+      "population": "Alle geeigneten gespeicherten primären Bestimmungen im gewählten Zeitraum werden berücksichtigt. Als falsch positiv geprüfte Erkennungen und Werte außerhalb von 0–100 % sind ausgeschlossen. Sekundäre Vorhersagen zählen nicht als zusätzliche Erkennungen.",
+      "normalized": "Prozentwerte anzeigen",
+      "models": "Bestimmungsmodelle",
+      "unknownModel": "Unbekanntes Modell",
+      "allModels": "Ohne Modellauswahl werden alle aufgezeichneten Modelle getrennt angezeigt.",
+      "sample": "{count} Erkennungen",
+      "median": "Median der Konfidenz",
+      "percent": "Anteil der Erkennungen",
+      "high": "Hohe Konfidenz (80 %+)",
+      "binsHelp": "Wählen Sie einen Balken, um die Erkennungen zu prüfen. Intervalle schließen ihre Untergrenze ein; nur das letzte Intervall schließt die Obergrenze (100 %) ein. Prozentwerte beziehen sich auf die gesamte Datenreihe, einschließlich Werten unter 20 %.",
+      "review": "Erkennungen prüfen",
+      "insights": "Zusammenfassende Erkenntnisse",
+      "modelScope": "Die folgenden Konfidenzmetriken und Erkenntnisse beruhen auf {count} Erkennungen von {model}. Wählen Sie zum Vergleich ein anderes aufgezeichnetes Modell; Werte werden niemals zusammengeführt.",
+      "highInsight": "{percent} von {count} Erkennungen erreichten einen Wert von mindestens 80 %.",
+      "speciesInsight": "{species} machte {percent} von {count} Erkennungen aus.",
+      "lowInsight": "{percent} von {count} Erkennungen lagen zwischen 20 % und unter 30 %.",
+      "changeInsight": "Die Zahl aufgezeichneter Erkennungen änderte sich gegenüber dem vorherigen gleich langen Kalenderzeitraum um {change} ({current} gegenüber {previous} Erkennungen).",
+      "pointsInsight": "Der Anteil mit einem Wert von 80 %+ änderte sich gegenüber dem vorherigen Zeitraum um {change} Prozentpunkte ({current} gegenüber {previous} Erkennungen)."
+    },
+    "summary": {
+      "activityTitle": "Aktivitätsübersicht",
+      "activeDays": "Tage mit Erkennungen",
+      "uptime": "Verfügbarkeit",
+      "uptimeUnavailable": "Nicht verfügbar",
+      "uptimeHistoryMissing": "Der Verfügbarkeitsverlauf deckt diesen Zeitraum nicht ab.",
+      "uptimeScope": "Serververfügbarkeit im verstrichenen Zeitraum.",
+      "uptimeMinimum": "Mindestens {percentage} %",
+      "uptimePartial": "Bestätigte Mindestverfügbarkeit; frühere Sitzungen sind nicht erfasst. Aktualisierung alle 10 Minuten.",
+      "calendarAverage": "Erkennungen pro Kalendertag",
+      "busiestDay": "Tag mit den meisten Erkennungen",
+      "calendarScope": "Basiert auf ausgewählten Kalendertagen, nicht auf der Aufnahmezeit.",
+      "topSpecies": "Die {count} häufigsten Arten",
+      "speciesLimit": "Angezeigte Arten",
+      "chartStyle": "Diagrammtyp",
+      "barChart": "Balkendiagramm",
+      "pieChart": "Kreisdiagramm",
+      "coverage": "Anteil an allen Erkennungen",
+      "hourlyTitle": "Erkennungen nach Stunde"
     }
   },
   "settings": {
@@ -6181,6 +6261,16 @@
     "observationsError": "Gespeicherte Kamerabeobachtungen können nicht geladen werden. Automatischer Neuversuch.",
     "sourceType": "Erkennungsquelle",
     "allSources": "Alle Quellen",
-    "audioSource": "Ton"
+    "audioSource": "Ton",
+    "classificationSource": "Quelle der Artbestimmung",
+    "frigateSublabel": "Frigate-Unterbezeichnung",
+    "ownerConfirmed": "Vom Eigentümer bestätigt",
+    "qualityLabel": "Videoqualität",
+    "previewQuality": "Vorschau · 720p / 3 FPS",
+    "sourceQuality": "Originalqualität",
+    "previewHelp": "Datensparende Vorschau mit Erkennungsrahmen.",
+    "sourceHelp": "Originales go2rtc-Video ohne Begrenzung der Auflösung oder Bildrate. Ohne Erkennungsrahmen.",
+    "sourceFallback": "Originalvideo nicht verfügbar oder nicht unterstützt. Stattdessen wird die Vorschau angezeigt.",
+    "detectionFps": "Erkennungs-FPS"
   }
 }

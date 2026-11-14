@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Button from '$lib/desktop/components/ui/Button.svelte';
+  import BirdThumbnailPopup from '$lib/desktop/features/dashboard/components/BirdThumbnailPopup.svelte';
+  import { getSpeciesImageUrl } from '$lib/desktop/components/ui/image-utils';
   import {
     CalendarDays,
     ChevronLeft,
@@ -232,6 +234,7 @@
             </h2>
             <ul class="season-list max-h-48 overflow-auto text-sm">
               {#each group.birds as bird (bird.scientific)}<li>
+                  {@render speciesThumbnail(bird)}
                   <span>{displayName(bird)}</span>{#if heardAt(bird, selectedWeek)}
                     <span class="heard-badge"
                       >· {t('calendar.heard')}: {heardAt(bird, selectedWeek)}</span
@@ -298,11 +301,17 @@
           <tbody>
             {#each rows as bird (bird.scientific)}
               <tr
-                ><th scope="row" class="species-name text-left"
-                  >{displayName(bird)}<span class="block text-[10px] font-normal italic opacity-60"
-                    >{bird.scientific}</span
-                  ></th
-                >
+                ><th scope="row" class="species-name text-left">
+                  <div class="flex items-center gap-2">
+                    {@render speciesThumbnail(bird)}
+                    <div class="min-w-0">
+                      <span class="block">{displayName(bird)}</span>
+                      <span class="block text-[10px] font-normal italic opacity-60"
+                        >{bird.scientific}</span
+                      >
+                    </div>
+                  </div>
+                </th>
                 {#each weeks as week (week)}
                   {@const rate = rateAt(bird, week)}
                   <td
@@ -346,6 +355,18 @@
     </footer>
   {/if}
 </div>
+
+{#snippet speciesThumbnail(bird: CalendarSpecies)}
+  <BirdThumbnailPopup
+    thumbnailUrl={getSpeciesImageUrl(bird.scientific)}
+    commonName={bird.name}
+    scientificName={bird.scientific}
+    detectionUrl={buildAppUrl(
+      `/ui/detections?${new URLSearchParams({ queryType: 'search', species: bird.scientific })}`
+    )}
+    className="shrink-0"
+  />
+{/snippet}
 
 <style>
   .calendar-heading {
@@ -442,7 +463,7 @@
     position: sticky;
     left: 0;
     z-index: 10;
-    width: 210px;
+    width: 250px;
     padding: 6px;
     background: var(--color-base-200);
   }

@@ -108,7 +108,13 @@
     let domainStart: Date;
     let domainEnd: Date;
     if (dateRange) {
-      [domainStart, domainEnd] = dateRange;
+      // API dates are inclusive calendar days. Include the whole final day,
+      // including for a one-day selection, instead of clipping its noon marker.
+      domainStart = new Date(dateRange[0]);
+      domainStart.setHours(0, 0, 0, 0);
+      domainEnd = new Date(dateRange[1]);
+      domainEnd.setHours(0, 0, 0, 0);
+      domainEnd.setDate(domainEnd.getDate() + 1);
     } else if (dateExtent[0] && dateExtent[1]) {
       domainStart = new Date(dateExtent[0].getTime() - MS_PER_DAY);
       domainEnd = new Date(dateExtent[1].getTime() + 2 * MS_PER_DAY);
@@ -201,9 +207,17 @@
       .enter()
       .append('rect')
       .attr('class', 'timeline-marker')
-      .attr('x', d => xScale(d.firstHeard))
+      .attr('x', d => {
+        const dayStart = new Date(d.firstHeard);
+        dayStart.setHours(0, 0, 0, 0);
+        return xScale(dayStart);
+      })
       .attr('y', d => yScale(d.key) ?? 0)
-      .attr('width', dayWidth)
+      .attr('width', d => {
+        const dayStart = new Date(d.firstHeard);
+        dayStart.setHours(0, 0, 0, 0);
+        return Math.min(dayWidth, Math.max(0, innerWidth - xScale(dayStart)));
+      })
       .attr('height', yScale.bandwidth())
       .attr('rx', 2)
       .style('fill', (_d, i) => colors[i % colors.length])
