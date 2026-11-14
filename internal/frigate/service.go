@@ -32,7 +32,7 @@ type Status struct {
 	Connected   bool       `json:"connected"`
 	LastSuccess *time.Time `json:"lastSuccessfulImport"`
 	LastError   string     `json:"lastError"`
-	Imported    int64      `json:"totalImported"`
+	Imported    int64      `json:"totalImported"` // Populated by the API from current repository totals.
 	Polls       uint64     `json:"polls"`
 	Failures    uint64     `json:"failures"`
 }
@@ -208,13 +208,6 @@ func (s *Service) Sync(parent context.Context, cfg *conf.FrigateSettings) error 
 			if err := s.repo.SetCursor(ctx, key, before); err != nil {
 				return err
 			}
-			_, total, countErr := s.repo.List(ctx, &repository.VisualFilter{Limit: 1})
-			if countErr != nil {
-				return countErr
-			}
-			s.mu.Lock()
-			s.status.Imported = total
-			s.mu.Unlock()
 			return nil
 		}
 	}

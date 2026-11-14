@@ -148,11 +148,16 @@ active configuration file. Active events are fetched without caching. Cache name
 are hashes, filesystem access is contained by `os.Root`, and writes use temporary
 files followed by rename. The cache is separate from exported audio media.
 
-At most two downloads run concurrently. Compressed images are limited to 8 MiB
+At most two snapshot operations run concurrently. Gallery bursts wait for capacity
+instead of failing immediately; waiting and network requests share the configured
+request timeout, and canceled requests leave the queue. Compressed images are limited to 8 MiB
 and 24 million pixels, checked as JPEG and decoded before serving. The hourly
 cleanup removes expired cache artifacts using the latest retention setting; an
 expired entry is never served. Missing or expired Frigate snapshots return 404.
-No videos, live camera streams, or additional inference are downloaded or run.
+Snapshot requests do not download videos or perform additional inference.
+If an in-progress snapshot fails, cards and search thumbnails retry when that
+event finishes or its snapshot availability changes, without retrying unchanged
+failed images on every poll.
 
 ## Verification and scope
 

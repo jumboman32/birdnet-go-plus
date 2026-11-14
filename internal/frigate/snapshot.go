@@ -40,17 +40,21 @@ func snapshotName(row *entities.VisualDetection) string {
 // Get serves a validated JPEG through BirdNET, never an external URL. A cache
 // entry expires after retention; active events bypass caching as their image changes.
 func (s *SnapshotCache) Get(ctx context.Context, client *Client, directory string, row *entities.VisualDetection) ([]byte, error) {
-	select {
-	case s.slots <- struct{}{}:
-		defer func() { <-s.slots }()
-	default:
-		return nil, errors.NewStd("Frigate snapshot capacity reached")
-	}
 	if !client.settings.Enabled || !client.settings.SnapshotImport {
 		return nil, errors.NewStd("Frigate snapshot import is disabled")
 	}
 	if row.Instance != InstanceKey(client.settings.BaseURL) {
 		return nil, errors.NewStd("snapshot belongs to a different Frigate connection")
+	}
+	// Galleries request several images together. Queue within the operation's
+	// deadline instead of rejecting otherwise valid thumbnails during a burst.
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(client.settings.RequestTimeout)*time.Second)
+	defer cancel()
+	select {
+	case s.slots <- struct{}{}:
+		defer func() { <-s.slots }()
+	case <-ctx.Done():
+		return nil, ctx.Err()
 	}
 	if err := os.MkdirAll(directory, cachePermissions); err != nil {
 		return nil, err

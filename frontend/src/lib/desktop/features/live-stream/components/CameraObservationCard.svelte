@@ -7,7 +7,10 @@
     observation: VisualObservation;
   }
   let { observation }: Props = $props();
-  let imageFailed = $state(false);
+  let failedSnapshot = $state('');
+  const snapshotKey = $derived(
+    `${observation.id}:${observation.endTime ?? ''}:${observation.snapshotStatus}`
+  );
   const PERCENT = 100;
   const snapshotURL = $derived(buildAppUrl(`/api/v2/visual-detections/${observation.id}/snapshot`));
   const name = $derived(observation.commonName || observation.originalLabel || t('common.unknown'));
@@ -23,14 +26,14 @@
     class="relative block min-h-64 flex-1 overflow-hidden rounded-xl bg-[var(--color-base-200)]"
     aria-label={`${t('cameraLive.snapshot')}: ${name}`}
   >
-    {#if observation.snapshotStatus === 'available' && !imageFailed}
+    {#if observation.snapshotStatus === 'available' && failedSnapshot !== snapshotKey}
       <img
         src={snapshotURL}
         alt={name}
         loading="lazy"
         class="absolute inset-0 h-full w-full object-cover"
         onerror={() => {
-          imageFailed = true;
+          failedSnapshot = snapshotKey;
         }}
       />
     {:else}<span class="absolute inset-0 flex items-center justify-center"

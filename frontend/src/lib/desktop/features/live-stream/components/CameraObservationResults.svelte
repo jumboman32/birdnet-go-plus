@@ -6,6 +6,7 @@
     originalLabel?: string | null;
     scientificName?: string | null;
     startTime: string;
+    endTime?: string | null;
     detectionConfidence?: number | null;
     classificationConfidence?: number | null;
     snapshotStatus: string;
@@ -25,7 +26,10 @@
     error?: string;
   }
   let { data, loading = false, error = '' }: Props = $props();
-  let failedImages = $state<number[]>([]);
+  let failedImages = $state<string[]>([]);
+  function snapshotKey(item: VisualObservation): string {
+    return `${item.id}:${item.endTime ?? ''}:${item.snapshotStatus}`;
+  }
   const PERCENT = 100;
   const columns: Column<VisualObservation>[] = $derived([
     { key: 'snapshotStatus', header: t('cameraLive.snapshot') },
@@ -70,7 +74,7 @@
           rel="noopener noreferrer"
           aria-label={t('cameraLive.snapshot')}
         >
-          {#if failedImages.includes(item.id)}{t('cameraLive.snapshot')}
+          {#if failedImages.includes(snapshotKey(item))}{t('cameraLive.snapshot')}
           {:else}<img
               src={buildAppUrl(`/api/v2/visual-detections/${item.id}/snapshot`)}
               alt={item.commonName || item.originalLabel || t('cameraLive.snapshot')}
@@ -79,7 +83,7 @@
               height="72"
               class="h-18 w-32 max-w-none rounded object-cover"
               onerror={() => {
-                failedImages = [...failedImages, item.id];
+                failedImages = [...failedImages, snapshotKey(item)];
               }}
             />{/if}
         </a>
